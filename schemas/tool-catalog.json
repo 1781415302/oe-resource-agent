@@ -1,0 +1,596 @@
+{
+  "schema_version": 1,
+  "tools": [
+    {
+      "name": "system.capabilities",
+      "description": "读取内核、BTF、cgroup 与插件能力",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "mutates": false
+    },
+    {
+      "name": "workload.observe",
+      "description": "采集按身份核对的实际 workload 时间窗口",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "profile": {
+            "type": "string",
+            "enum": [
+              "nginx-cpu",
+              "nginx-slo",
+              "nginx-wakeup-slo"
+            ]
+          },
+          "seconds": {
+            "type": "number",
+            "minimum": 0.2,
+            "maximum": 10
+          }
+        },
+        "required": [
+          "profile"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": false
+    },
+    {
+      "name": "policy.list",
+      "description": "列出内核默认与本机可配置 SCX 策略",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "mutates": false
+    },
+    {
+      "name": "policy.validate",
+      "description": "核对参数与策略语义",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "policy_id": {
+            "type": "string",
+            "enum": [
+              "kernel.default",
+              "scx.slice"
+            ]
+          },
+          "slice_us": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 20000
+          },
+          "wakeup_preempt": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "policy_id"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": false
+    },
+    {
+      "name": "policy.status",
+      "description": "读取会话的实际策略、map 与动作版本",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "mutates": false
+    },
+    {
+      "name": "metrics.submit",
+      "description": "提交同一策略和任务身份内的业务窗口；SLO会话可据此保留或回退策略",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "enum": [
+              1
+            ]
+          },
+          "window_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "profile_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "boot_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "policy_revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "workload_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "wrk.reported",
+              "wrk2.hdr.aligned",
+              "wrk2.hdr.window"
+            ]
+          },
+          "source_sha256": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "start_monotonic": {
+            "type": "number",
+            "minimum": 0
+          },
+          "end_monotonic": {
+            "type": "number",
+            "minimum": 0
+          },
+          "frontend_p99_ms": {
+            "type": "number",
+            "minimum": 0
+          },
+          "completed_requests": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "request_errors": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "offered_rps": {
+            "type": "number",
+            "minimum": 1
+          },
+          "background_eps": {
+            "type": "number",
+            "minimum": 0
+          },
+          "background_covered_seconds": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "schema_version",
+          "window_id",
+          "profile_id",
+          "boot_id",
+          "policy_revision",
+          "workload_key",
+          "source",
+          "source_sha256",
+          "start_monotonic",
+          "end_monotonic",
+          "frontend_p99_ms",
+          "completed_requests",
+          "request_errors",
+          "offered_rps",
+          "background_eps",
+          "background_covered_seconds"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": true
+    },
+    {
+      "name": "metrics.status",
+      "description": "读取SLO反馈阶段、基线和最近评价",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "mutates": false
+    },
+    {
+      "name": "policy.apply",
+      "description": "按预期版本应用策略并回读真实参数",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "policy_id": {
+            "type": "string",
+            "enum": [
+              "kernel.default",
+              "scx.slice"
+            ]
+          },
+          "slice_us": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 20000
+          },
+          "wakeup_preempt": {
+            "type": "boolean"
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "policy_id",
+          "expected_revision"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": true
+    },
+    {
+      "name": "policy.rollback",
+      "description": "停止本会话原生后端并确认恢复默认调度",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "expected_revision"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": true
+    },
+    {
+      "name": "policy.evaluate",
+      "description": "评估实际业务窗口的延迟、吞吐与后台约束；缺少指标时不作收益判定",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "before": {
+            "type": "object",
+            "properties": {
+              "frontend_p99_ms": {
+                "type": "number",
+                "minimum": 0
+              },
+              "frontend_rps": {
+                "type": "number",
+                "minimum": 0
+              },
+              "background_eps": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [],
+            "additionalProperties": false
+          },
+          "after": {
+            "type": "object",
+            "properties": {
+              "frontend_p99_ms": {
+                "type": "number",
+                "minimum": 0
+              },
+              "frontend_rps": {
+                "type": "number",
+                "minimum": 0
+              },
+              "background_eps": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [],
+            "additionalProperties": false
+          },
+          "goals": {
+            "type": "object",
+            "properties": {
+              "max_p99_ms": {
+                "type": "number",
+                "minimum": 0.001
+              },
+              "min_frontend_fraction": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "min_background_fraction": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "max_p99_ms",
+              "min_frontend_fraction",
+              "min_background_fraction"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "before",
+          "after",
+          "goals"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": false
+    },
+    {
+      "name": "agent.run",
+      "description": "执行有限时长的采样、决策、控制与回退闭环",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "profile": {
+            "type": "string",
+            "enum": [
+              "nginx-cpu",
+              "nginx-slo",
+              "nginx-wakeup-slo"
+            ]
+          },
+          "duration_seconds": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 43200
+          },
+          "dry_run": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "profile",
+          "duration_seconds"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": true
+    },
+    {
+      "name": "resource.cgroup.describe",
+      "description": "报告 cgroup 插件实际能力与边界",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "mutates": false
+    },
+    {
+      "name": "resource.cgroup.inspect",
+      "description": "读取本框架受管组的 CPU 权重与成员 PID",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "group": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "group"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": false
+    },
+    {
+      "name": "resource.cgroup.create",
+      "description": "创建本框架的受管 cgroup",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "group": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "group"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": true
+    },
+    {
+      "name": "resource.cgroup.apply",
+      "description": "按预期旧值更新受管组权重并回读",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "group": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "expected_value": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 262144
+          },
+          "value": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 262144
+          }
+        },
+        "required": [
+          "group",
+          "expected_value",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": true
+    },
+    {
+      "name": "resource.cgroup.attach",
+      "description": "核对 PID 与启动时间后将进程迁入受管 cgroup",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "group": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "pid": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4194304
+          },
+          "expected_start_ticks": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "group",
+          "pid"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": true
+    },
+    {
+      "name": "resource.cgroup.detach",
+      "description": "将进程从受管 cgroup 迁回根控制器组",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "group": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "pid": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4194304
+          }
+        },
+        "required": [
+          "group",
+          "pid"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": true
+    },
+    {
+      "name": "network.ebpf.describe",
+      "description": "报告 eBPF TC 网络观测与端口隔离插件能力",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "mutates": false
+    },
+    {
+      "name": "network.ebpf.status",
+      "description": "读取已加载 eBPF 网络 hook 的配置与实时包/字节/丢包计数",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "mutates": false
+    },
+    {
+      "name": "network.ebpf.attach",
+      "description": "加载或更新 lo 上的 eBPF TC 分类器（统计端口流量或执行端口级丢包隔离）",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "interface": {
+            "type": "string",
+            "enum": [
+              "lo"
+            ]
+          },
+          "target_port": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          "drop_target": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "target_port"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": true
+    },
+    {
+      "name": "network.ebpf.detach",
+      "description": "卸载 lo 上的 eBPF TC 网络分类器并清理 bpffs 引脚",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "mutates": true
+    },
+    {
+      "name": "security.lsm.describe",
+      "description": "读取内核 LSM 模块栈与 BPF LSM 状态",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "mutates": false
+    },
+    {
+      "name": "security.lsm.audit",
+      "description": "审计目标进程的 LSM 标签、Capability 掩码、Seccomp 与 cgroup 隔离上下文",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4194304
+          }
+        },
+        "required": [
+          "pid"
+        ],
+        "additionalProperties": false
+      },
+      "mutates": false
+    }
+  ]
+}

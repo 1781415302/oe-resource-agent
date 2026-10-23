@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "directory": "/root/oe-resource-agent/results/feedback-session-validation-1792744159610380529",
+  "checks": [
+    {
+      "name": "coalesced_requests_and_ids",
+      "passed": true
+    },
+    {
+      "name": "feedback_control_ownership",
+      "passed": true
+    },
+    {
+      "name": "public_metrics_stale_revision_rejected",
+      "passed": true
+    },
+    {
+      "name": "nested_agent_rejected",
+      "passed": true
+    },
+    {
+      "name": "signal_closes_idle_protocol",
+      "passed": true
+    }
+  ],
+  "responses": [
+    {
+      "schema_version": 1,
+      "request_id": 0,
+      "tool": "policy.status",
+      "ok": true,
+      "data": {
+        "revision": 0,
+        "policy_since_monotonic": 95871.626388658,
+        "boot_id": "5084334e-b2b1-4b90-b8a4-f377b583ca0f",
+        "profile_id": "nginx-cpu-slo-development",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled",
+        "control_mode": "feedback",
+        "observation_ready": false,
+        "feedback": {
+          "stage": "awaiting_baseline",
+          "deadline_monotonic": null,
+          "retry_after_monotonic": 0.0,
+          "baseline_window_id": null,
+          "baseline_confirmations": 0,
+          "last_evaluation": null
+        }
+      },
+      "elapsed_seconds": 0.00010815000860020518
+    },
+    {
+      "schema_version": 1,
+      "request_id": 1,
+      "tool": "metrics.status",
+      "ok": true,
+      "data": {
+        "revision": 0,
+        "policy_since_monotonic": 95871.626388658,
+        "boot_id": "5084334e-b2b1-4b90-b8a4-f377b583ca0f",
+        "profile_id": "nginx-cpu-slo-development",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled",
+        "control_mode": "feedback",
+        "observation_ready": false,
+        "feedback": {
+          "stage": "awaiting_baseline",
+          "deadline_monotonic": null,
+          "retry_after_monotonic": 0.0,
+          "baseline_window_id": null,
+          "baseline_confirmations": 0,
+          "last_evaluation": null
+        }
+      },
+      "elapsed_seconds": 4.991699825040996e-05
+    },
+    {
+      "schema_version": 1,
+      "request_id": "manual",
+      "tool": "policy.apply",
+      "ok": false,
+      "error": {
+        "code": "AUTOMATIC_CONTROL_ACTIVE",
+        "message": "SLO\u4f1a\u8bdd\u7531\u4e1a\u52a1\u53cd\u9988\u63a7\u5236\uff1b\u8bf7\u5728\u666e\u901a\u63a7\u5236\u4f1a\u8bdd\u624b\u52a8\u8c03\u53c2\u3002",
+        "details": {}
+      },
+      "elapsed_seconds": 2.5913002900779247e-05
+    },
+    {
+      "schema_version": 1,
+      "request_id": "stale",
+      "tool": "metrics.submit",
+      "ok": false,
+      "error": {
+        "code": "STALE_METRIC_REVISION",
+        "message": "\u6307\u6807\u4e0d\u662f\u5f53\u524d\u7b56\u7565\u7248\u672c\u3002",
+        "details": {}
+      },
+      "elapsed_seconds": 8.511499618180096e-05
+    },
+    {
+      "schema_version": 1,
+      "request_id": "nested",
+      "tool": "agent.run",
+      "ok": false,
+      "error": {
+        "code": "CONTROL_SESSION_OWNED",
+        "message": "\u5f53\u524d\u6301\u4e45\u4f1a\u8bdd\u5df2\u6709\u63a7\u5236\u5668\uff0c\u8bf7\u53e6\u5f00\u72ec\u7acbrun\u547d\u4ee4\u3002",
+        "details": {}
+      },
+      "elapsed_seconds": 1.6985010006465018e-05
+    }
+  ],
+  "final_sched_ext": "disabled"
+}

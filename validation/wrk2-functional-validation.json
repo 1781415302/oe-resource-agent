@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "directory": "/root/oe-resource-agent/results/wrk2-functional-1792040378281804942",
+  "upstream_commit": "44a94c17d8e6a0bac8559b53da76848e430cb7a7",
+  "binary_sha256": "24bee774b25bcb28d89a66f79636e0b7849dba761f200b734f7ba2fc388140bd",
+  "scope": "client functional validation only; HDR latency excludes initial calibration, requests include it",
+  "metrics": {
+    "schema_version": 1,
+    "duration_us": 30000794,
+    "requests": 59859,
+    "bytes": 259548464,
+    "p50_us": 1246.0,
+    "p95_us": 2345.0,
+    "p99_us": 2805.0,
+    "mean_us": 1289.193,
+    "max_us": 4528.0,
+    "finished_monotonic": 2569.882033154,
+    "errors": {
+      "connect": 0,
+      "read": 0,
+      "write": 0,
+      "status": 0,
+      "timeout": 0
+    },
+    "duration_seconds": 30.000794,
+    "rps": 1995.2471924576396,
+    "p50_ms": 1.246,
+    "p95_ms": 2.345,
+    "p99_ms": 2.805,
+    "http_error_percent": 0.0,
+    "socket_errors": 0,
+    "start_monotonic_estimate": 2539.881239154
+  },
+  "calibration_recorded": true,
+  "cleanup_errors": [],
+  "final_sched_ext": "disabled"
+}

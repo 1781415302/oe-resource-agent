@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "plugin": {
+    "name": "resource.cgroup",
+    "available": true,
+    "cgroup_version": 1,
+    "controlled_file": "cpu.shares",
+    "value_range": [
+      2,
+      262144
+    ],
+    "scope": "owned oeagent child groups only",
+    "cpu_weight_under_scx": "unsupported by this backend; writes require sched_ext disabled",
+    "attach_processes": "not implemented in this iteration"
+  },
+  "responses": [
+    {
+      "schema_version": 1,
+      "request_id": "77d8085e-e9c3-471d-a5fc-fb27c3001552",
+      "tool": "resource.cgroup.create",
+      "ok": true,
+      "data": {
+        "group": "validation-bd0f5e797a12",
+        "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-bd0f5e797a12",
+        "cgroup_version": 1,
+        "file": "cpu.shares",
+        "value": 1024
+      },
+      "elapsed_seconds": 0.0004973790000804001
+    },
+    {
+      "schema_version": 1,
+      "request_id": "52263341-c31a-4fd4-b600-8dc2f7650370",
+      "tool": "resource.cgroup.apply",
+      "ok": true,
+      "data": {
+        "before": {
+          "group": "validation-bd0f5e797a12",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-bd0f5e797a12",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 1024
+        },
+        "after": {
+          "group": "validation-bd0f5e797a12",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-bd0f5e797a12",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 2048
+        },
+        "scope": "configured owned group; process membership must be established separately"
+      },
+      "elapsed_seconds": 0.00010769400023491471
+    },
+    {
+      "schema_version": 1,
+      "request_id": "cd96d49f-f03e-4b19-9cd8-0fa7386df0bd",
+      "tool": "resource.cgroup.apply",
+      "ok": false,
+      "error": {
+        "code": "STALE_RESOURCE_VALUE",
+        "message": "cgroup 权重已变化，请重新读取。",
+        "details": {}
+      },
+      "elapsed_seconds": 3.606900008890079e-05
+    },
+    {
+      "schema_version": 1,
+      "request_id": "a6a8939e-d3a9-4e3b-b9c3-9f13f16741c6",
+      "tool": "resource.cgroup.apply",
+      "ok": true,
+      "data": {
+        "before": {
+          "group": "validation-bd0f5e797a12",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-bd0f5e797a12",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 2048
+        },
+        "after": {
+          "group": "validation-bd0f5e797a12",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-bd0f5e797a12",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 1024
+        },
+        "scope": "configured owned group; process membership must be established separately"
+      },
+      "elapsed_seconds": 0.00021249099972919794
+    }
+  ],
+  "scope": "empty owned v1 group configuration/readback only; no process migration or performance evidence",
+  "empty_group_removed": true
+}

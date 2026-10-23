@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "directory": "/root/oe-resource-agent/results/wakeup-validation-1792744160745845210",
+  "checks": [
+    {
+      "name": "default_off_has_no_kicks",
+      "passed": true,
+      "stats": {
+        "generation": 0,
+        "slice_ns": 1000000,
+        "local": 1691,
+        "global": 68179,
+        "accounting_errors": 0,
+        "wakeup_preempt": false,
+        "eligible_wakes": 0,
+        "preempt_kicks": 0,
+        "kick_throttled": 0,
+        "wakeup_enqueues": 0,
+        "short_sleepers": 0,
+        "busy_running": 0
+      }
+    },
+    {
+      "name": "real_short_wakeup_kicks",
+      "passed": true,
+      "stats": {
+        "generation": 1,
+        "slice_ns": 1000000,
+        "local": 4513,
+        "global": 182210,
+        "accounting_errors": 0,
+        "wakeup_preempt": true,
+        "eligible_wakes": 106,
+        "preempt_kicks": 82,
+        "kick_throttled": 24,
+        "wakeup_enqueues": 106021,
+        "short_sleepers": 105835,
+        "busy_running": 4962
+      }
+    },
+    {
+      "name": "online_disable_stops_new_kicks_without_restart",
+      "passed": true,
+      "before": {
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": false,
+        "kick_interval_us": 200,
+        "variant": "weighted_vtime",
+        "sched_ext": "enabled",
+        "pid": 38839,
+        "map_id": 343,
+        "generation": 0,
+        "max_slice_us": 20000
+      },
+      "enabled": {
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": true,
+        "kick_interval_us": 200,
+        "variant": "wakeup_preempt",
+        "sched_ext": "enabled",
+        "pid": 38839,
+        "map_id": 343,
+        "generation": 1,
+        "max_slice_us": 20000
+      },
+      "disabled": {
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": false,
+        "kick_interval_us": 200,
+        "variant": "weighted_vtime",
+        "sched_ext": "enabled",
+        "pid": 38839,
+        "map_id": 343,
+        "generation": 2,
+        "max_slice_us": 20000
+      },
+      "stats": {
+        "generation": 2,
+        "slice_ns": 1000000,
+        "local": 6201,
+        "global": 252503,
+        "accounting_errors": 0,
+        "wakeup_preempt": false,
+        "eligible_wakes": 106,
+        "preempt_kicks": 82,
+        "kick_throttled": 24,
+        "wakeup_enqueues": 106473,
+        "short_sleepers": 106286,
+        "busy_running": 4982
+      }
+    },
+    {
+      "name": "default_restored",
+      "passed": true
+    }
+  ],
+  "scope": "real load and off/on/off counter validation; not a performance comparison",
+  "frontend": {
+    "schema_version": 1,
+    "duration_us": 26001875,
+    "requests": 1958320,
+    "bytes": 8491265760,
+    "p50_us": 253.0,
+    "p95_us": 2222.0,
+    "p99_us": 2319.0,
+    "mean_us": 622.954,
+    "max_us": 5392.0,
+    "finished_monotonic": 95898.879122992,
+    "errors": {
+      "connect": 0,
+      "read": 0,
+      "write": 0,
+      "status": 0,
+      "timeout": 0
+    },
+    "duration_seconds": 26.001875,
+    "rps": 75314.56866091388,
+    "p50_ms": 0.253,
+    "p95_ms": 2.222,
+    "p99_ms": 2.319,
+    "http_error_percent": 0.0,
+    "socket_errors": 0,
+    "start_monotonic_estimate": 95872.877247992
+  },
+  "final_sched_ext": "disabled"
+}

@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "scope": "functional real-workload transition check; not a performance comparison",
+  "profile": {
+    "schema_version": 1,
+    "name": "nginx-cpu-adaptive-development",
+    "selectors": [
+      {
+        "role": "latency",
+        "comm": [
+          "nginx"
+        ]
+      },
+      {
+        "role": "batch",
+        "comm": [
+          "sysbench"
+        ]
+      }
+    ],
+    "sample_seconds": 1.0,
+    "lease_seconds": 15,
+    "initial_slice_us": 20000,
+    "controller_cpu": 2,
+    "policy": {
+      "latency_slice_us": 1000,
+      "balanced_slice_us": 4000,
+      "batch_slice_us": 20000,
+      "confirmations": 3,
+      "residence_seconds": 10.0,
+      "batch_active_cpu_percent": 10.0,
+      "latency_switches_per_sec": 20.0,
+      "latency_wait_fraction": 0.05
+    },
+    "calibration_status": "unvalidated_development_defaults",
+    "performance_claim": null
+  },
+  "directory": "/root/oe-resource-agent/results/workload-loop-1792589246225883810",
+  "background_started_monotonic": 8791.142808016,
+  "background_stopped_monotonic": 8804.146360504,
+  "applied": [
+    {
+      "schema_version": 1,
+      "utc": "2026-10-21T13:27:37.416580+00:00",
+      "monotonic": 8794.220832854,
+      "event": "policy_applied",
+      "before": {
+        "policy_id": "kernel.default",
+        "slice_us": null
+      },
+      "after": {
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": false,
+        "kick_interval_us": 200,
+        "variant": "weighted_vtime",
+        "sched_ext": "enabled",
+        "pid": 22997,
+        "map_id": 122,
+        "generation": 0,
+        "max_slice_us": 20000
+      },
+      "revision": 1,
+      "dry_run": false,
+      "action_started_monotonic": 8794.178621326,
+      "action_finished_monotonic": 8794.22082545
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-21T13:27:49.502407+00:00",
+      "monotonic": 8806.306656769,
+      "event": "policy_applied",
+      "before": {
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": false,
+        "kick_interval_us": 200,
+        "variant": "weighted_vtime",
+        "sched_ext": "enabled",
+        "pid": 22997,
+        "map_id": 122,
+        "generation": 0,
+        "max_slice_us": 20000
+      },
+      "after": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "revision": 2,
+      "dry_run": false,
+      "action_started_monotonic": 8806.274929221,
+      "action_finished_monotonic": 8806.306652758
+    }
+  ],
+  "frontend_aggregate": {
+    "schema_version": 1,
+    "duration_us": 33099795,
+    "requests": 3742507,
+    "bytes": 16227491792,
+    "p50_us": 233.0,
+    "p95_us": 1759.0,
+    "p99_us": 2662.0,
+    "mean_us": 421.54,
+    "max_us": 8867.0,
+    "finished_monotonic": 8816.242542621,
+    "errors": {
+      "connect": 0,
+      "read": 0,
+      "write": 0,
+      "status": 0,
+      "timeout": 0
+    },
+    "duration_seconds": 33.099795,
+    "rps": 113067.37700339232,
+    "p50_ms": 0.233,
+    "p95_ms": 1.759,
+    "p99_ms": 2.662,
+    "http_error_percent": 0.0,
+    "socket_errors": 0,
+    "start_monotonic_estimate": 8783.142747621
+  },
+  "observation_windows": 35,
+  "page_sha256": "6155a08099f63b9b57d674832c46ad1bfd85a9adac6085535d580a16ad7fbd48",
+  "final_sched_ext": "disabled"
+}

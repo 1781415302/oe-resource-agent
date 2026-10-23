@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>openEuler 资源管控 Agent — 真机实时交互沙盒与示波器</title>
+<style>
+  :root {
+    --bg: #070b14;
+    --card: #0f172a;
+    --card-2: #162038;
+    --border: #1e293b;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --cyan: #38bdf8;
+    --emerald: #10b981;
+    --amber: #f59e0b;
+    --rose: #f43f5e;
+    --violet: #a855f7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: radial-gradient(circle at 15% 0%, #172554 0%, var(--bg) 50%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 16px 22px 28px;
+  }
+  /* Header */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .title-box h1 {
+    font-size: 21px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #38bdf8, #34d399, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .title-box p {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+  .conn-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 13px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
+    background: rgba(16, 185, 129, 0.14);
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    color: #34d399;
+  }
+  .conn-badge.offline {
+    background: rgba(244, 63, 94, 0.15);
+    border-color: rgba(244, 63, 94, 0.45);
+    color: #fb7185;
+  }
+  .pulse-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 10px #10b981;
+    animation: pulse 1.2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.55; }
+  }
+
+  /* Control Deck */
+  .control-deck {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.92));
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .deck-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .stage-banner {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e2e8f0;
+    background: rgba(15, 23, 42, 0.85);
+    border-left: 3px solid var(--cyan);
+    padding: 6px 12px;
+    border-radius: 6px;
+    flex: 1;
+    min-width: 280px;
+  }
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .btn {
+    cursor: pointer;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    background: #1e293b;
+    color: #f8fafc;
+    padding: 7px 13px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    transition: all 0.16s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { transform: translateY(-1px); border-color: var(--cyan); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn.hero {
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    border-color: #60a5fa;
+    box-shadow: 0 3px 14px rgba(59, 130, 246, 0.35);
+  }
+  .btn.danger-on {
+    background: rgba(244, 63, 94, 0.22);
+    border-color: #f43f5e;
+    color: #fda4af;
+    box-shadow: 0 0 12px rgba(244, 63, 94, 0.25);
+  }
+  .btn.emerald-on {
+    background: rgba(16, 185, 129, 0.22);
+    border-color: #10b981;
+    color: #6ee7b7;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+  }
+  .btn.cyan-on {
+    background: rgba(56, 189, 248, 0.22);
+    border-color: #38bdf8;
+    color: #7dd3fc;
+  }
+  .divider {
+    width: 1px;
+    height: 22px;
+    background: rgba(148, 163, 184, 0.25);
+    margin: 0 2px;
+  }
+
+  /* 4 Live KPI Cards */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .kpi-card {
+    background: rgba(15, 23, 42, 0.88);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    padding: 12px 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--cyan);
+  }
+  .kpi-card.emerald::before { background: var(--emerald); }
+  .kpi-card.amber::before { background: var(--amber); }
+  .kpi-card.rose::before { background: var(--rose); }
+  .kpi-card.violet::before { background: var(--violet); }
+  .kpi-label { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; }
+  .kpi-main { font-size: 24px; font-weight: 800; margin: 5px 0 3px; font-variant-numeric: tabular-nums; }
+  .kpi-sub { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  /* Two Live Oscilloscope Charts */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .card {
+    background: rgba(15, 23, 42, 0.88);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+  .card-title { font-size: 14.5px; font-weight: 700; display: flex; align-items: center; gap: 7px; }
+  .legend { display: flex; gap: 12px; font-size: 11.5px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+  .chart-wrap {
+    width: 100%;
+    height: 215px;
+    background: rgba(7, 11, 20, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 8px;
+    position: relative;
+  }
+  svg.osc { width: 100%; height: 100%; display: block; }
+
+  /* Bottom 3 Interactive Labs */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.15fr;
+    gap: 14px;
+  }
+  .bar-track {
+    width: 100%;
+    height: 26px;
+    background: #090d16;
+    border-radius: 7px;
+    overflow: hidden;
+    display: flex;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    margin: 10px 0;
+  }
+  .bar-fill {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #06101e;
+    transition: width 0.45s ease;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .mini-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 10px 0;
+  }
+  .mini-stat {
+    background: rgba(7, 11, 20, 0.75);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+  }
+  .mini-stat .k { font-size: 11px; color: var(--muted); }
+  .mini-stat .v { font-size: 16px; font-weight: 800; margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+  .probe-box {
+    background: rgba(7, 11, 20, 0.85);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-family: "JetBrains Mono", Consolas, monospace;
+    margin-top: 8px;
+  }
+  .terminal {
+    background: #050811;
+    border: 1px solid rgba(56, 189, 248, 0.22);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: "JetBrains Mono", Consolas, monospace;
+    font-size: 11.8px;
+    height: 195px;
+    overflow-y: auto;
+    line-height: 1.55;
+    color: #cbd5e1;
+  }
+  .log-item { margin-bottom: 4px; }
+  .log-ts { color: #64748b; margin-right: 6px; }
+  .log-ok { color: #34d399; }
+  .log-warn { color: #fbbf24; }
+  .log-err { color: #fb7185; }
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<header class="topbar">
+  <div class="title-box">
+    <h1>openEuler 资源管控 Agent — 真机实时交互沙盒与示波器</h1>
+    <p>实时连接 openEuler 24.03 LTS-SP4 (Kernel 6.6.0-scx) · 1秒级真实内核采样与在线策略调控</p>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="conn-badge" id="connBadge">
+      <span class="pulse-dot" id="connDot"></span>
+      <span id="connText">正在连接虚拟机 172.26.1.3:8899...</span>
+    </div>
+  </div>
+</header>
+
+<!-- Interactive Control Deck -->
+<section class="control-deck">
+  <div class="deck-row">
+    <div class="stage-banner" id="stageBanner">
+      💡 实时沙盒已就绪：你可以点击右侧【🎬 一键 25秒全自动真机实况剧本】，或手动开关【🔥 后台 sysbench 干扰】与【⚡ SCX 调度策略】实时观察下方波形变化！
+    </div>
+    <div class="btn-group">
+      <button class="btn hero" id="btnChoreo" onclick="sendControl({action:'start_choreography'})">
+        🎬 一键 25秒全自动真机实况剧本
+      </button>
+    </div>
+  </div>
+
+  <div class="deck-row">
+    <div class="btn-group">
+      <span style="font-size:12px;color:var(--muted);font-weight:600;">真实负载开关：</span>
+      <button class="btn emerald-on" id="btnTraffic" onclick="toggleTraffic()">
+        🟢 前台 Nginx+wrk2 (25.6k RPS): 运行中
+      </button>
+      <button class="btn" id="btnSysbench" onclick="toggleSysbench()">
+        🔥 注入 CPU0 后台 sysbench 干扰: 已关闭
+      </button>
+      <div class="divider"></div>
+      <span style="font-size:12px;color:var(--muted);font-weight:600;">Agent 闭环：</span>
+      <button class="btn" id="btnAutoAgent" onclick="toggleAutoAgent()">
+        🤖 Agent 自动闭环管控: 手动模式
+      </button>
+    </div>
+
+    <div class="btn-group">
+      <span style="font-size:12px;color:var(--muted);font-weight:600;">手动切换内核调度 / BPF 热更新：</span>
+      <button class="btn" id="btnPolDefault" onclick="sendControl({action:'set_policy',policy:'default'})">
+        🔄 默认 CFS/EEVDF
+      </button>
+      <button class="btn" id="btnPolScx1m" onclick="sendControl({action:'set_policy',policy:'scx',slice_us:1000,wakeup_preempt:true})">
+        ⚡ SCX 1ms + 唤醒抢占
+      </button>
+      <button class="btn" id="btnPolScx2m" onclick="sendControl({action:'set_policy',policy:'scx',slice_us:2000,wakeup_preempt:true})">
+        🎛️ 热更新 2ms + 抢占
+      </button>
+      <button class="btn" id="btnPolScx10m" onclick="sendControl({action:'set_policy',policy:'scx',slice_us:10000,wakeup_preempt:false})">
+        🐢 热更新 10ms 无抢占 (劣化对比)
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- 4 Live KPI Gauges -->
+<section class="kpi-grid">
+  <div class="kpi-card emerald" id="cardLat">
+    <div class="kpi-label">
+      <span>前台 Nginx 实时响应延迟 (HTTP)</span>
+      <span id="latBadge" style="color:#34d399;font-weight:700;">● 极速响应</span>
+    </div>
+    <div class="kpi-main" id="kpiP95">p95: 0.24 ms</div>
+    <div class="kpi-sub" id="kpiLatSub">p50: 0.09 ms &nbsp;|&nbsp; p99: 0.42 ms</div>
+  </div>
+
+  <div class="kpi-card" id="cardWait">
+    <div class="kpi-label">
+      <span>CPU0 内核运行队列排队占比 (schedstat)</span>
+      <span id="waitBadge" style="color:#38bdf8;font-weight:700;">/proc/pid/schedstat</span>
+    </div>
+    <div class="kpi-main" id="kpiWaitPct">0.3 %</div>
+    <div class="kpi-sub" id="kpiWaitSub">单次唤醒排队: 0.6 µs &nbsp;|&nbsp; 调度: 605 次/s</div>
+  </div>
+
+  <div class="kpi-card violet">
+    <div class="kpi-label">
+      <span>当前活跃内核调度器 (sched_ext)</span>
+      <span id="schedStateBadge" style="color:#a855f7;font-weight:700;">state: disabled</span>
+    </div>
+    <div class="kpi-main" id="kpiPolicy" style="font-size:20px;">kernel.default</div>
+    <div class="kpi-sub" id="kpiBpfMap">CFS/EEVDF 默认调度 &nbsp;|&nbsp; BPF Map 未挂载</div>
+  </div>
+
+  <div class="kpi-card amber">
+    <div class="kpi-label">
+      <span>CPU0 后台批处理吞吐 (sysbench)</span>
+      <span id="sysbBadge" style="color:#94a3b8;font-weight:700;">未注入</span>
+    </div>
+    <div class="kpi-main" id="kpiEps">0.0 EPS</div>
+    <div class="kpi-sub" id="kpiCpuSub">sysbench CPU0: 0.0% &nbsp;|&nbsp; Nginx CPU0: 14.0%</div>
+  </div>
+</section>
+
+<!-- Two Live Scrolling Oscilloscopes -->
+<section class="charts-grid">
+  <!-- Chart 1: Latency -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">📈 实时示波器 A：前台 Nginx 响应延迟 (p95 / p50 ms)</div>
+      <div class="legend">
+        <span><i class="dot" style="background:#f43f5e;"></i>p95 延迟 (ms)</span>
+        <span><i class="dot" style="background:#38bdf8;"></i>p50 中位延迟 (ms)</span>
+        <span><i class="dot" style="background:rgba(16,185,129,0.35);"></i>绿色背景 = SCX 生效中</span>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <svg class="osc" id="svgLatency" viewBox="0 0 600 205" preserveAspectRatio="none"></svg>
+    </div>
+  </div>
+
+  <!-- Chart 2: Queue Wait % & Wakeup Delay -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">📊 实时示波器 B：CPU0 内核调度排队占比 (%) 与后台吞吐 (EPS)</div>
+      <div class="legend">
+        <span><i class="dot" style="background:#f59e0b;"></i>Nginx 排队等待占比 (%)</span>
+        <span><i class="dot" style="background:#a855f7;"></i>后台 sysbench 吞吐 (EPS/50)</span>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <svg class="osc" id="svgWait" viewBox="0 0 600 205" preserveAspectRatio="none"></svg>
+    </div>
+  </div>
+</section>
+
+<!-- Bottom 3 Interactive Live Sub-Labs -->
+<section class="bottom-grid">
+  <!-- Lab 1: Live Cgroup Contention -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">📦 Cgroup 同核权重争用实时实验台</div>
+      <span style="font-size:11.5px;color:var(--emerald);font-weight:700;" id="cgRatioBadge">实测 3.98 : 1</span>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">
+      点击下方按钮在虚拟机 <code>CPU3</code> 启动两个真实争用进程，验证 <code>cpu.shares</code> 实测时间片分配比例：
+    </div>
+    <div class="btn-group" style="margin-bottom:8px;">
+      <button class="btn" id="btnCg14" onclick="runCgroup(1024,4096)">▶ 实测 1:4 (1024:4096)</button>
+      <button class="btn" id="btnCg12" onclick="runCgroup(1024,2048)">▶ 实测 1:2 (1024:2048)</button>
+      <button class="btn" id="btnCg11" onclick="runCgroup(1024,1024)">▶ 实测 1:1 (1024:1024)</button>
+    </div>
+    <div class="bar-track">
+      <div class="bar-fill" id="cgBarLow" style="width:20.1%;background:#38bdf8;">低权重 40 ticks (20.1%)</div>
+      <div class="bar-fill" id="cgBarHigh" style="width:79.9%;background:#10b981;">高权重 159 ticks (79.9%)</div>
+    </div>
+    <div style="font-size:11.8px;color:var(--muted);display:flex;justify-content:space-between;" id="cgSubText">
+      <span>当前配置: 1024 vs 4096 shares</span>
+      <span>理论比例: 4.0 : 1 | 实测: 3.98 : 1</span>
+    </div>
+  </div>
+
+  <!-- Lab 2: Live eBPF TC Firewall -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">🌐 eBPF TC 网络钩子实时防火墙实验台</div>
+      <span style="font-size:11.5px;color:var(--cyan);font-weight:700;" id="ebpfStatusBadge">未挂载</span>
+    </div>
+    <div class="btn-group" style="margin-bottom:8px;">
+      <button class="btn" id="btnEbpfObs" onclick="sendControl({action:'ebpf_mode',mode:'observe'})">🟢 观测模式 (放行)</button>
+      <button class="btn" id="btnEbpfDrop" onclick="sendControl({action:'ebpf_mode',mode:'drop'})">🔴 端口阻断 (TC_ACT_SHOT)</button>
+      <button class="btn" id="btnEbpfDet" onclick="sendControl({action:'ebpf_mode',mode:'detach'})">⚪ 卸载</button>
+      <button class="btn cyan-on" onclick="probeEbpf()">📡 发送真实 HTTP 探测</button>
+    </div>
+    <div class="mini-stat-grid">
+      <div class="mini-stat">
+        <div class="k">目标端口捕获包</div>
+        <div class="v" style="color:var(--cyan);" id="ebpfPkts">0</div>
+      </div>
+      <div class="mini-stat">
+        <div class="k">捕获总字节</div>
+        <div class="v" style="color:var(--emerald);" id="ebpfBytes">0 B</div>
+      </div>
+      <div class="mini-stat">
+        <div class="k">内核丢包阻断数</div>
+        <div class="v" style="color:var(--rose);" id="ebpfDrops">0</div>
+      </div>
+    </div>
+    <div class="probe-box" id="ebpfProbeBox">
+      📡 点击上方【发送真实 HTTP 探测】向 <code>127.0.0.1:18095</code> 发起真实请求，验证放行与内核丢包阻断效果
+    </div>
+  </div>
+
+  <!-- Lab 3: Live Kernel & Agent Event Stream -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">💻 真机内核与 Agent 实时事件流</div>
+      <span style="font-size:11.5px;color:var(--muted);" id="sampleSeqText">采样 #0</span>
+    </div>
+    <div class="terminal" id="logBox"></div>
+  </div>
+</section>
+
+<script>
+// Automatically determine API base URL: works both via http://172.26.1.3:8899, http://127.0.0.1:8899, and file://
+const API_BASE = (window.location.protocol === "http:" || window.location.protocol === "https:")
+  ? ""
+  : "http://172.26.1.3:8899";
+
+let currentState = {
+  traffic_running: true,
+  sysbench_running: false,
+  auto_agent: false
+};
+let lastLogSignature = "";
+
+async function sendControl(payload) {
+  try {
+    const resp = await fetch(API_BASE + "/api/control", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    await resp.json();
+    pollState();
+  } catch (err) {
+    console.error("Control failed:", err);
+  }
+}
+
+function toggleTraffic() {
+  sendControl({ action: "toggle_traffic", enable: !currentState.traffic_running });
+}
+function toggleSysbench() {
+  sendControl({ action: "toggle_sysbench", enable: !currentState.sysbench_running });
+}
+function toggleAutoAgent() {
+  sendControl({ action: "toggle_auto_agent", enable: !currentState.auto_agent });
+}
+function runCgroup(low, high) {
+  document.getElementById("cgRatioBadge").textContent = "⏳ 正在 CPU3 实测争用 (1.8s)...";
+  sendControl({ action: "run_cgroup", low_shares: low, high_shares: high });
+}
+async function probeEbpf() {
+  const box = document.getElementById("ebpfProbeBox");
+  box.innerHTML = "⏳ 正在向 <code>127.0.0.1:18095</code> 发起真实 HTTP 请求...";
+  await sendControl({ action: "ebpf_probe" });
+}
+
+function renderLatencyChart(history) {
+  const svg = document.getElementById("svgLatency");
+  const W = 600, H = 205, PAD_L = 42, PAD_R = 14, PAD_T = 16, PAD_B = 24;
+  const plotW = W - PAD_L - PAD_R;
+  const plotH = H - PAD_T - PAD_B;
+  const maxPoints = 40;
+  const pts = history.slice(-maxPoints);
+  if (pts.length === 0) return;
+
+  // Dynamic Y scale with minimum 2.5 ms so normal vs spike is super clear
+  let maxY = 2.5;
+  pts.forEach(p => {
+    if (p.http_p95_ms * 1.15 > maxY) maxY = Math.min(6.0, p.http_p95_ms * 1.15);
+  });
+
+  const xOf = i => PAD_L + (i / Math.max(1, maxPoints - 1)) * plotW;
+  const yOf = v => PAD_T + plotH - Math.min(1, Math.max(0, v / maxY)) * plotH;
+
+  let html = "";
+  // Background shading for SCX active or sysbench active
+  const stepW = plotW / Math.max(1, maxPoints - 1);
+  pts.forEach((p, i) => {
+    const x = xOf(i);
+    if (p.policy_id === "scx.slice") {
+      html += `<rect x="${x - stepW/2}" y="${PAD_T}" width="${stepW + 1}" height="${plotH}" fill="rgba(16,185,129,0.13)" />`;
+    } else if (p.sysbench_on) {
+      html += `<rect x="${x - stepW/2}" y="${PAD_T}" width="${stepW + 1}" height="${plotH}" fill="rgba(244,63,94,0.10)" />`;
+    }
+  });
+
+  // Horizontal grid lines
+  [0, 0.25, 0.5, 0.75, 1.0].forEach(frac => {
+    const val = (maxY * frac).toFixed(1);
+    const y = yOf(maxY * frac);
+    html += `<line x1="${PAD_L}" y1="${y}" x2="${W - PAD_R}" y2="${y}" stroke="rgba(148,163,184,0.14)" stroke-dasharray="3,3" />`;
+    html += `<text x="${PAD_L - 6}" y="${y + 4}" fill="#64748b" font-size="10" text-anchor="end">${val}ms</text>`;
+  });
+
+  // Alert threshold line at 1.2ms
+  const yAlert = yOf(1.2);
+  html += `<line x1="${PAD_L}" y1="${yAlert}" x2="${W - PAD_R}" y2="${yAlert}" stroke="rgba(244,63,94,0.55)" stroke-dasharray="5,4" />`;
+  html += `<text x="${W - PAD_R - 4}" y="${yAlert - 4}" fill="#fb7185" font-size="10" text-anchor="end">干扰劣化警戒线 (1.2ms)</text>`;
+
+  // Polylines for p95 and p50
+  const p95Points = pts.map((p, i) => `${xOf(i).toFixed(1)},${yOf(p.http_p95_ms).toFixed(1)}`).join(" ");
+  const p50Points = pts.map((p, i) => `${xOf(i).toFixed(1)},${yOf(p.http_p50_ms).toFixed(1)}`).join(" ");
+
+  html += `<polyline fill="none" stroke="#38bdf8" stroke-width="2.2" points="${p50Points}" />`;
+  html += `<polyline fill="none" stroke="#f43f5e" stroke-width="2.8" points="${p95Points}" />`;
+
+  // Latest dots
+  const lastIdx = pts.length - 1;
+  const last = pts[lastIdx];
+  html += `<circle cx="${xOf(lastIdx)}" cy="${yOf(last.http_p95_ms)}" r="4.5" fill="#f43f5e" stroke="#fff" stroke-width="1.2" />`;
+  html += `<circle cx="${xOf(lastIdx)}" cy="${yOf(last.http_p50_ms)}" r="3.5" fill="#38bdf8" />`;
+
+  svg.innerHTML = html;
+}
+
+function renderWaitChart(history) {
+  const svg = document.getElementById("svgWait");
+  const W = 600, H = 205, PAD_L = 42, PAD_R = 14, PAD_T = 16, PAD_B = 24;
+  const plotW = W - PAD_L - PAD_R;
+  const plotH = H - PAD_T - PAD_B;
+  const maxPoints = 40;
+  const pts = history.slice(-maxPoints);
+  if (pts.length === 0) return;
+
+  const xOf = i => PAD_L + (i / Math.max(1, maxPoints - 1)) * plotW;
+  const yOf = pct => PAD_T + plotH - Math.min(1, Math.max(0, pct / 100.0)) * plotH;
+
+  let html = "";
+  const stepW = plotW / Math.max(1, maxPoints - 1);
+  pts.forEach((p, i) => {
+    const x = xOf(i);
+    if (p.policy_id === "scx.slice") {
+      html += `<rect x="${x - stepW/2}" y="${PAD_T}" width="${stepW + 1}" height="${plotH}" fill="rgba(16,185,129,0.13)" />`;
+    } else if (p.sysbench_on) {
+      html += `<rect x="${x - stepW/2}" y="${PAD_T}" width="${stepW + 1}" height="${plotH}" fill="rgba(244,63,94,0.10)" />`;
+    }
+  });
+
+  [0, 25, 50, 75, 100].forEach(pct => {
+    const y = yOf(pct);
+    html += `<line x1="${PAD_L}" y1="${y}" x2="${W - PAD_R}" y2="${y}" stroke="rgba(148,163,184,0.14)" stroke-dasharray="3,3" />`;
+    html += `<text x="${PAD_L - 6}" y="${y + 4}" fill="#64748b" font-size="10" text-anchor="end">${pct}%</text>`;
+  });
+
+  const waitPoints = pts.map((p, i) => `${xOf(i).toFixed(1)},${yOf(p.nginx_wait_pct).toFixed(1)}`).join(" ");
+  const epsPoints = pts.map((p, i) => `${xOf(i).toFixed(1)},${yOf(Math.min(100, p.sysbench_eps / 45.0)).toFixed(1)}`).join(" ");
+
+  html += `<polyline fill="none" stroke="#a855f7" stroke-width="2.0" stroke-dasharray="4,3" points="${epsPoints}" />`;
+  html += `<polyline fill="none" stroke="#f59e0b" stroke-width="2.8" points="${waitPoints}" />`;
+
+  const lastIdx = pts.length - 1;
+  const last = pts[lastIdx];
+  html += `<circle cx="${xOf(lastIdx)}" cy="${yOf(last.nginx_wait_pct)}" r="4.5" fill="#f59e0b" stroke="#fff" stroke-width="1.2" />`;
+
+  svg.innerHTML = html;
+}
+
+function updateUI(data) {
+  currentState = data;
+  const badge = document.getElementById("connBadge");
+  badge.classList.remove("offline");
+  document.getElementById("connText").textContent = `已连接 openEuler 真机 (172.26.1.3) · 实时采样 #${data.latest.seq} (${data.timestamp})`;
+  document.getElementById("sampleSeqText").textContent = `采样 #${data.latest.seq}`;
+
+  // Stage banner
+  document.getElementById("stageBanner").textContent = data.choreography_stage;
+  document.getElementById("btnChoreo").disabled = data.choreography_running;
+  document.getElementById("btnChoreo").textContent = data.choreography_running
+    ? "⏳ 正在真机执行 25秒实况剧本..."
+    : "🎬 一键 25秒全自动真机实况剧本";
+
+  // Control buttons state
+  const btnTraffic = document.getElementById("btnTraffic");
+  btnTraffic.className = data.traffic_running ? "btn emerald-on" : "btn";
+  btnTraffic.textContent = data.traffic_running
+    ? "🟢 前台 Nginx+wrk2 (25.6k RPS): 运行中"
+    : "⏸ 前台 Nginx+wrk2: 已暂停";
+
+  const btnSys = document.getElementById("btnSysbench");
+  btnSys.className = data.sysbench_running ? "btn danger-on" : "btn";
+  btnSys.textContent = data.sysbench_running
+    ? "🔥 CPU0 后台 sysbench 干扰: 满载争用中 (点击关闭)"
+    : "🔥 注入 CPU0 后台 sysbench 干扰: 已关闭 (点击注入)";
+
+  const btnAuto = document.getElementById("btnAutoAgent");
+  btnAuto.className = data.auto_agent ? "btn cyan-on" : "btn";
+  btnAuto.textContent = data.auto_agent
+    ? "🤖 Agent 自动闭环管控: 已开启 (自动启停 SCX)"
+    : "🤖 Agent 自动闭环管控: 手动模式 (点击开启)";
+
+  // Policy buttons highlight
+  const sch = data.scheduler;
+  document.getElementById("btnPolDefault").className = (sch.policy_id === "kernel.default") ? "btn cyan-on" : "btn";
+  document.getElementById("btnPolScx1m").className = (sch.policy_id === "scx.slice" && sch.slice_us === 1000 && sch.wakeup_preempt) ? "btn emerald-on" : "btn";
+  document.getElementById("btnPolScx2m").className = (sch.policy_id === "scx.slice" && sch.slice_us === 2000 && sch.wakeup_preempt) ? "btn emerald-on" : "btn";
+  document.getElementById("btnPolScx10m").className = (sch.policy_id === "scx.slice" && sch.slice_us === 10000 && !sch.wakeup_preempt) ? "btn danger-on" : "btn";
+
+  // KPI 1: Latency
+  const lat = data.latest;
+  document.getElementById("kpiP95").textContent = `p95: ${lat.http_p95_ms.toFixed(2)} ms`;
+  document.getElementById("kpiLatSub").innerHTML = `p50: <strong>${lat.http_p50_ms.toFixed(2)} ms</strong> &nbsp;|&nbsp; p99: <strong>${lat.http_p99_ms.toFixed(2)} ms</strong>`;
+  const latBadge = document.getElementById("latBadge");
+  if (lat.http_p95_ms > 1.1 || lat.http_p50_ms > 0.4) {
+    latBadge.textContent = "🚨 干扰排队劣化中!";
+    latBadge.style.color = "#fb7185";
+  } else {
+    latBadge.textContent = "● 低延迟健康";
+    latBadge.style.color = "#34d399";
+  }
+
+  // KPI 2: Wait %
+  document.getElementById("kpiWaitPct").textContent = `${lat.nginx_wait_pct.toFixed(1)} %`;
+  document.getElementById("kpiWaitSub").innerHTML = `单次唤醒等待: <strong>${lat.nginx_avg_wait_us.toFixed(1)} µs</strong> &nbsp;|&nbsp; 调度: ${lat.nginx_slices_per_s.toFixed(0)} 次/s`;
+  const waitBadge = document.getElementById("waitBadge");
+  if (lat.nginx_wait_pct > 35) {
+    waitBadge.textContent = "⚠️ 严重排队等待";
+    waitBadge.style.color = "#fb7185";
+  } else {
+    waitBadge.textContent = "✓ 调度顺畅";
+    waitBadge.style.color = "#34d399";
+  }
+
+  // KPI 3: Scheduler
+  document.getElementById("schedStateBadge").textContent = `state: ${sch.state}`;
+  document.getElementById("schedStateBadge").style.color = (sch.state === "enabled") ? "#34d399" : "#94a3b8";
+  if (sch.policy_id === "scx.slice") {
+    document.getElementById("kpiPolicy").textContent = `scx.slice (${sch.slice_us}µs)`;
+    document.getElementById("kpiPolicy").style.color = "#34d399";
+    document.getElementById("kpiBpfMap").textContent = `抢占: ${sch.wakeup_preempt ? 'ON' : 'OFF'} | map_id=${sch.map_id}, gen=${sch.generation}`;
+  } else {
+    document.getElementById("kpiPolicy").textContent = "kernel.default";
+    document.getElementById("kpiPolicy").style.color = "#f1f5f9";
+    document.getElementById("kpiBpfMap").textContent = "CFS/EEVDF 默认调度 | BPF Map 未挂载";
+  }
+
+  // KPI 4: Sysbench
+  document.getElementById("kpiEps").textContent = `${lat.sysbench_eps.toFixed(1)} EPS`;
+  document.getElementById("kpiCpuSub").textContent = `sysbench CPU0: ${lat.sysbench_cpu_pct.toFixed(1)}% | Nginx CPU0: ${lat.nginx_cpu_pct.toFixed(1)}%`;
+  const sysbBadge = document.getElementById("sysbBadge");
+  sysbBadge.textContent = data.sysbench_running ? "🔥 正在 CPU0 争用" : "未运行";
+  sysbBadge.style.color = data.sysbench_running ? "#fbbf24" : "#94a3b8";
+
+  // Render live oscilloscopes
+  renderLatencyChart(data.history || []);
+  renderWaitChart(data.history || []);
+
+  // Cgroup Lab
+  const cg = data.cgroup;
+  if (!cg.running) {
+    document.getElementById("cgRatioBadge").textContent = `实测 ${cg.ratio} : 1 (理论 ${cg.expected_ratio}:1)`;
+  }
+  document.getElementById("cgBarLow").style.width = `${cg.low_pct}%`;
+  document.getElementById("cgBarLow").textContent = `低权 ${cg.low_ticks} ticks (${cg.low_pct}%)`;
+  document.getElementById("cgBarHigh").style.width = `${cg.high_pct}%`;
+  document.getElementById("cgBarHigh").textContent = `高权 ${cg.high_ticks} ticks (${cg.high_pct}%)`;
+  document.getElementById("cgSubText").innerHTML = `<span>配置: ${cg.low_shares} vs ${cg.high_shares} shares</span><span>理论: ${cg.expected_ratio}:1 | 实测: <strong>${cg.ratio}:1</strong></span>`;
+
+  // eBPF Lab
+  const eb = data.ebpf;
+  const ebBadge = document.getElementById("ebpfStatusBadge");
+  if (!eb.attached) {
+    ebBadge.textContent = "⚪ 未挂载";
+    ebBadge.style.color = "#94a3b8";
+  } else if (eb.drop_target) {
+    ebBadge.textContent = "🔴 阻断隔离中 (TC_ACT_SHOT)";
+    ebBadge.style.color = "#fb7185";
+  } else {
+    ebBadge.textContent = "🟢 观测放行中 (TC_ACT_OK)";
+    ebBadge.style.color = "#34d399";
+  }
+  document.getElementById("btnEbpfObs").className = (eb.attached && !eb.drop_target) ? "btn emerald-on" : "btn";
+  document.getElementById("btnEbpfDrop").className = (eb.attached && eb.drop_target) ? "btn danger-on" : "btn";
+  document.getElementById("ebpfPkts").textContent = eb.stats.target_packets ?? eb.stats.total_packets ?? 0;
+  document.getElementById("ebpfBytes").textContent = (eb.stats.target_bytes ?? eb.stats.total_bytes ?? 0) + " B";
+  document.getElementById("ebpfDrops").textContent = eb.stats.dropped_packets ?? 0;
+  if (eb.last_probe && eb.last_probe.ts !== "-") {
+    const box = document.getElementById("ebpfProbeBox");
+    const color = eb.last_probe.ok ? "#34d399" : "#fb7185";
+    box.innerHTML = `<span style="color:#64748b;">[${eb.last_probe.ts}]</span> <strong style="color:${color};">${eb.last_probe.status}</strong>`;
+  }
+
+  // Logs
+  const sig = JSON.stringify(data.logs);
+  if (sig !== lastLogSignature) {
+    lastLogSignature = sig;
+    const logBox = document.getElementById("logBox");
+    logBox.innerHTML = (data.logs || []).map(item => {
+      const cls = item.level === "warn" ? "log-warn" : (item.level === "err" ? "log-err" : "log-ok");
+      return `<div class="log-item"><span class="log-ts">[${item.ts}]</span><span class="${cls}">${item.msg}</span></div>`;
+    }).join("");
+    logBox.scrollTop = logBox.scrollHeight;
+  }
+}
+
+async function pollState() {
+  try {
+    const resp = await fetch(API_BASE + "/api/live-state", { cache: "no-store" });
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    const data = await resp.json();
+    updateUI(data);
+  } catch (err) {
+    const badge = document.getElementById("connBadge");
+    badge.classList.add("offline");
+    document.getElementById("connText").textContent = "等待连接 openEuler 实时沙盒 (172.26.1.3:8899)...";
+  }
+}
+
+setInterval(pollState, 850);
+pollState();
+</script>
+</body>
+</html>

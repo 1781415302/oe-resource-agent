@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "target_port": 18091,
+  "other_port": 18092,
+  "network_describe": {
+    "schema_version": 1,
+    "request_id": "558c66da-90ff-4c03-a57a-c5fec3c0b191",
+    "tool": "network.ebpf.describe",
+    "ok": true,
+    "data": {
+      "name": "network.ebpf_tc",
+      "available": true,
+      "program_type": "sched_cls",
+      "attach_point": "tc egress (lo)",
+      "source": "native/oe_net_hook.bpf.c",
+      "object_built": true,
+      "active": false,
+      "capabilities": [
+        "packet_byte_accounting",
+        "target_port_monitoring",
+        "target_port_drop_isolation"
+      ]
+    },
+    "elapsed_seconds": 9.650200081523508e-05
+  },
+  "security_describe": {
+    "schema_version": 1,
+    "request_id": "1a6c9b15-b568-4d12-8b6f-70cb0a0845b5",
+    "tool": "security.lsm.describe",
+    "ok": true,
+    "data": {
+      "name": "security.lsm",
+      "available": true,
+      "active_lsm_stack": [
+        "lockdown",
+        "capability",
+        "yama",
+        "apparmor",
+        "bpf"
+      ],
+      "bpf_lsm_enabled": true,
+      "capabilities": [
+        "lsm_stack_discovery",
+        "process_capability_and_confinement_audit"
+      ]
+    },
+    "elapsed_seconds": 3.2163006835617125e-05
+  },
+  "security_audit": {
+    "schema_version": 1,
+    "request_id": "58df4580-c76e-47fa-b3f3-486a4b9837c0",
+    "tool": "security.lsm.audit",
+    "ok": true,
+    "data": {
+      "pid": 38888,
+      "comm": "python3",
+      "lsm_stack": [
+        "lockdown",
+        "capability",
+        "yama",
+        "apparmor",
+        "bpf"
+      ],
+      "lsm_label": "unconfined",
+      "no_new_privs": false,
+      "seccomp_mode": 0,
+      "cap_eff_hex": "000001ffffffffff",
+      "has_cap_sys_admin": true,
+      "has_cap_net_admin": true,
+      "cgroups": "14:hugetlb:/\n13:cpu,cpuacct:/\n12:rdma:/\n11:misc:/\n10:pids:/system.slice/sshd.service\n9:freezer:/\n8:cpuset:/\n7:devices:/system.slice/sshd.service\n6:net_cls,net_prio:/\n5:memory:/system.slice/sshd.service\n4:perf_event:/\n3:files:/\n2:blkio:/\n1:name=systemd:/system.slice/sshd.service"
+    },
+    "elapsed_seconds": 0.00035197999386582524
+  },
+  "attach_observe": {
+    "schema_version": 1,
+    "request_id": "72fe76e5-cd25-4240-bc9b-e18c8febd1dd",
+    "tool": "network.ebpf.attach",
+    "ok": true,
+    "data": {
+      "active": true,
+      "interface": "lo",
+      "config": {
+        "target_port": 18091,
+        "drop_target": 0
+      },
+      "stats": {
+        "total_packets": 0,
+        "total_bytes": 0,
+        "target_packets": 0,
+        "target_bytes": 0,
+        "dropped_packets": 0
+      }
+    },
+    "elapsed_seconds": 0.025489603998721577
+  },
+  "status_after_traffic": {
+    "schema_version": 1,
+    "request_id": "fa04004e-82f2-416d-a1e8-7dee39ef0479",
+    "tool": "network.ebpf.status",
+    "ok": true,
+    "data": {
+      "active": true,
+      "interface": "lo",
+      "config": {
+        "target_port": 18091,
+        "drop_target": 0
+      },
+      "stats": {
+        "total_packets": 60,
+        "total_bytes": 5255,
+        "target_packets": 60,
+        "target_bytes": 5255,
+        "dropped_packets": 0
+      }
+    },
+    "elapsed_seconds": 0.01207985200744588
+  },
+  "attach_drop": {
+    "schema_version": 1,
+    "request_id": "c3661390-bbcf-4ef5-ae50-2341c7c1a2d0",
+    "tool": "network.ebpf.attach",
+    "ok": true,
+    "data": {
+      "active": true,
+      "interface": "lo",
+      "config": {
+        "target_port": 18091,
+        "drop_target": 1
+      },
+      "stats": {
+        "total_packets": 60,
+        "total_bytes": 5255,
+        "target_packets": 60,
+        "target_bytes": 5255,
+        "dropped_packets": 0
+      }
+    },
+    "elapsed_seconds": 0.015679927993915044
+  },
+  "status_after_drop": {
+    "schema_version": 1,
+    "request_id": "0bc53838-5d41-48a5-8724-02fc7e3536f6",
+    "tool": "network.ebpf.status",
+    "ok": true,
+    "data": {
+      "active": true,
+      "interface": "lo",
+      "config": {
+        "target_port": 18091,
+        "drop_target": 1
+      },
+      "stats": {
+        "total_packets": 73,
+        "total_bytes": 6380,
+        "target_packets": 61,
+        "target_bytes": 5329,
+        "dropped_packets": 1
+      }
+    },
+    "elapsed_seconds": 0.012009807003778405
+  },
+  "detach": {
+    "schema_version": 1,
+    "request_id": "4dcd134d-c008-4582-9fca-51ed72becbae",
+    "tool": "network.ebpf.detach",
+    "ok": true,
+    "data": {
+      "detached": true,
+      "before": {
+        "active": true,
+        "interface": "lo",
+        "config": {
+          "target_port": 18091,
+          "drop_target": 1
+        },
+        "stats": {
+          "total_packets": 73,
+          "total_bytes": 6380,
+          "target_packets": 61,
+          "target_bytes": 5329,
+          "dropped_packets": 1
+        }
+      },
+      "after": {
+        "active": false,
+        "interface": "lo",
+        "config": null,
+        "stats": null
+      }
+    },
+    "elapsed_seconds": 0.014432058000238612
+  }
+}

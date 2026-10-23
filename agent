@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+agent_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+cd "$agent_root"
+exec python3 -m oeagent.cli "$@"

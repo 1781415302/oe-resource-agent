@@ -1,0 +1,77 @@
+--- a/src/wrk.h
++++ b/src/wrk.h
+@@ -32,6 +32,8 @@
+     uint64_t connections;
+     int interval;
+     uint64_t stop_at;
++    uint64_t oe_start_ns, oe_end_ns, oe_start_complete, oe_start_bytes, oe_terminal_exclusions;
++    errors oe_start_errors;
+     uint64_t complete;
+     uint64_t requests;
+     uint64_t bytes;
+--- a/src/wrk.c
++++ b/src/wrk.c
+@@ -5,6 +5,12 @@
+ #include "main.h"
+ #include "hdr_histogram.h"
+ #include "stats.h"
++#include <time.h>
++static uint64_t oe_monotonic_ns(void) {
++    struct timespec ts;
++    if (clock_gettime(CLOCK_MONOTONIC, &ts)) abort();
++    return (uint64_t)ts.tv_sec * 1000000000ULL + ts.tv_nsec;
++}
+ 
+ // Max recordable latency of 1 day
+ #define MAX_LATENCY 24L * 60 * 60 * 1000000
+@@ -244,6 +250,23 @@
+         script_done(L, latency_stats, statistics.requests);
+     }
+ 
++
++    /* Measurement export is restricted to the one-thread benchmark adapter. */
++    if (cfg.threads == 1 && threads[0].oe_start_ns) {
++        thread *t = &threads[0];
++        printf("OE_WRK2_ALIGNED {\"schema_version\":1,\"start_ns\":%"PRIu64
++               ",\"end_ns\":%"PRIu64",\"requests\":%"PRIu64",\"bytes\":%"PRIu64
++               ",\"latency_samples\":%"PRId64",\"rate\":%"PRIu64
++               ",\"terminal_exclusions\":%"PRIu64",\"connections\":%"PRIu64
++               ",\"errors\":{\"connect\":%"PRIu64",\"read\":%"PRIu64
++               ",\"write\":%"PRIu64",\"status\":%"PRIu64",\"timeout\":%"PRIu64"}}\n",
++               t->oe_start_ns, t->oe_end_ns, t->complete - t->oe_start_complete,
++               t->bytes - t->oe_start_bytes, t->latency_histogram->total_count, cfg.rate,
++               t->oe_terminal_exclusions, cfg.connections,
++               t->errors.connect - t->oe_start_errors.connect,
++               t->errors.read - t->oe_start_errors.read, t->errors.write - t->oe_start_errors.write,
++               t->errors.status - t->oe_start_errors.status, t->errors.timeout - t->oe_start_errors.timeout);
++    }
+     return 0;
+ }
+ 
+@@ -288,6 +311,7 @@
+ 
+     thread->start = time_us();
+     aeMain(loop);
++    thread->oe_end_ns = oe_monotonic_ns();
+ 
+     aeDeleteEventLoop(loop);
+     zfree(thread->cs);
+@@ -355,6 +379,10 @@
+     hdr_reset(thread->latency_histogram);
+     hdr_reset(thread->u_latency_histogram);
+ 
++    thread->oe_start_ns = oe_monotonic_ns();
++    thread->oe_start_complete = thread->complete;
++    thread->oe_start_bytes = thread->bytes;
++    thread->oe_start_errors = thread->errors;
+     thread->start    = time_us();
+     thread->interval = interval;
+     thread->requests = 0;
+@@ -501,6 +529,7 @@
+     }
+ 
+     if (now >= thread->stop_at) {
++        thread->oe_terminal_exclusions++;
+         aeStop(thread->loop);
+         goto done;
+     }

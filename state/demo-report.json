@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "sections": {
+    "capabilities": {
+      "system": {
+        "schema_version": 1,
+        "agent_version": "0.1.3",
+        "python_cache_mode": "checked_hash",
+        "system": "Linux",
+        "kernel_release": "6.6.0-scx",
+        "architecture": "x86_64",
+        "root": true,
+        "linux": true,
+        "sched_ext": "disabled",
+        "btf": true,
+        "cgroup_version": 1,
+        "psi_cpu": false,
+        "schedstats_enabled": true,
+        "backend_built": true,
+        "backend": {
+          "version": "0.1.3",
+          "kernel_release": "6.6.0-scx",
+          "architecture": "x86_64",
+          "binary": "/root/rpmbuild/BUILD/kernel-6.6.0/linux-6.6.0-159.4.3.154.x86_64/tools/sched_ext/build/bin/scx_oe_adaptive",
+          "binary_sha256": "28fe968c2bd1d316fe177595391ca15851665fade8dc33a10452d8332fb1e3bf",
+          "configuration": {
+            "version": "0.1.3",
+            "scheduler": "oe_adaptive",
+            "slice_ns": 20000000,
+            "max_slice_ns": 20000000,
+            "lease_seconds": 15,
+            "wakeup_preempt": false,
+            "kick_interval_ns": 200000
+          },
+          "btf_sha256": "84a688bd73200194ffd5df22794c3cbe34980bce0406159f10a11462dc740bf4",
+          "source": {
+            "kernel_tree": "/root/rpmbuild/BUILD/kernel-6.6.0/linux-6.6.0-159.4.3.154.x86_64",
+            "sha256": {
+              "scx_oe_adaptive.c": "c68fe1a62e61d8589abfcd50c6affc9e3239e434b99d8b3480654549b3403e7e",
+              "scx_oe_adaptive.bpf.c": "fa6a446078f04bfac707c99ab68eeb16f21c14632797dbb91df889942c956e65",
+              "oe_adaptive.h": "350a23509ae597a1161e9e53ab5eadbf11fd9f6b5184e0bc14abf22a32b4230e"
+            }
+          },
+          "native_load_verified": false,
+          "performance_verified": false
+        },
+        "available_plugins": [
+          "cpu.sched_ext",
+          "resource.cgroup",
+          "network.ebpf_tc",
+          "security.lsm"
+        ],
+        "extension_hooks": {
+          "network": "ebpf_tc_sched_cls",
+          "security": "lsm_capability_audit"
+        }
+      },
+      "lsm": {
+        "name": "security.lsm",
+        "available": true,
+        "active_lsm_stack": [
+          "lockdown",
+          "capability",
+          "yama",
+          "apparmor",
+          "bpf"
+        ],
+        "bpf_lsm_enabled": true,
+        "capabilities": [
+          "lsm_stack_discovery",
+          "process_capability_and_confinement_audit"
+        ]
+      },
+      "process_audit": {
+        "pid": 38505,
+        "comm": "python3",
+        "lsm_stack": [
+          "lockdown",
+          "capability",
+          "yama",
+          "apparmor",
+          "bpf"
+        ],
+        "lsm_label": "unconfined",
+        "no_new_privs": false,
+        "seccomp_mode": 0,
+        "cap_eff_hex": "000001ffffffffff",
+        "has_cap_sys_admin": true,
+        "has_cap_net_admin": true,
+        "cgroups": "14:hugetlb:/\n13:cpu,cpuacct:/\n12:rdma:/\n11:misc:/\n10:pids:/system.slice/sshd.service\n9:freezer:/\n8:cpuset:/\n7:devices:/system.slice/sshd.service\n6:net_cls,net_prio:/\n5:memory:/system.slice/sshd.service\n4:perf_event:/\n3:files:/\n2:blkio:/\n1:name=systemd:/system.slice/sshd.service"
+      }
+    },
+    "cgroup_demo": {
+      "low_ticks": 40,
+      "high_ticks": 159,
+      "ratio": 3.98
+    },
+    "ebpf_net_demo": {
+      "observe_stats": {
+        "total_packets": 48,
+        "total_bytes": 4204,
+        "target_packets": 48,
+        "target_bytes": 4204,
+        "dropped_packets": 0
+      },
+      "drop_stats": {
+        "total_packets": 49,
+        "total_bytes": 4278,
+        "target_packets": 49,
+        "target_bytes": 4278,
+        "dropped_packets": 1
+      },
+      "blocked": true
+    },
+    "scx_loop_demo": {
+      "applied": {
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": true,
+        "kick_interval_us": 200,
+        "variant": "wakeup_preempt",
+        "sched_ext": "enabled",
+        "pid": 38583,
+        "map_id": 295,
+        "generation": 0,
+        "max_slice_us": 20000,
+        "revision": 1
+      },
+      "updated": {
+        "policy_id": "scx.slice",
+        "slice_us": 2000,
+        "wakeup_preempt": true,
+        "kick_interval_us": 200,
+        "variant": "wakeup_preempt",
+        "sched_ext": "enabled",
+        "pid": 38583,
+        "map_id": 295,
+        "generation": 1,
+        "max_slice_us": 20000,
+        "revision": 2
+      },
+      "rolled_back": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled",
+        "revision": 3
+      }
+    },
+    "slo_continuous_summary": {
+      "total_stream_windows": 6,
+      "submitted_windows": 5,
+      "confirming_windows": 1,
+      "probe_triggered": true,
+      "scx_evaluated_windows": 3,
+      "baseline_p99_ms": 3.505,
+      "scx_p99_ms": 1.987,
+      "final_feedback_stage": "accepted"
+    }
+  },
+  "final_sched_ext": "disabled"
+}

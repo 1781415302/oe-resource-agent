@@ -1,0 +1,3 @@
+{"episode": 1, "cycle": 1, "condition": "fixed-1000"}
+{"episode": 1, "valid": false, "error": {"type": "KeyboardInterrupt", "message": "Received signal 15"}}
+{"summary": {"status": "failed", "cycle": 1, "run_key": "validation-cancel-1792744187056783373", "guest_start_utc_seconds": 1792744187.1007276, "performance_claim": null, "error": {"type": "KeyboardInterrupt", "message": "Interrupted episode cleaned up"}, "episodes": 1, "valid_episodes": 0, "windows": 0, "final_sched_ext": "disabled", "guest_end_utc_seconds": 1792744191.6110928}, "archive": "/tmp/oe-controlled-validation-cancel-1792744187056783373.tar.gz", "archive_sha256": "a4a527f5bad46451992aafaadbb448d3dc54289974b8cafc3ff387fa74d1c307"}

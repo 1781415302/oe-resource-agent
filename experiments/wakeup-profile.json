@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "seed": 20261015,
+  "conditions": ["default", "fixed-1000", "preempt-1000"],
+  "window_seconds": 30,
+  "windows": 2,
+  "rate": 40000,
+  "port": 18086,
+  "page_bytes": 4096,
+  "connections": 32,
+  "service_cpus": [0],
+  "client_cpus": [1],
+  "controller_cpus": [2],
+  "sample_seconds": 1,
+  "host_quality": {
+    "sample_seconds": 5,
+    "preflight_seconds": 30,
+    "preflight_cpu_limit": 20,
+    "during_cpu_limit": 30,
+    "maximum_sample_gap_seconds": 8,
+    "maximum_preflight_wait_seconds": 120,
+    "desired_cycles": 3,
+    "maximum_attempts_per_cycle": 2
+  },
+  "scope": "host-gated expert ablation; all attempts retained, no retries based on latency or throughput"
+}

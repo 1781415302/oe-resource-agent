@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "responses": [
+    {
+      "schema_version": 1,
+      "request_id": 0,
+      "tool": "policy.status",
+      "ok": true,
+      "data": {
+        "revision": 0,
+        "policy_since_monotonic": 95871.457164237,
+        "boot_id": "5084334e-b2b1-4b90-b8a4-f377b583ca0f",
+        "profile_id": "nginx-cpu-adaptive-development",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled",
+        "control_mode": "adaptive",
+        "observation_ready": false,
+        "feedback": null
+      },
+      "elapsed_seconds": 0.00014192899107001722
+    },
+    {
+      "schema_version": 1,
+      "request_id": "load",
+      "tool": "policy.apply",
+      "ok": true,
+      "data": {
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": false,
+        "kick_interval_us": 200,
+        "variant": "weighted_vtime",
+        "sched_ext": "enabled",
+        "pid": 38826,
+        "map_id": 331,
+        "generation": 0,
+        "max_slice_us": 20000,
+        "revision": 1
+      },
+      "elapsed_seconds": 0.043508368005859666
+    },
+    {
+      "schema_version": 1,
+      "request_id": "update",
+      "tool": "policy.apply",
+      "ok": true,
+      "data": {
+        "policy_id": "scx.slice",
+        "slice_us": 2000,
+        "wakeup_preempt": true,
+        "kick_interval_us": 200,
+        "variant": "wakeup_preempt",
+        "sched_ext": "enabled",
+        "pid": 38826,
+        "map_id": 331,
+        "generation": 1,
+        "max_slice_us": 20000,
+        "revision": 2
+      },
+      "elapsed_seconds": 0.0012569969985634089
+    },
+    {
+      "schema_version": 1,
+      "request_id": "stale",
+      "tool": "policy.apply",
+      "ok": false,
+      "error": {
+        "code": "STALE_REVISION",
+        "message": "策略版本已变化，请重新观察。",
+        "details": {}
+      },
+      "elapsed_seconds": 2.601000596769154e-05
+    },
+    {
+      "schema_version": 1,
+      "request_id": "rollback",
+      "tool": "policy.rollback",
+      "ok": true,
+      "data": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled",
+        "revision": 3
+      },
+      "elapsed_seconds": 0.007457979008904658
+    }
+  ],
+  "directory": "/root/oe-resource-agent/results/tool-session-validation-1792744159440094558",
+  "final_sched_ext": "disabled"
+}

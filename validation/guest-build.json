@@ -1,0 +1,25 @@
+{
+  "version": "0.1.2",
+  "kernel_release": "6.6.0-scx",
+  "architecture": "x86_64",
+  "binary": "/root/rpmbuild/BUILD/kernel-6.6.0/linux-6.6.0-159.4.3.154.x86_64/tools/sched_ext/build/bin/scx_oe_adaptive",
+  "binary_sha256": "2aff9a0559470d20d9fb9ea54483182a0454e2de8f047d50a70f6e45c3d39361",
+  "configuration": {
+    "version": "0.1.2",
+    "scheduler": "oe_adaptive",
+    "slice_ns": 20000000,
+    "max_slice_ns": 20000000,
+    "lease_seconds": 15
+  },
+  "btf_sha256": "3c3bf1bc86efb5204d17611cea59066d6540e7b0697ed1eb4c6d1b239a5dbd53",
+  "source": {
+    "kernel_tree": "/root/rpmbuild/BUILD/kernel-6.6.0/linux-6.6.0-159.4.3.154.x86_64",
+    "sha256": {
+      "scx_oe_adaptive.c": "008f9c08445dac1fa4bef3d727816d2bdc617257827b3688e2c140be5b817292",
+      "scx_oe_adaptive.bpf.c": "eef1229341ff182f52da7a809b6f4f47a9b587b9aeaccfc8eea62c7f39999215",
+      "oe_adaptive.h": "539e3da05b7437c06e94e26c93394d70904645b2207bab6322712e0e1e7ab556"
+    }
+  },
+  "native_load_verified": false,
+  "performance_verified": false
+}

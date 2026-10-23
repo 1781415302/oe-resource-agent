@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "responses": [
+    {
+      "schema_version": 1,
+      "request_id": 0,
+      "tool": "policy.status",
+      "ok": true,
+      "data": {
+        "revision": 0,
+        "policy_since_monotonic": 5679.996720303,
+        "boot_id": "a4fc5166-143b-48dd-8c7a-62f4fba8bc88",
+        "profile_id": "nginx-cpu-adaptive-development",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled",
+        "control_mode": "adaptive",
+        "observation_ready": false,
+        "feedback": null
+      },
+      "elapsed_seconds": 7.099400045262882e-05
+    },
+    {
+      "schema_version": 1,
+      "request_id": "load",
+      "tool": "policy.apply",
+      "ok": true,
+      "data": {
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "sched_ext": "enabled",
+        "pid": 10080,
+        "map_id": 411,
+        "generation": 0,
+        "max_slice_us": 20000,
+        "revision": 1
+      },
+      "elapsed_seconds": 0.04912396700001409
+    },
+    {
+      "schema_version": 1,
+      "request_id": "update",
+      "tool": "policy.apply",
+      "ok": true,
+      "data": {
+        "policy_id": "scx.slice",
+        "slice_us": 2000,
+        "sched_ext": "enabled",
+        "pid": 10080,
+        "map_id": 411,
+        "generation": 1,
+        "max_slice_us": 20000,
+        "revision": 2
+      },
+      "elapsed_seconds": 0.0029997310002727318
+    },
+    {
+      "schema_version": 1,
+      "request_id": "stale",
+      "tool": "policy.apply",
+      "ok": false,
+      "error": {
+        "code": "STALE_REVISION",
+        "message": "策略版本已变化，请重新观察。",
+        "details": {}
+      },
+      "elapsed_seconds": 2.839399985532509e-05
+    },
+    {
+      "schema_version": 1,
+      "request_id": "rollback",
+      "tool": "policy.rollback",
+      "ok": true,
+      "data": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled",
+        "revision": 3
+      },
+      "elapsed_seconds": 0.033217138000509294
+    }
+  ],
+  "directory": "/root/oe-resource-agent/results/tool-session-validation-1792043518474232065",
+  "final_sched_ext": "disabled"
+}

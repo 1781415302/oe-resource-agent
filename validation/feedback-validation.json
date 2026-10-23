@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "directory": "/root/oe-resource-agent/results/feedback-validation-1792043519740158530",
+  "checks": [
+    {
+      "name": "real_business_baseline_probe_and_reject",
+      "passed": true
+    },
+    {
+      "name": "lost_business_metrics_restore_default",
+      "passed": true,
+      "evidence": {
+        "passed": true,
+        "elapsed_seconds": 20.134167350000098,
+        "note": "native heartbeats continue; workload fallback confirmation deliberately delayed"
+      }
+    }
+  ],
+  "final_sched_ext": "disabled"
+}

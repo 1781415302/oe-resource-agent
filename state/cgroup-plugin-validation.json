@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "plugin": {
+    "name": "resource.cgroup",
+    "available": true,
+    "cgroup_version": 1,
+    "controlled_file": "cpu.shares",
+    "value_range": [
+      2,
+      262144
+    ],
+    "scope": "owned oeagent child groups only",
+    "cpu_weight_under_scx": "unsupported by this backend; writes require sched_ext disabled",
+    "attach_processes": "supported (PID and start_ticks verified; safe detach to root cgroup)"
+  },
+  "responses": [
+    {
+      "schema_version": 1,
+      "request_id": "8401341f-ff18-4387-9e2e-38e3632e625b",
+      "tool": "resource.cgroup.create",
+      "ok": true,
+      "data": {
+        "group": "validation-9d5b1f3e-low",
+        "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-9d5b1f3e-low",
+        "cgroup_version": 1,
+        "file": "cpu.shares",
+        "value": 1024,
+        "procs": []
+      },
+      "elapsed_seconds": 0.00012106800568290055
+    },
+    {
+      "schema_version": 1,
+      "request_id": "d93b1caf-c75f-455f-945c-cde17785abea",
+      "tool": "resource.cgroup.create",
+      "ok": true,
+      "data": {
+        "group": "validation-9d5b1f3e-high",
+        "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-9d5b1f3e-high",
+        "cgroup_version": 1,
+        "file": "cpu.shares",
+        "value": 1024,
+        "procs": []
+      },
+      "elapsed_seconds": 7.05760030541569e-05
+    },
+    {
+      "schema_version": 1,
+      "request_id": "f52ad7e5-0ece-4ceb-94d3-c43f8d66a715",
+      "tool": "resource.cgroup.apply",
+      "ok": true,
+      "data": {
+        "before": {
+          "group": "validation-9d5b1f3e-high",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-9d5b1f3e-high",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 1024,
+          "procs": []
+        },
+        "after": {
+          "group": "validation-9d5b1f3e-high",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-9d5b1f3e-high",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 4096,
+          "procs": []
+        },
+        "scope": "configured owned group; use resource.cgroup.attach to migrate verified tasks"
+      },
+      "elapsed_seconds": 0.00011657900176942348
+    },
+    {
+      "schema_version": 1,
+      "request_id": "5ffdaa69-0ed2-45ab-aa30-3400084eba47",
+      "tool": "resource.cgroup.apply",
+      "ok": false,
+      "error": {
+        "code": "STALE_RESOURCE_VALUE",
+        "message": "cgroup 权重已变化，请重新读取。",
+        "details": {}
+      },
+      "elapsed_seconds": 4.880300548393279e-05
+    },
+    {
+      "schema_version": 1,
+      "request_id": "a0996a88-2c84-49fa-9848-b0b742898bf8",
+      "tool": "resource.cgroup.attach",
+      "ok": false,
+      "error": {
+        "code": "STALE_PROCESS_IDENTITY",
+        "message": "目标 PID 启动时间不匹配，拒绝迁入。",
+        "details": {}
+      },
+      "elapsed_seconds": 0.00017887700232677162
+    },
+    {
+      "schema_version": 1,
+      "request_id": "ecd732ab-7d3c-45ad-abd0-56d4b17a6979",
+      "tool": "resource.cgroup.attach",
+      "ok": true,
+      "data": {
+        "group": "validation-9d5b1f3e-low",
+        "pid": 38886,
+        "start_ticks": 9590382,
+        "comm": "python3",
+        "attached": true,
+        "after": {
+          "group": "validation-9d5b1f3e-low",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-9d5b1f3e-low",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 1024,
+          "procs": [
+            38886
+          ]
+        }
+      },
+      "elapsed_seconds": 0.005604523001238704
+    },
+    {
+      "schema_version": 1,
+      "request_id": "46f91fb3-c73b-4b49-9a1f-247f21604842",
+      "tool": "resource.cgroup.attach",
+      "ok": true,
+      "data": {
+        "group": "validation-9d5b1f3e-high",
+        "pid": 38887,
+        "start_ticks": 9590392,
+        "comm": "python3",
+        "attached": true,
+        "after": {
+          "group": "validation-9d5b1f3e-high",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-9d5b1f3e-high",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 4096,
+          "procs": [
+            38887
+          ]
+        }
+      },
+      "elapsed_seconds": 0.00023809599224478006
+    },
+    {
+      "schema_version": 1,
+      "request_id": "2555136f-b58a-4b87-a62a-5e04d611b6da",
+      "tool": "resource.cgroup.detach",
+      "ok": true,
+      "data": {
+        "group": "validation-9d5b1f3e-low",
+        "pid": 38886,
+        "detached": true,
+        "after": {
+          "group": "validation-9d5b1f3e-low",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-9d5b1f3e-low",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 1024,
+          "procs": []
+        }
+      },
+      "elapsed_seconds": 0.009016472002258524
+    },
+    {
+      "schema_version": 1,
+      "request_id": "1345e926-434f-40ba-aff7-9e2fdadc3cee",
+      "tool": "resource.cgroup.detach",
+      "ok": true,
+      "data": {
+        "group": "validation-9d5b1f3e-high",
+        "pid": 38887,
+        "detached": true,
+        "after": {
+          "group": "validation-9d5b1f3e-high",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-9d5b1f3e-high",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 4096,
+          "procs": []
+        }
+      },
+      "elapsed_seconds": 0.0001012760039884597
+    },
+    {
+      "schema_version": 1,
+      "request_id": "0858801f-ee27-4cfa-84c4-70eda62f823c",
+      "tool": "resource.cgroup.apply",
+      "ok": true,
+      "data": {
+        "before": {
+          "group": "validation-9d5b1f3e-high",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-9d5b1f3e-high",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 4096,
+          "procs": []
+        },
+        "after": {
+          "group": "validation-9d5b1f3e-high",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/validation-9d5b1f3e-high",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 1024,
+          "procs": []
+        },
+        "scope": "configured owned group; use resource.cgroup.attach to migrate verified tasks"
+      },
+      "elapsed_seconds": 0.00011156100663356483
+    }
+  ],
+  "scope": "owned v1 group configuration, verified PID migration, and 1:4 CPU share contention check",
+  "contention_experiment": {
+    "low_shares": 1024,
+    "high_shares": 4096,
+    "low_cpu_ticks": 50,
+    "high_cpu_ticks": 198,
+    "measured_high_to_low_ratio": 3.96,
+    "expected_theoretical_ratio": 4.0
+  },
+  "empty_groups_removed": true
+}

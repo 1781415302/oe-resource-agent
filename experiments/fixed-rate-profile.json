@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "seed": 20261015,
+  "conditions": ["default", "fixed-1000", "feedback"],
+  "repeats": 3,
+  "window_seconds": 30,
+  "windows": 3,
+  "rate": 40000,
+  "port": 18084,
+  "page_bytes": 4096,
+  "connections": 32,
+  "service_cpus": [0],
+  "client_cpus": [1],
+  "controller_cpus": [2],
+  "sample_seconds": 1,
+  "purpose": "exploratory fixed-rate steady mixed workload; each window excludes wrk2 calibration",
+  "limitations": [
+    "Each 30 second client window has its own approximately 10 second calibration",
+    "Same workload processes persist; post-calibration windows measure stable operation, not switch transients",
+    "All conditions use the same observer; performance is scoped to this VM",
+    "3ms is a predeclared experimental goal, not a production guarantee"
+  ]
+}

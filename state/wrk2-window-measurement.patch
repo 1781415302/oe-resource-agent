@@ -1,0 +1,307 @@
+--- a/src/wrk.h
++++ b/src/wrk.h
+@@ -32,6 +32,19 @@
+     uint64_t connections;
+     int interval;
+     uint64_t stop_at;
++    uint64_t oe_start_ns, oe_end_ns, oe_start_complete, oe_start_bytes, oe_terminal_exclusions;
++    errors oe_start_errors;
++    struct hdr_histogram *oe_window_histogram;
++    uint64_t oe_window_seq;
++    uint64_t oe_window_start_ns;
++    uint64_t oe_window_complete;
++    uint64_t oe_window_bytes;
++    errors oe_window_errors;
++    uint64_t oe_window_terminal;
++    uint64_t oe_terminal_at_ready;
++    uint64_t oe_window_overflows;
++    uint64_t oe_overflow_total;
++    uint64_t oe_export_duration_ns;
+     uint64_t complete;
+     uint64_t requests;
+     uint64_t bytes;
+--- a/src/wrk.c
++++ b/src/wrk.c
+@@ -5,6 +5,12 @@
+ #include "main.h"
+ #include "hdr_histogram.h"
+ #include "stats.h"
++#include <time.h>
++static uint64_t oe_monotonic_ns(void) {
++    struct timespec ts;
++    if (clock_gettime(CLOCK_MONOTONIC, &ts)) abort();
++    return (uint64_t)ts.tv_sec * 1000000000ULL + ts.tv_nsec;
++}
+ 
+ // Max recordable latency of 1 day
+ #define MAX_LATENCY 24L * 60 * 60 * 1000000
+@@ -74,6 +80,159 @@
+            "  Time arguments may include a time unit (2s, 2m, 2h)\n");
+ }
+ 
++
++static uint64_t oe_window_ms;
++
++static void oe_load_window_ms(void) {
++    const char *value = getenv("OE_WRK2_WINDOW_MS");
++    if (!value || !value[0]) {
++        oe_window_ms = 0;
++        return;
++    }
++    if (strcmp(value, "5000") != 0) {
++        fprintf(stderr, "OE_WRK2_WINDOW_MS must be unset or 5000\n");
++        exit(1);
++    }
++    oe_window_ms = 5000;
++}
++
++static void oe_io_check(int written) {
++    if (written < 0) {
++        fprintf(stderr, "OE_WRK2_WINDOW write failed\n");
++        exit(1);
++    }
++}
++
++static void oe_flush_export(thread *t, uint64_t started_ns) {
++    uint64_t finished_ns;
++    oe_io_check(printf("\n"));
++    if (fflush(stdout) != 0) {
++        fprintf(stderr, "OE_WRK2_WINDOW flush failed\n");
++        exit(1);
++    }
++    finished_ns = oe_monotonic_ns();
++    if (finished_ns < started_ns) {
++        fprintf(stderr, "OE_WRK2_WINDOW clock moved backwards\n");
++        exit(1);
++    }
++    t->oe_export_duration_ns += finished_ns - started_ns;
++}
++
++static void oe_print_errors(errors start, errors end) {
++    oe_io_check(printf("{\"connect\":%" PRIu32 ",\"read\":%" PRIu32
++        ",\"write\":%" PRIu32 ",\"status\":%" PRIu32 ",\"timeout\":%" PRIu32 "}",
++        (uint32_t)(end.connect - start.connect), (uint32_t)(end.read - start.read),
++        (uint32_t)(end.write - start.write), (uint32_t)(end.status - start.status),
++        (uint32_t)(end.timeout - start.timeout)));
++}
++
++static void oe_print_bins(struct hdr_histogram *histogram) {
++    struct hdr_recorded_iter iter;
++    int first = 1;
++    hdr_recorded_iter_init(&iter, histogram);
++    oe_io_check(printf("["));
++    while (hdr_recorded_iter_next(&iter)) {
++        if (iter.iter.count_at_index <= 0) continue;
++        if (!first) oe_io_check(printf(","));
++        first = 0;
++        oe_io_check(printf("[%" PRId64 ",%" PRId64 "]",
++            iter.iter.highest_equivalent_value, iter.iter.count_at_index));
++    }
++    oe_io_check(printf("]"));
++}
++
++static void oe_emit_ready(thread *t) {
++    uint64_t started_ns = oe_monotonic_ns();
++    oe_io_check(printf(
++        "OE_WRK2_STREAM {\"schema_version\":1,\"kind\":\"ready\",\"start_ns\":%" PRIu64
++        ",\"window_ms\":%" PRIu64 ",\"offered_rps\":%" PRIu64 ",\"connections\":%" PRIu64
++        ",\"client_threads\":1,\"pipeline\":1,\"histogram\":\"wrk2_expected_latency_hdr_3sig\"}",
++        t->oe_start_ns, oe_window_ms, cfg.rate, cfg.connections));
++    oe_flush_export(t, started_ns);
++}
++
++static void oe_emit_window(thread *t, uint64_t end_ns, int is_final) {
++    uint64_t started_ns;
++    if (end_ns < t->oe_window_start_ns) {
++        fprintf(stderr, "OE_WRK2_WINDOW clock moved backwards\n");
++        exit(1);
++    }
++    t->oe_window_seq++;
++    started_ns = oe_monotonic_ns();
++    oe_io_check(printf(
++        "OE_WRK2_STREAM {\"schema_version\":1,\"kind\":\"window\",\"seq\":%" PRIu64
++        ",\"start_ns\":%" PRIu64 ",\"end_ns\":%" PRIu64 ",\"final\":%s,\"requests\":%" PRIu64
++        ",\"bytes\":%" PRIu64 ",\"errors\":",
++        t->oe_window_seq, t->oe_window_start_ns, end_ns, is_final ? "true" : "false",
++        t->complete - t->oe_window_complete, t->bytes - t->oe_window_bytes));
++    oe_print_errors(t->oe_window_errors, t->errors);
++    oe_io_check(printf(",\"terminal_exclusions\":%" PRIu64 ",\"histogram_overflows\":%" PRIu64 ",\"bins_us\":",
++        t->oe_window_terminal, t->oe_window_overflows));
++    oe_print_bins(t->oe_window_histogram);
++    oe_io_check(printf("}"));
++    oe_flush_export(t, started_ns);
++    hdr_reset(t->oe_window_histogram);
++    t->oe_window_start_ns = end_ns;
++    t->oe_window_complete = t->complete;
++    t->oe_window_bytes = t->bytes;
++    t->oe_window_errors = t->errors;
++    t->oe_window_terminal = 0;
++    t->oe_window_overflows = 0;
++}
++
++static void oe_emit_tail(thread *t) {
++    if (t->oe_end_ns < t->oe_window_start_ns) {
++        fprintf(stderr, "OE_WRK2_WINDOW clock moved backwards\n");
++        exit(1);
++    }
++    if (t->oe_end_ns == t->oe_window_start_ns) return;
++    oe_emit_window(t, t->oe_end_ns, 1);
++}
++
++static int oe_window_tick(aeEventLoop *loop, long long id, void *data) {
++    thread *t = data;
++    uint64_t end_ns = oe_monotonic_ns();
++    (void)loop;
++    (void)id;
++    if (end_ns != t->oe_window_start_ns)
++        oe_emit_window(t, end_ns, 0);
++    return (int)oe_window_ms;
++}
++
++static void oe_emit_footer(thread *t) {
++    oe_io_check(printf(
++        "OE_WRK2_STREAM {\"schema_version\":1,\"kind\":\"footer\",\"start_ns\":%" PRIu64
++        ",\"end_ns\":%" PRIu64 ",\"windows\":%" PRIu64 ",\"requests\":%" PRIu64
++        ",\"bytes\":%" PRIu64 ",\"errors\":",
++        t->oe_start_ns, t->oe_end_ns, t->oe_window_seq,
++        t->complete - t->oe_start_complete, t->bytes - t->oe_start_bytes));
++    oe_print_errors(t->oe_start_errors, t->errors);
++    oe_io_check(printf(",\"terminal_exclusions\":%" PRIu64 ",\"histogram_overflows\":%" PRIu64 ",\"bins_us\":",
++        t->oe_terminal_exclusions - t->oe_terminal_at_ready, t->oe_overflow_total));
++    oe_print_bins(t->latency_histogram);
++    oe_io_check(printf(",\"export_duration_ns\":%" PRIu64 "}\n", t->oe_export_duration_ns));
++    if (fflush(stdout) != 0) {
++        fprintf(stderr, "OE_WRK2_WINDOW flush failed\n");
++        exit(1);
++    }
++}
++
++/* Upstream record stays first. Mirror disagreement aborts; shared rejection is counted. */
++static void oe_record_expected(thread *t, int64_t timing) {
++    bool recorded = hdr_record_value(t->latency_histogram, timing);
++    bool mirrored;
++    if (!(oe_window_ms && t->oe_window_start_ns)) return;
++    mirrored = hdr_record_value(t->oe_window_histogram, timing);
++    if (recorded != mirrored) {
++        fprintf(stderr, "OE_WRK2_WINDOW mirror record diverged\n");
++        exit(1);
++    }
++    if (!recorded) {
++        t->oe_window_overflows++;
++        t->oe_overflow_total++;
++    }
++}
++
+ int main(int argc, char **argv) {
+     char *url, **headers = zmalloc(argc * sizeof(char *));
+     struct http_parser_url parts = {};
+@@ -82,6 +241,7 @@
+         usage();
+         exit(1);
+     }
++    oe_load_window_ms();
+ 
+     char *schema  = copy_url_part(url, &parts, UF_SCHEMA);
+     char *host    = copy_url_part(url, &parts, UF_HOST);
+@@ -137,6 +297,12 @@
+         if (i == 0) {
+             cfg.pipeline = script_verify_request(t->L);
+             cfg.dynamic = !script_is_static(t->L);
++            if (oe_window_ms && (cfg.threads != 1 || cfg.pipeline != 1 || !cfg.record_all_responses)) {
++                fprintf(stderr, "OE_WRK2_WINDOW_MS refused: threads=%" PRIu64
++                    " pipeline=%" PRIu64 " record_all_responses=%d\n",
++                    cfg.threads, cfg.pipeline, cfg.record_all_responses ? 1 : 0);
++                exit(1);
++            }
+             if (script_want_response(t->L)) {
+                 parser_settings.on_header_field = header_field;
+                 parser_settings.on_header_value = header_value;
+@@ -244,6 +410,25 @@
+         script_done(L, latency_stats, statistics.requests);
+     }
+ 
++
++    /* Measurement export is restricted to the one-thread benchmark adapter. */
++    if (cfg.threads == 1 && threads[0].oe_start_ns) {
++        thread *t = &threads[0];
++        printf("OE_WRK2_ALIGNED {\"schema_version\":1,\"start_ns\":%"PRIu64
++               ",\"end_ns\":%"PRIu64",\"requests\":%"PRIu64",\"bytes\":%"PRIu64
++               ",\"latency_samples\":%"PRId64",\"rate\":%"PRIu64
++               ",\"terminal_exclusions\":%"PRIu64",\"connections\":%"PRIu64
++               ",\"errors\":{\"connect\":%"PRIu64",\"read\":%"PRIu64
++               ",\"write\":%"PRIu64",\"status\":%"PRIu64",\"timeout\":%"PRIu64"}}\n",
++               t->oe_start_ns, t->oe_end_ns, t->complete - t->oe_start_complete,
++               t->bytes - t->oe_start_bytes, t->latency_histogram->total_count, cfg.rate,
++               t->oe_terminal_exclusions, cfg.connections,
++               t->errors.connect - t->oe_start_errors.connect,
++               t->errors.read - t->oe_start_errors.read, t->errors.write - t->oe_start_errors.write,
++               t->errors.status - t->oe_start_errors.status, t->errors.timeout - t->oe_start_errors.timeout);
++    }
++    if (oe_window_ms && threads[0].oe_start_ns)
++        oe_emit_footer(&threads[0]);
+     return 0;
+ }
+ 
+@@ -255,6 +440,10 @@
+     tinymt64_init(&thread->rand, time_us());
+     hdr_init(1, MAX_LATENCY, 3, &thread->latency_histogram);
+     hdr_init(1, MAX_LATENCY, 3, &thread->u_latency_histogram);
++    if (oe_window_ms && hdr_init(1, MAX_LATENCY, 3, &thread->oe_window_histogram)) {
++        fprintf(stderr, "OE_WRK2_WINDOW histogram init failed\n");
++        exit(1);
++    }
+ 
+     char *request = NULL;
+     size_t length = 0;
+@@ -288,6 +477,8 @@
+ 
+     thread->start = time_us();
+     aeMain(loop);
++    thread->oe_end_ns = oe_monotonic_ns();
++    if (oe_window_ms && thread->oe_window_start_ns) oe_emit_tail(thread);
+ 
+     aeDeleteEventLoop(loop);
+     zfree(thread->cs);
+@@ -355,6 +546,24 @@
+     hdr_reset(thread->latency_histogram);
+     hdr_reset(thread->u_latency_histogram);
+ 
++    thread->oe_start_ns = oe_monotonic_ns();
++    thread->oe_start_complete = thread->complete;
++    thread->oe_start_bytes = thread->bytes;
++    thread->oe_start_errors = thread->errors;
++    if (oe_window_ms) {
++        thread->oe_window_start_ns = thread->oe_start_ns;
++        thread->oe_window_complete = thread->complete;
++        thread->oe_window_bytes = thread->bytes;
++        thread->oe_window_errors = thread->errors;
++        thread->oe_window_terminal = 0;
++        thread->oe_window_overflows = 0;
++        thread->oe_terminal_at_ready = thread->oe_terminal_exclusions;
++        oe_emit_ready(thread);
++        if (aeCreateTimeEvent(loop, (long long)oe_window_ms, oe_window_tick, thread, NULL) == AE_ERR) {
++            fprintf(stderr, "OE_WRK2_WINDOW timer failed\n");
++            exit(1);
++        }
++    }
+     thread->start    = time_us();
+     thread->interval = interval;
+     thread->requests = 0;
+@@ -501,6 +710,8 @@
+     }
+ 
+     if (now >= thread->stop_at) {
++        thread->oe_terminal_exclusions++;
++        if (oe_window_ms && thread->oe_window_start_ns) thread->oe_window_terminal++;
+         aeStop(thread->loop);
+         goto done;
+     }
+@@ -552,7 +763,7 @@
+ 
+     // Record if needed, either last in batch or all, depending in cfg:
+     if (cfg.record_all_responses || !c->has_pending) {
+-        hdr_record_value(thread->latency_histogram, expected_latency_timing);
++        oe_record_expected(thread, expected_latency_timing);
+ 
+         uint64_t actual_latency_timing = now - c->actual_latency_start;
+         hdr_record_value(thread->u_latency_histogram, actual_latency_timing);

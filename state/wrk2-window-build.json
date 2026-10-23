@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "upstream_commit": "44a94c17d8e6a0bac8559b53da76848e430cb7a7",
+  "upstream_archive_sha256": "3bc11d20d7d3e72a6b67ce26407eb7c34ae816c882669dcedf578d1c27ad4c20",
+  "patch_sha256": "fc6c533fc3fc2bf80bc121d2a70ca064a0ec2015db72511cd79320459246a96b",
+  "binary": "/root/oe-resource-agent/cache/wrk2-window-1792638977636425076/wrk2-44a94c17/wrk",
+  "binary_sha256": "382efd0572f1e286f27536c7f7d6f1a48d48f7a45893ebd78e1e667ece54cc91",
+  "scope": "one client thread only; calibration/end snapshots, request scheduling and HDR algorithm unchanged",
+  "compiler": "gcc (GCC) 12.3.1 (openEuler 12.3.1-110.oe2403sp4)\nCopyright (C) 2022 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "patched_sources": {
+    "src/wrk.h": "63845c7b0f361cbf94c1f77a99ee507e0ce4df5c52cf4a55dcdeb30510c88fb1",
+    "src/wrk.c": "bf4f4bc5643c18483843062ba2b075b633439fbefeaccc7ee93037456b92d571"
+  },
+  "measurement_protocol": "oe_wrk2_windows_v1",
+  "window_ms": 5000
+}

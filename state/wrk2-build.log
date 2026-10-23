@@ -1,0 +1,344 @@
+make: Entering directory '/root/oe-resource-agent/cache/wrk2-aligned-1792580647839031832/wrk2-44a94c17'
+Building LuaJIT...
+make[1]: Entering directory '/root/oe-resource-agent/cache/wrk2-aligned-1792580647839031832/wrk2-44a94c17/deps/luajit/src'
+HOSTCC    host/minilua.o
+HOSTCC    host/buildvm_asm.o
+HOSTCC    host/buildvm_peobj.o
+HOSTCC    host/buildvm_lib.o
+HOSTCC    host/buildvm_fold.o
+CC        lj_gc.o
+CC        lj_char.o
+CC        lj_obj.o
+CC        lj_str.o
+CC        lj_tab.o
+CC        lj_func.o
+CC        lj_udata.o
+CC        lj_meta.o
+CC        lj_debug.o
+CC        lj_state.o
+CC        lj_vmevent.o
+CC        lj_vmmath.o
+CC        lj_strscan.o
+CC        lj_api.o
+CC        lj_lex.o
+CC        lj_parse.o
+CC        lj_bcread.o
+CC        lj_bcwrite.o
+CC        lj_load.o
+CC        lj_ir.o
+CC        lj_opt_mem.o
+CC        lj_opt_narrow.o
+CC        lj_opt_dce.o
+CC        lj_opt_loop.o
+CC        lj_opt_split.o
+CC        lj_opt_sink.o
+CC        lj_mcode.o
+CC        lj_snap.o
+CC        lj_asm.o
+CC        lj_trace.o
+CC        lj_gdbjit.o
+CC        lj_ctype.o
+CC        lj_cdata.o
+CC        lj_cconv.o
+CC        lj_ccall.o
+CC        lj_ccallback.o
+CC        lj_carith.o
+CC        lj_clib.o
+CC        lj_cparse.o
+lj_cparse.c: In function ‘cp_next_’:
+lj_cparse.c:313:7: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  313 |       if (cp_get(cp) != '|') return '|'; cp_get(cp); return CTOK_OROR;
+      |       ^~
+lj_cparse.c:313:42: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  313 |       if (cp_get(cp) != '|') return '|'; cp_get(cp); return CTOK_OROR;
+      |                                          ^~~~~~
+lj_cparse.c:315:7: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  315 |       if (cp_get(cp) != '&') return '&'; cp_get(cp); return CTOK_ANDAND;
+      |       ^~
+lj_cparse.c:315:42: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  315 |       if (cp_get(cp) != '&') return '&'; cp_get(cp); return CTOK_ANDAND;
+      |                                          ^~~~~~
+lj_cparse.c:317:7: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  317 |       if (cp_get(cp) != '=') return '='; cp_get(cp); return CTOK_EQ;
+      |       ^~
+lj_cparse.c:317:42: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  317 |       if (cp_get(cp) != '=') return '='; cp_get(cp); return CTOK_EQ;
+      |                                          ^~~~~~
+lj_cparse.c:319:7: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  319 |       if (cp_get(cp) != '=') return '!'; cp_get(cp); return CTOK_NE;
+      |       ^~
+lj_cparse.c:319:42: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  319 |       if (cp_get(cp) != '=') return '!'; cp_get(cp); return CTOK_NE;
+      |                                          ^~~~~~
+lj_cparse.c:329:7: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  329 |       if (cp_get(cp) != '>') return '-'; cp_get(cp); return CTOK_DEREF;
+      |       ^~
+lj_cparse.c:329:42: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  329 |       if (cp_get(cp) != '>') return '-'; cp_get(cp); return CTOK_DEREF;
+      |                                          ^~~~~~
+CC        lj_lib.o
+CC        lj_alloc.o
+CC        lib_aux.o
+CC        lib_package.o
+CC        lib_init.o
+CC        luajit.o
+HOSTLINK  host/minilua
+DYNASM    host/buildvm_arch.h
+HOSTCC    host/buildvm.o
+In file included from host/buildvm.c:59:
+./../dynasm/dasm_x86.h: In function ‘dasm_put’:
+./../dynasm/dasm_x86.h:207:9: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  207 |         if (*p++ == 1 && *p == DASM_DISP) mrm = n; continue;
+      |         ^~
+./../dynasm/dasm_x86.h:207:52: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  207 |         if (*p++ == 1 && *p == DASM_DISP) mrm = n; continue;
+      |                                                    ^~~~~~~~
+HOSTLINK  host/buildvm
+BUILDVM   lj_ffdef.h
+BUILDVM   lj_vm.s
+BUILDVM   lj_bcdef.h
+CC        lj_dispatch.o
+BUILDVM   lj_folddef.h
+CC        lj_record.o
+CC        lj_crecord.o
+BUILDVM   lj_recdef.h
+BUILDVM   lj_libdef.h
+BUILDVM   jit/vmdef.lua
+ASM       lj_vm.o
+CC        lj_err.o
+CC        lj_bc.o
+CC        lj_opt_fold.o
+CC        lj_ffrecord.o
+CC        lib_base.o
+CC        lib_math.o
+CC        lib_bit.o
+CC        lib_string.o
+CC        lib_table.o
+CC        lib_io.o
+CC        lib_os.o
+CC        lib_debug.o
+CC        lib_jit.o
+CC        lib_ffi.o
+AR        libluajit.a
+LINK      luajit
+OK        Successfully built LuaJIT
+make[1]: Leaving directory '/root/oe-resource-agent/cache/wrk2-aligned-1792580647839031832/wrk2-44a94c17/deps/luajit/src'
+CC src/wrk.c
+CC src/net.c
+In file included from /usr/include/errno.h:25,
+                 from src/net.c:3:
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+  196 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+      |   ^~~~~~~
+In file included from /usr/include/pthread.h:21,
+                 from src/wrk.h:5,
+                 from src/wrk.c:3:
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+  196 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+      |   ^~~~~~~
+src/wrk.c: In function ‘main’:
+src/wrk.c:257:16: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 10 has type ‘uint32_t’ {aka ‘unsigned int’} [-Wformat=]
+  257 |         printf("OE_WRK2_ALIGNED {\"schema_version\":1,\"start_ns\":%"PRIu64
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+......
+  266 |                t->errors.connect - t->oe_start_errors.connect,
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                  |
+      |                                  uint32_t {aka unsigned int}
+In file included from src/wrk.h:6:
+/usr/include/inttypes.h:105:41: note: format string is defined here
+  105 | # define PRIu64         __PRI64_PREFIX "u"
+src/wrk.c:257:16: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 11 has type ‘uint32_t’ {aka ‘unsigned int’} [-Wformat=]
+  257 |         printf("OE_WRK2_ALIGNED {\"schema_version\":1,\"start_ns\":%"PRIu64
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+......
+  267 |                t->errors.read - t->oe_start_errors.read, t->errors.write - t->oe_start_errors.write,
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                               |
+      |                               uint32_t {aka unsigned int}
+/usr/include/inttypes.h:105:41: note: format string is defined here
+  105 | # define PRIu64         __PRI64_PREFIX "u"
+src/wrk.c:257:16: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 12 has type ‘uint32_t’ {aka ‘unsigned int’} [-Wformat=]
+  257 |         printf("OE_WRK2_ALIGNED {\"schema_version\":1,\"start_ns\":%"PRIu64
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+......
+  267 |                t->errors.read - t->oe_start_errors.read, t->errors.write - t->oe_start_errors.write,
+      |                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                                          |
+      |                                                                          uint32_t {aka unsigned int}
+/usr/include/inttypes.h:105:41: note: format string is defined here
+  105 | # define PRIu64         __PRI64_PREFIX "u"
+src/wrk.c:257:16: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 13 has type ‘uint32_t’ {aka ‘unsigned int’} [-Wformat=]
+  257 |         printf("OE_WRK2_ALIGNED {\"schema_version\":1,\"start_ns\":%"PRIu64
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+......
+  268 |                t->errors.status - t->oe_start_errors.status, t->errors.timeout - t->oe_start_errors.timeout);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                 |
+      |                                 uint32_t {aka unsigned int}
+/usr/include/inttypes.h:105:41: note: format string is defined here
+  105 | # define PRIu64         __PRI64_PREFIX "u"
+src/wrk.c:257:16: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 14 has type ‘uint32_t’ {aka ‘unsigned int’} [-Wformat=]
+  257 |         printf("OE_WRK2_ALIGNED {\"schema_version\":1,\"start_ns\":%"PRIu64
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+......
+  268 |                t->errors.status - t->oe_start_errors.status, t->errors.timeout - t->oe_start_errors.timeout);
+      |                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                                                |
+      |                                                                                uint32_t {aka unsigned int}
+/usr/include/inttypes.h:105:41: note: format string is defined here
+  105 | # define PRIu64         __PRI64_PREFIX "u"
+src/wrk.c: In function ‘response_complete’:
+src/wrk.c:558:48: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘int64_t’ {aka ‘long int’} [-Wformat=]
+  558 |         printf("  expected_latency_timing = %lld\n", expected_latency_timing);
+      |                                             ~~~^     ~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                |     |
+      |                                                |     int64_t {aka long int}
+      |                                                long long int
+      |                                             %ld
+src/wrk.c:559:28: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+  559 |         printf("  now = %lld\n", now);
+      |                         ~~~^     ~~~
+      |                            |     |
+      |                            |     uint64_t {aka long unsigned int}
+      |                            long long int
+      |                         %ld
+src/wrk.c:560:47: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+  560 |         printf("  expected_latency_start = %lld\n", expected_latency_start);
+      |                                            ~~~^     ~~~~~~~~~~~~~~~~~~~~~~
+      |                                               |     |
+      |                                               |     uint64_t {aka long unsigned int}
+      |                                               long long int
+      |                                            %ld
+src/wrk.c:561:40: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+  561 |         printf("  c->thread_start = %lld\n", c->thread_start);
+      |                                     ~~~^     ~~~~~~~~~~~~~~~
+      |                                        |      |
+      |                                        |      uint64_t {aka long unsigned int}
+      |                                        long long int
+      |                                     %ld
+src/wrk.c:562:36: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+  562 |         printf("  c->complete = %lld\n", c->complete);
+      |                                 ~~~^     ~~~~~~~~~~~
+      |                                    |      |
+      |                                    |      uint64_t {aka long unsigned int}
+      |                                    long long int
+      |                                 %ld
+src/wrk.c:564:48: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+  564 |         printf("  latest_should_send_time = %lld\n", c->latest_should_send_time);
+      |                                             ~~~^     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                |      |
+      |                                                |      uint64_t {aka long unsigned int}
+      |                                                long long int
+      |                                             %ld
+src/wrk.c:565:46: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+  565 |         printf("  latest_expected_start = %lld\n", c->latest_expected_start);
+      |                                           ~~~^     ~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                              |      |
+      |                                              |      uint64_t {aka long unsigned int}
+      |                                              long long int
+      |                                           %ld
+src/wrk.c:566:39: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+  566 |         printf("  latest_connect = %lld\n", c->latest_connect);
+      |                                    ~~~^     ~~~~~~~~~~~~~~~~~
+      |                                       |      |
+      |                                       |      uint64_t {aka long unsigned int}
+      |                                       long long int
+      |                                    %ld
+src/wrk.c:567:37: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+  567 |         printf("  latest_write = %lld\n", c->latest_write);
+      |                                  ~~~^     ~~~~~~~~~~~~~~~
+      |                                     |      |
+      |                                     |      uint64_t {aka long unsigned int}
+      |                                     long long int
+      |                                  %ld
+src/wrk.c:571:52: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+  571 |         printf("  next expected_latency_start = %lld\n", expected_latency_start);
+      |                                                 ~~~^     ~~~~~~~~~~~~~~~~~~~~~~
+      |                                                    |     |
+      |                                                    |     uint64_t {aka long unsigned int}
+      |                                                    long long int
+      |                                                 %ld
+CC src/ssl.c
+src/wrk.c: At top level:
+src/wrk.c:863:13: warning: ‘print_stats_latency’ defined but not used [-Wunused-function]
+  863 | static void print_stats_latency(stats *stats) {
+      |             ^~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/pthread.h:21,
+                 from src/ssl.c:3:
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+  196 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+      |   ^~~~~~~
+src/ssl.c:22:22: warning: ‘ssl_id’ defined but not used [-Wunused-function]
+   22 | static unsigned long ssl_id() {
+      |                      ^~~~~~
+src/ssl.c:13:13: warning: ‘ssl_lock’ defined but not used [-Wunused-function]
+   13 | static void ssl_lock(int mode, int n, const char *file, int line) {
+      |             ^~~~~~~~
+CC src/aprintf.c
+In file included from /usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdlib.h:26,
+                 from src/aprintf.c:4:
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+  196 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+      |   ^~~~~~~
+CC src/stats.c
+In file included from /usr/include/inttypes.h:25,
+                 from src/stats.c:3:
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+  196 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+      |   ^~~~~~~
+CC src/script.c
+In file included from /usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdlib.h:26,
+                 from src/script.c:3:
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+  196 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+      |   ^~~~~~~
+CC src/units.c
+In file included from /usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdlib.h:26,
+                 from src/units.c:3:
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+  196 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+      |   ^~~~~~~
+CC src/ae.c
+In file included from /usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdio.h:27,
+                 from src/ae.c:33:
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+  196 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+      |   ^~~~~~~
+CC src/zmalloc.c
+In file included from /usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdio.h:27,
+                 from src/zmalloc.c:31:
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+  196 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+      |   ^~~~~~~
+CC src/http_parser.c
+In file included from /usr/include/sys/types.h:25,
+                 from src/http_parser.h:32,
+                 from src/http_parser.c:24:
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+  196 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+      |   ^~~~~~~
+CC src/tinymt64.c
+In file included from /usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdint.h:26,
+                 from /usr/lib/gcc/x86_64-openEuler-linux/12/include/stdint.h:9,
+                 from src/tinymt64.h:19,
+                 from src/tinymt64.c:16:
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+  196 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+      |   ^~~~~~~
+CC src/hdr_histogram.c
+In file included from /usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdlib.h:26,
+                 from src/hdr_histogram.c:7:
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+  196 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+      |   ^~~~~~~
+LUAJIT src/wrk.lua
+LINK wrk
+make: Leaving directory '/root/oe-resource-agent/cache/wrk2-aligned-1792580647839031832/wrk2-44a94c17'

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "name": "nginx-cpu-adaptive-development",
+  "selectors": [
+    {"role": "latency", "comm": ["nginx"]},
+    {"role": "batch", "comm": ["sysbench"]}
+  ],
+  "sample_seconds": 1.0,
+  "lease_seconds": 15,
+  "initial_slice_us": 20000,
+  "controller_cpu": 2,
+  "policy": {
+    "latency_slice_us": 1000,
+    "balanced_slice_us": 4000,
+    "batch_slice_us": 20000,
+    "confirmations": 3,
+    "residence_seconds": 10.0,
+    "batch_active_cpu_percent": 10.0,
+    "latency_switches_per_sec": 20.0,
+    "latency_wait_fraction": 0.05
+  },
+  "calibration_status": "unvalidated_development_defaults",
+  "performance_claim": null
+}

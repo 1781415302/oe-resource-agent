@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "snapshot_local_date": "2026-10-15",
+  "cpu_model": "AMD Ryzen 9 9955HX 16-Core Processor",
+  "physical_cores": 16,
+  "logical_processors": 32,
+  "power_scheme_name": "silent",
+  "power_scheme_guid": "64a64f24-65b9-4b56-befd-5ec1eaced9b3",
+  "virtualization": "VMware",
+  "guest_vcpus": 4,
+  "notes": [
+    "Read-only host snapshot after the first two exploratory batches; does not prove full-run host stability",
+    "Host CPU activity not continuously sampled",
+    "No power scheme change was performed"
+  ]
+}

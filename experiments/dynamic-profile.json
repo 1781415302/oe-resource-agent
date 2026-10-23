@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "name": "nginx-background-dynamic",
+  "purpose": "exploratory comparison; not final evaluation or fixed arrival rate",
+  "seed": 20261015,
+  "conditions": ["default", "fixed-1000", "fixed-20000", "adaptive"],
+  "repeats": 3,
+  "window_seconds": 5,
+  "warmup_seconds": 6,
+  "cooldown_seconds": 2,
+  "port": 18082,
+  "page_bytes": 4096,
+  "connections": 32,
+  "client_threads": 1,
+  "service_cpus": [0],
+  "client_cpus": [1],
+  "controller_cpus": [2],
+  "sample_seconds": 1,
+  "p99_target_ms": 3.0,
+  "phases": [
+    {"id": "service-before", "background_threads": 0, "windows": 4},
+    {"id": "mixed", "background_threads": 1, "windows": 4},
+    {"id": "service-after", "background_threads": 0, "windows": 4}
+  ],
+  "limitations": [
+    "Closed-loop wrk; client restarts between windows and measured gaps are reported",
+    "All transitions are included; steady windows are also reported separately",
+    "Identical observer in every condition; no claims of complete controller-overhead isolation",
+    "Default, fixed and adaptive share the same native backend build and source snapshot"
+  ]
+}

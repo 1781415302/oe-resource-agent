@@ -1,0 +1,333 @@
+{
+  "valid": true,
+  "issues": [],
+  "summary": {
+    "episodes": 9,
+    "valid_episodes": 9,
+    "windows": 27,
+    "final_sched_ext": "disabled"
+  },
+  "archive_sha256": "5878eb4d6a437f870b0706bb3d98a78caac466d3f854cf3376b3c6ef0f64ac27",
+  "groups": [
+    {
+      "condition": "default",
+      "n_episodes": 3,
+      "median_window_p99_ms": 308.223,
+      "max_window_p99_ms": 332.799,
+      "rps": 39815.768860819175,
+      "background_eps": 3611.9338596491225,
+      "slo_met_windows": 0,
+      "windows": 9
+    },
+    {
+      "condition": "fixed-1000",
+      "n_episodes": 3,
+      "median_window_p99_ms": 11.279,
+      "max_window_p99_ms": 494.847,
+      "rps": 40002.880696259235,
+      "background_eps": 3451.0359649122806,
+      "slo_met_windows": 0,
+      "windows": 9
+    },
+    {
+      "condition": "feedback",
+      "n_episodes": 3,
+      "median_window_p99_ms": 45.151,
+      "max_window_p99_ms": 818.175,
+      "rps": 40047.468120939244,
+      "background_eps": 3457.4982142857143,
+      "slo_met_windows": 0,
+      "windows": 9
+    }
+  ],
+  "effects": {
+    "fixed-1000": {
+      "median_window_p99_ms": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -73.29757999889691,
+          -93.034171406691,
+          -97.30089590795676
+        ],
+        "median_percent": -93.034171406691,
+        "bootstrap_95_percent": [
+          -97.30089590795676,
+          -73.29757999889691
+        ],
+        "scope": "paired independent episodes; exploratory three cycles"
+      },
+      "rps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          2.241643772007529,
+          -0.3611291233652003,
+          0.4699440467773819
+        ],
+        "median_percent": 0.4699440467773819,
+        "bootstrap_95_percent": [
+          -0.3611291233652003,
+          2.241643772007529
+        ],
+        "scope": "paired independent episodes; exploratory three cycles"
+      },
+      "background_eps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -2.8257678004308007,
+          -6.32774427673114,
+          -4.63392721098087
+        ],
+        "median_percent": -4.63392721098087,
+        "bootstrap_95_percent": [
+          -6.32774427673114,
+          -2.8257678004308007
+        ],
+        "scope": "paired independent episodes; exploratory three cycles"
+      }
+    },
+    "feedback": {
+      "median_window_p99_ms": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -85.35119053412626,
+          245.29795762078567,
+          -93.0219325323554
+        ],
+        "median_percent": -85.35119053412626,
+        "bootstrap_95_percent": [
+          -93.0219325323554,
+          245.29795762078567
+        ],
+        "scope": "paired independent episodes; exploratory three cycles"
+      },
+      "rps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          1.1152563052049036,
+          0.4376275241197547,
+          0.47570394049125664
+        ],
+        "median_percent": 0.47570394049125664,
+        "bootstrap_95_percent": [
+          0.4376275241197547,
+          1.1152563052049036
+        ],
+        "scope": "paired independent episodes; exploratory three cycles"
+      },
+      "background_eps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -2.64380385466777,
+          -12.703914685262308,
+          -1.9912742471678735
+        ],
+        "median_percent": -2.64380385466777,
+        "bootstrap_95_percent": [
+          -12.703914685262308,
+          -1.9912742471678735
+        ],
+        "scope": "paired independent episodes; exploratory three cycles"
+      }
+    }
+  },
+  "feedback": [
+    {
+      "cycle": 1,
+      "window": 1,
+      "reason": "baseline_business_goal_violated",
+      "actual_policy": "scx.slice",
+      "stage": "probing",
+      "evaluation": null
+    },
+    {
+      "cycle": 1,
+      "window": 2,
+      "reason": "latency_improved_slo_still_unmet",
+      "actual_policy": "scx.slice",
+      "stage": "mitigating_slo_unmet",
+      "evaluation": {
+        "status": "evaluated",
+        "acceptable": true,
+        "checks": {
+          "p99_target": false,
+          "frontend_floor": true,
+          "background_floor": true,
+          "completion_floor": true,
+          "no_request_errors": true,
+          "latency_improvement": true
+        },
+        "percent_changes": {
+          "frontend_p99_ms": -95.82058632681643,
+          "frontend_rps": -0.8531230168293491,
+          "background_eps": 11.78446711461052
+        },
+        "scope": "provided metric windows; caller must establish comparable workload",
+        "slo_met": false,
+        "require_slo": false,
+        "hard_constraints": {
+          "frontend_floor": true,
+          "background_floor": true,
+          "completion_floor": true,
+          "no_request_errors": true,
+          "latency_improvement": true
+        },
+        "baseline_window_id": "cycle-1-feedback-window-1",
+        "candidate_window_id": "cycle-1-feedback-window-2"
+      }
+    },
+    {
+      "cycle": 1,
+      "window": 3,
+      "reason": "latency_improved_slo_still_unmet",
+      "actual_policy": "scx.slice",
+      "stage": "mitigating_slo_unmet",
+      "evaluation": {
+        "status": "evaluated",
+        "acceptable": true,
+        "checks": {
+          "p99_target": false,
+          "frontend_floor": true,
+          "background_floor": true,
+          "completion_floor": true,
+          "no_request_errors": true,
+          "latency_improvement": true
+        },
+        "percent_changes": {
+          "frontend_p99_ms": -98.98039375406708,
+          "frontend_rps": -0.592278406977842,
+          "background_eps": 12.665883831118329
+        },
+        "scope": "provided metric windows; caller must establish comparable workload",
+        "slo_met": false,
+        "require_slo": false,
+        "hard_constraints": {
+          "frontend_floor": true,
+          "background_floor": true,
+          "completion_floor": true,
+          "no_request_errors": true,
+          "latency_improvement": true
+        },
+        "baseline_window_id": "cycle-1-feedback-window-1",
+        "candidate_window_id": "cycle-1-feedback-window-3"
+      }
+    },
+    {
+      "cycle": 2,
+      "window": 1,
+      "reason": "baseline_business_goal_violated",
+      "actual_policy": "scx.slice",
+      "stage": "probing",
+      "evaluation": null
+    },
+    {
+      "cycle": 2,
+      "window": 2,
+      "reason": "business_guard_rejected_candidate",
+      "actual_policy": "kernel.default",
+      "stage": "cooldown",
+      "evaluation": {
+        "status": "evaluated",
+        "acceptable": false,
+        "checks": {
+          "p99_target": false,
+          "frontend_floor": true,
+          "background_floor": false,
+          "completion_floor": true,
+          "no_request_errors": true,
+          "latency_improvement": false
+        },
+        "percent_changes": {
+          "frontend_p99_ms": 46.33707921438448,
+          "frontend_rps": -2.3088571271717817,
+          "background_eps": -22.073931206386423
+        },
+        "scope": "provided metric windows; caller must establish comparable workload",
+        "slo_met": false,
+        "require_slo": false,
+        "hard_constraints": {
+          "frontend_floor": true,
+          "background_floor": false,
+          "completion_floor": true,
+          "no_request_errors": true,
+          "latency_improvement": false
+        },
+        "baseline_window_id": "cycle-2-feedback-window-1",
+        "candidate_window_id": "cycle-2-feedback-window-2"
+      }
+    },
+    {
+      "cycle": 2,
+      "window": 3,
+      "reason": "probe_cooldown",
+      "actual_policy": "kernel.default",
+      "stage": "cooldown",
+      "evaluation": null
+    },
+    {
+      "cycle": 3,
+      "window": 1,
+      "reason": "baseline_business_goal_violated",
+      "actual_policy": "scx.slice",
+      "stage": "probing",
+      "evaluation": null
+    },
+    {
+      "cycle": 3,
+      "window": 2,
+      "reason": "business_guard_rejected_candidate",
+      "actual_policy": "kernel.default",
+      "stage": "cooldown",
+      "evaluation": {
+        "status": "evaluated",
+        "acceptable": false,
+        "checks": {
+          "p99_target": false,
+          "frontend_floor": true,
+          "background_floor": true,
+          "completion_floor": true,
+          "no_request_errors": true,
+          "latency_improvement": false
+        },
+        "percent_changes": {
+          "frontend_p99_ms": 44.21708708178984,
+          "frontend_rps": 0.020883893879819482,
+          "background_eps": -1.447976554590269
+        },
+        "scope": "provided metric windows; caller must establish comparable workload",
+        "slo_met": false,
+        "require_slo": false,
+        "hard_constraints": {
+          "frontend_floor": true,
+          "background_floor": true,
+          "completion_floor": true,
+          "no_request_errors": true,
+          "latency_improvement": false
+        },
+        "baseline_window_id": "cycle-3-feedback-window-1",
+        "candidate_window_id": "cycle-3-feedback-window-2"
+      }
+    },
+    {
+      "cycle": 3,
+      "window": 3,
+      "reason": "probe_cooldown",
+      "actual_policy": "kernel.default",
+      "stage": "cooldown",
+      "evaluation": null
+    }
+  ],
+  "host_sampling": {
+    "count": 68,
+    "min_cpu_percent": 0.0,
+    "median_cpu_percent": 10.0,
+    "max_cpu_percent": 87.0,
+    "missing_leading_seconds": 122.327111,
+    "missing_trailing_seconds": 1.144628,
+    "scope": "Windows total CPU; approximate UTC alignment; no proof of absent external interference"
+  },
+  "performance_status_note": "执行与数据审计通过；宿主CPU采样峰值87%，开头约122秒未覆盖。当前为受外部条件影响的探索，不能独立归因或作为正式调度收益结论。",
+  "performance_causal_claims_supported": false,
+  "schema_version": 1,
+  "status": "execution_audited_performance_confounded",
+  "source_package_at_run_sha256": "7fa2743414a33d8f90751c7c6d75041e94cdb88b181d35e35d3112c5e15968e7"
+}

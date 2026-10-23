@@ -1,0 +1,554 @@
+{
+  "valid": true,
+  "issues": [],
+  "summary": {
+    "schema_version": 1,
+    "mode": "quick",
+    "episodes": 12,
+    "valid_episodes": 12,
+    "measurement_windows": 144,
+    "final_sched_ext": "disabled",
+    "scope": "dynamic exploratory workload comparison"
+  },
+  "archive_sha256": "55f21af1fccbe75b5f2b8c8cebceee06d42c90fa4021c7f2edbc5fdcd16a2246",
+  "groups": [
+    {
+      "phase_id": "service-before",
+      "condition": "default",
+      "n_cycles": 3,
+      "p99_ms": 1.0,
+      "active_rps": 92252.21099262423,
+      "wall_rps": 91722.259299964,
+      "background_eps": null,
+      "slo_pass_windows": 12,
+      "windows": 12
+    },
+    {
+      "phase_id": "service-before",
+      "condition": "fixed-1000",
+      "n_cycles": 3,
+      "p99_ms": 1.05,
+      "active_rps": 91237.49285281003,
+      "wall_rps": 90507.86947477407,
+      "background_eps": null,
+      "slo_pass_windows": 12,
+      "windows": 12
+    },
+    {
+      "phase_id": "service-before",
+      "condition": "fixed-20000",
+      "n_cycles": 3,
+      "p99_ms": 1.007,
+      "active_rps": 91232.04671670422,
+      "wall_rps": 90675.54794680646,
+      "background_eps": null,
+      "slo_pass_windows": 12,
+      "windows": 12
+    },
+    {
+      "phase_id": "service-before",
+      "condition": "adaptive",
+      "n_cycles": 3,
+      "p99_ms": 0.99,
+      "active_rps": 94415.05739747679,
+      "wall_rps": 93787.74913900226,
+      "background_eps": null,
+      "slo_pass_windows": 12,
+      "windows": 12
+    },
+    {
+      "phase_id": "mixed",
+      "condition": "default",
+      "n_cycles": 3,
+      "p99_ms": 3.867,
+      "active_rps": 53809.8378398347,
+      "wall_rps": 53069.91231677632,
+      "background_eps": 2905.072941176471,
+      "slo_pass_windows": 0,
+      "windows": 12
+    },
+    {
+      "phase_id": "mixed",
+      "condition": "fixed-1000",
+      "n_cycles": 3,
+      "p99_ms": 2.506,
+      "active_rps": 53441.906716879865,
+      "wall_rps": 53001.90278447072,
+      "background_eps": 2643.43,
+      "slo_pass_windows": 12,
+      "windows": 12
+    },
+    {
+      "phase_id": "mixed",
+      "condition": "fixed-20000",
+      "n_cycles": 3,
+      "p99_ms": 21.805,
+      "active_rps": 11877.916846217555,
+      "wall_rps": 11521.824692700424,
+      "background_eps": 5127.34625,
+      "slo_pass_windows": 0,
+      "windows": 12
+    },
+    {
+      "phase_id": "mixed",
+      "condition": "adaptive",
+      "n_cycles": 3,
+      "p99_ms": 2.878,
+      "active_rps": 53021.34917789377,
+      "wall_rps": 52495.55314230322,
+      "background_eps": 2658.890588235294,
+      "slo_pass_windows": 9,
+      "windows": 12
+    },
+    {
+      "phase_id": "service-after",
+      "condition": "default",
+      "n_cycles": 3,
+      "p99_ms": 1.018,
+      "active_rps": 95873.00295516377,
+      "wall_rps": 94369.0744347427,
+      "background_eps": null,
+      "slo_pass_windows": 12,
+      "windows": 12
+    },
+    {
+      "phase_id": "service-after",
+      "condition": "fixed-1000",
+      "n_cycles": 3,
+      "p99_ms": 1.058,
+      "active_rps": 91995.05313817234,
+      "wall_rps": 90650.85049023517,
+      "background_eps": null,
+      "slo_pass_windows": 12,
+      "windows": 12
+    },
+    {
+      "phase_id": "service-after",
+      "condition": "fixed-20000",
+      "n_cycles": 3,
+      "p99_ms": 0.949,
+      "active_rps": 92561.13624367175,
+      "wall_rps": 89751.77557001234,
+      "background_eps": null,
+      "slo_pass_windows": 12,
+      "windows": 12
+    },
+    {
+      "phase_id": "service-after",
+      "condition": "adaptive",
+      "n_cycles": 3,
+      "p99_ms": 0.999,
+      "active_rps": 94663.86780294395,
+      "wall_rps": 93551.52650952431,
+      "background_eps": null,
+      "slo_pass_windows": 12,
+      "windows": 12
+    }
+  ],
+  "effects": [
+    {
+      "phase_id": "service-before",
+      "condition": "fixed-1000",
+      "p99_ms": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -0.5681818181818232,
+          23.024054982817876,
+          -2.6000000000000023
+        ],
+        "median_percent": -0.5681818181818232,
+        "bootstrap_95_percent": [
+          -2.6000000000000023,
+          23.024054982817876
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "active_rps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -0.6391168554825799,
+          -11.104288789133577,
+          1.7000417645738564
+        ],
+        "median_percent": -0.6391168554825799,
+        "bootstrap_95_percent": [
+          -11.104288789133577,
+          1.7000417645738564
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "background_eps": null
+    },
+    {
+      "phase_id": "service-before",
+      "condition": "fixed-20000",
+      "p99_ms": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -4.6401515151515245,
+          17.18213058419242,
+          -3.400000000000003
+        ],
+        "median_percent": -3.400000000000003,
+        "bootstrap_95_percent": [
+          -4.6401515151515245,
+          17.18213058419242
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "active_rps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -1.1058426296162938,
+          -12.378212546608369,
+          6.323940313053256
+        ],
+        "median_percent": -1.1058426296162938,
+        "bootstrap_95_percent": [
+          -12.378212546608369,
+          6.323940313053256
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "background_eps": null
+    },
+    {
+      "phase_id": "service-before",
+      "condition": "adaptive",
+      "p99_ms": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -4.924242424242431,
+          13.4020618556701,
+          -2.300000000000002
+        ],
+        "median_percent": -2.300000000000002,
+        "bootstrap_95_percent": [
+          -4.924242424242431,
+          13.4020618556701
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "active_rps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          0.2034860010285966,
+          -8.0082824074996,
+          7.38382011666987
+        ],
+        "median_percent": 0.2034860010285966,
+        "bootstrap_95_percent": [
+          -8.0082824074996,
+          7.38382011666987
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "background_eps": null
+    },
+    {
+      "phase_id": "mixed",
+      "condition": "fixed-1000",
+      "p99_ms": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -34.646878198567045,
+          -35.634859063873805,
+          -29.06878007359185
+        ],
+        "median_percent": -34.646878198567045,
+        "bootstrap_95_percent": [
+          -35.634859063873805,
+          -29.06878007359185
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "active_rps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -1.7747449013572836,
+          0.2967341814373192,
+          4.347523069352088
+        ],
+        "median_percent": 0.2967341814373192,
+        "bootstrap_95_percent": [
+          -1.7747449013572836,
+          4.347523069352088
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "background_eps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -12.567738498059299,
+          -6.67125093953298,
+          -9.868560393945792
+        ],
+        "median_percent": -9.868560393945792,
+        "bootstrap_95_percent": [
+          -12.567738498059299,
+          -6.67125093953298
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      }
+    },
+    {
+      "phase_id": "mixed",
+      "condition": "fixed-20000",
+      "p99_ms": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          457.9580348004094,
+          468.2182570468063,
+          514.4353240871781
+        ],
+        "median_percent": 468.2182570468063,
+        "bootstrap_95_percent": [
+          457.9580348004094,
+          514.4353240871781
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "active_rps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -77.92612406383337,
+          -79.37565690493524,
+          -70.75906679989895
+        ],
+        "median_percent": -77.92612406383337,
+        "bootstrap_95_percent": [
+          -79.37565690493524,
+          -70.75906679989895
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "background_eps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          80.00589849731585,
+          68.54757519503407,
+          81.53876640036711
+        ],
+        "median_percent": 80.00589849731585,
+        "bootstrap_95_percent": [
+          68.54757519503407,
+          81.53876640036711
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      }
+    },
+    {
+      "phase_id": "mixed",
+      "condition": "adaptive",
+      "p99_ms": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -26.356192425793246,
+          -27.023532454098785,
+          -17.46391168978205
+        ],
+        "median_percent": -26.356192425793246,
+        "bootstrap_95_percent": [
+          -27.023532454098785,
+          -17.46391168978205
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "active_rps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -1.465324359995046,
+          -1.2682677507163675,
+          1.7862836998392195
+        ],
+        "median_percent": -1.2682677507163675,
+        "bootstrap_95_percent": [
+          -1.465324359995046,
+          1.7862836998392195
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "background_eps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -6.654248415278985,
+          -9.165305963766446,
+          -3.178626613160751
+        ],
+        "median_percent": -6.654248415278985,
+        "bootstrap_95_percent": [
+          -9.165305963766446,
+          -3.178626613160751
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      }
+    },
+    {
+      "phase_id": "service-after",
+      "condition": "fixed-1000",
+      "p99_ms": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          3.9292730844793677,
+          20.28353326063248,
+          -10.521235521235518
+        ],
+        "median_percent": 3.9292730844793677,
+        "bootstrap_95_percent": [
+          -10.521235521235518,
+          20.28353326063248
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "active_rps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -12.240821065284013,
+          -8.06125917145023,
+          7.299447065939346
+        ],
+        "median_percent": -8.06125917145023,
+        "bootstrap_95_percent": [
+          -12.240821065284013,
+          7.299447065939346
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "background_eps": null
+    },
+    {
+      "phase_id": "service-after",
+      "condition": "fixed-20000",
+      "p99_ms": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -7.7603143418467635,
+          3.4896401308615044,
+          -3.8610038610038644
+        ],
+        "median_percent": -3.8610038610038644,
+        "bootstrap_95_percent": [
+          -7.7603143418467635,
+          3.4896401308615044
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "active_rps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -3.4544309757783,
+          -5.1755890899379935,
+          3.8990552278354462
+        ],
+        "median_percent": -3.4544309757783,
+        "bootstrap_95_percent": [
+          -5.1755890899379935,
+          3.8990552278354462
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "background_eps": null
+    },
+    {
+      "phase_id": "service-after",
+      "condition": "adaptive",
+      "p99_ms": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -1.8664047151277008,
+          9.814612868047966,
+          -13.803088803088803
+        ],
+        "median_percent": -1.8664047151277008,
+        "bootstrap_95_percent": [
+          -13.803088803088803,
+          9.814612868047966
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "active_rps": {
+        "n_cycles": 3,
+        "each_cycle_percent": [
+          -1.8642531532547912,
+          -5.394078150147507,
+          14.678927724703051
+        ],
+        "median_percent": -1.8642531532547912,
+        "bootstrap_95_percent": [
+          -5.394078150147507,
+          14.678927724703051
+        ],
+        "method": "cycle paired median; bootstrap 2000, exploratory only"
+      },
+      "background_eps": null
+    }
+  ],
+  "switches": [
+    {
+      "cycle": 1,
+      "phase_id": "mixed",
+      "target": "scx.slice",
+      "completed_in_phase": true,
+      "response_seconds": 3.9668918910001594,
+      "actuation_seconds": 0.04780122800002573
+    },
+    {
+      "cycle": 1,
+      "phase_id": "service-after",
+      "target": "kernel.default",
+      "completed_in_phase": true,
+      "response_seconds": 2.9142298280000887,
+      "actuation_seconds": 0.03421393100006753
+    },
+    {
+      "cycle": 2,
+      "phase_id": "mixed",
+      "target": "scx.slice",
+      "completed_in_phase": true,
+      "response_seconds": 3.7869436579999274,
+      "actuation_seconds": 0.08457497799986413
+    },
+    {
+      "cycle": 2,
+      "phase_id": "service-after",
+      "target": "kernel.default",
+      "completed_in_phase": true,
+      "response_seconds": 2.6860783109998465,
+      "actuation_seconds": 0.03452690999984043
+    },
+    {
+      "cycle": 3,
+      "phase_id": "mixed",
+      "target": "scx.slice",
+      "completed_in_phase": true,
+      "response_seconds": 3.9852279259998795,
+      "actuation_seconds": 0.05001020400004563
+    },
+    {
+      "cycle": 3,
+      "phase_id": "service-after",
+      "target": "kernel.default",
+      "completed_in_phase": true,
+      "response_seconds": 3.0781364119998216,
+      "actuation_seconds": 0.16711882100025832
+    }
+  ],
+  "host_sampling": {
+    "count": 78,
+    "first_utc": "2026-10-15T04:42:42.4689259Z",
+    "last_utc": "2026-10-15T04:56:02.2881567Z",
+    "host_cpu_percent": {
+      "min": 0.0,
+      "median": 11.0,
+      "max": 31.0
+    },
+    "missing_leading_seconds": 37.847718,
+    "missing_trailing_seconds": 7.440636,
+    "scope": "Windows total CPU sampled about every 10s; UTC alignment assumed, not proof of absent interference"
+  },
+  "schema_version": 1,
+  "status": "passed",
+  "source_package_sha256": "6cd4b6801eea4c5804c6083bc52169aa1d1d134d86f03c74b24c0dc94dd7a2c8",
+  "raw_archive": "dynamic-quick-20261015.tar.gz",
+  "scope": "three cycles; exploratory VM closed-loop comparison, not final evaluation"
+}

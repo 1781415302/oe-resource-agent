@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "run_key": "validation-cancel-1792744187056783373",
+  "directory": "/root/oe-resource-agent/results/controlled-validation-cancel-1792744187056783373",
+  "checks": [
+    {
+      "name": "pidfd_owned_interrupt_default_restored",
+      "passed": true,
+      "response": {
+        "stopped": true,
+        "reason": "owned_SIGTERM"
+      },
+      "experiment_returncode": 1,
+      "summary": {
+        "status": "failed",
+        "cycle": 1,
+        "run_key": "validation-cancel-1792744187056783373",
+        "guest_start_utc_seconds": 1792744187.1007276,
+        "performance_claim": null,
+        "error": {
+          "type": "KeyboardInterrupt",
+          "message": "Interrupted episode cleaned up"
+        },
+        "episodes": 1,
+        "valid_episodes": 0,
+        "windows": 0,
+        "final_sched_ext": "disabled",
+        "guest_end_utc_seconds": 1792744191.6110928
+      }
+    },
+    {
+      "name": "repeated_stop_exited_instance",
+      "passed": true
+    },
+    {
+      "name": "unknown_run_abstains",
+      "passed": true
+    }
+  ],
+  "final_sched_ext": "disabled"
+}
