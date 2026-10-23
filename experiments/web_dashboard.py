@@ -733,12 +733,12 @@ class LiveSandbox:
             time.sleep(6.5)
 
             # Stage 3.5: Live BPF Map hot-update (4s)
-            self.choreography_stage = "阶段 3.5/4 [BPF Map 热更新]：零重启在线调整 slice_us=2000µs (map_id 不变，generation 递增)"
+            self.choreography_stage = "阶段 3.5/4 [BPF Map 热更新]：零重启在线调整 slice_us=500µs，排队进一步压至 < 10% (map_id 不变，generation 递增)"
             with self.lock:
                 if self.backend.process is not None and self.backend.process.poll() is None:
-                    res = self.backend.update(2000, wakeup_preempt=True)
+                    res = self.backend.update(500, wakeup_preempt=True)
                     self._log(
-                        f"🎛️ [实况剧本 3.5/4] BPF Map 零重启热更新: slice_us=2000µs "
+                        f"🎛️ [实况剧本 3.5/4] BPF Map 零重启热更新: slice_us=500µs "
                         f"(map_id={res.get('map_id')} 不变, generation={res.get('generation')})",
                         "ok",
                     )

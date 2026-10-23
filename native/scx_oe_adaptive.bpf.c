@@ -126,9 +126,25 @@ static __always_inline bool wakeup_preempt_enabled(void)
                value->kick_interval_ns == OE_KICK_INTERVAL_NS;
 }
 
-static void maybe_preempt(struct task_struct *p, u64 enq_flags)
+static __always_inline bool is_short_wakeup(struct task_struct *p, u64 enq_flags)
 {
         struct task_ctx *ctx;
+        u64 max_burst;
+
+        if (!wakeup_preempt_enabled() || !(enq_flags & SCX_ENQ_WAKEUP) ||
+            (p->flags & PF_KTHREAD))
+                return false;
+        ctx = bpf_task_storage_get(&task_context, p, 0, 0);
+        if (!ctx || !ctx->slept || !ctx->seen_running || !ctx->last_burst_ns)
+                return false;
+        max_burst = configured_slice() * 3 / 4;
+        if (max_burst < 750000ULL)
+                max_burst = 750000ULL;
+        return ctx->last_burst_ns <= max_burst;
+}
+
+static void maybe_preempt(struct task_struct *p, u64 enq_flags)
+{
         struct cpu_state *cpu;
         u64 previous, now;
         u32 key;
@@ -138,9 +154,7 @@ static void maybe_preempt(struct task_struct *p, u64 enq_flags)
             (p->flags & PF_KTHREAD))
                 return;
         stat_inc(STAT_WAKE_ENQUEUE);
-        ctx = bpf_task_storage_get(&task_context, p, 0, 0);
-        if (!ctx || !ctx->slept || !ctx->seen_running || !ctx->last_burst_ns ||
-            ctx->last_burst_ns > configured_slice() / 2)
+        if (!is_short_wakeup(p, enq_flags))
                 return;
         stat_inc(STAT_SHORT_SLEEPER);
         /* Single-CPU affinity bypasses select_cpu in the core. At enqueue,
@@ -187,13 +201,22 @@ void BPF_STRUCT_OPS(oe_adaptive_enqueue, struct task_struct *p, u64 enq_flags)
         if (fifo_sched) {
                 scx_bpf_dsq_insert(p, SHARED_DSQ, configured_slice(), enq_flags);
         } else {
+                u64 slice = configured_slice();
                 u64 vtime = p->scx.dsq_vtime;
 
                 /* Keep the original absolute sleep bonus, independent of slice. */
                 if (time_before(vtime, vtime_now - sleep_credit_ns))
                         vtime = vtime_now - sleep_credit_ns;
+                /* Ensure waking short sleepers place ahead of the currently
+                 * running batch task whose vtime is only charged at stopping.
+                 */
+                if (is_short_wakeup(p, enq_flags) &&
+                    time_after(vtime, vtime_now - slice)) {
+                        vtime = vtime_now - slice;
+                        p->scx.dsq_vtime = vtime;
+                }
 
-                scx_bpf_dsq_insert_vtime(p, SHARED_DSQ, configured_slice(), vtime,
+                scx_bpf_dsq_insert_vtime(p, SHARED_DSQ, slice, vtime,
                                          enq_flags);
         }
         maybe_preempt(p, enq_flags);
@@ -234,7 +257,7 @@ void BPF_STRUCT_OPS(oe_adaptive_running, struct task_struct *p)
                 if (state) {
                         tctx->tracked_cpu = true;
                         state->current_pid = p->pid;
-                        state->busy = tctx->busy_runs >= 2 && !(p->flags & PF_KTHREAD);
+                        state->busy = tctx->busy_runs >= 1 && !(p->flags & PF_KTHREAD);
                         if (state->busy)
                                 stat_inc(STAT_BUSY_RUNNING);
                 }

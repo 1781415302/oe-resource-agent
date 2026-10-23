@@ -349,8 +349,8 @@
       <button class="btn" id="btnPolScx1m" onclick="sendControl({action:'set_policy',policy:'scx',slice_us:1000,wakeup_preempt:true})">
         ⚡ SCX 1ms + 唤醒抢占
       </button>
-      <button class="btn" id="btnPolScx2m" onclick="sendControl({action:'set_policy',policy:'scx',slice_us:2000,wakeup_preempt:true})">
-        🎛️ 热更新 2ms + 抢占
+      <button class="btn" id="btnPolScx2m" onclick="sendControl({action:'set_policy',policy:'scx',slice_us:500,wakeup_preempt:true})">
+        🚀 热更新 500µs + 抢占 (极致低延迟)
       </button>
       <button class="btn" id="btnPolScx10m" onclick="sendControl({action:'set_policy',policy:'scx',slice_us:10000,wakeup_preempt:false})">
         🐢 热更新 10ms 无抢占 (劣化对比)
@@ -681,7 +681,7 @@ function updateUI(data) {
   const sch = data.scheduler;
   document.getElementById("btnPolDefault").className = (sch.policy_id === "kernel.default") ? "btn cyan-on" : "btn";
   document.getElementById("btnPolScx1m").className = (sch.policy_id === "scx.slice" && sch.slice_us === 1000 && sch.wakeup_preempt) ? "btn emerald-on" : "btn";
-  document.getElementById("btnPolScx2m").className = (sch.policy_id === "scx.slice" && sch.slice_us === 2000 && sch.wakeup_preempt) ? "btn emerald-on" : "btn";
+  document.getElementById("btnPolScx2m").className = (sch.policy_id === "scx.slice" && sch.slice_us === 500 && sch.wakeup_preempt) ? "btn emerald-on" : "btn";
   document.getElementById("btnPolScx10m").className = (sch.policy_id === "scx.slice" && sch.slice_us === 10000 && !sch.wakeup_preempt) ? "btn danger-on" : "btn";
 
   // KPI 1: Latency

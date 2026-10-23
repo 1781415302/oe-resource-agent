@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "passed",
-  "directory": "/root/oe-resource-agent/results/slo-continuous-1792743919247737855",
+  "directory": "/root/oe-resource-agent/results/slo-continuous-1792771128135789172",
   "offered_rps": 25600,
   "window_ms": 5000,
   "baseline_confirmations": 2,
@@ -11,9 +11,9 @@
       "status": "submitted",
       "policy_before": "kernel.default",
       "revision_before": 0,
-      "frontend_p99_ms": 3.499,
-      "frontend_rps": 25600.34,
-      "background_eps": 3262.18,
+      "frontend_p99_ms": 3.739,
+      "frontend_rps": 25601.06,
+      "background_eps": 2769.26,
       "background_covered_seconds": 4.34,
       "background_whole_covered_seconds": 4.0,
       "decision": {
@@ -30,9 +30,9 @@
       "status": "submitted",
       "policy_before": "kernel.default",
       "revision_before": 0,
-      "frontend_p99_ms": 3.505,
-      "frontend_rps": 25600.64,
-      "background_eps": 3256.15,
+      "frontend_p99_ms": 4.691,
+      "frontend_rps": 25590.61,
+      "background_eps": 2185.06,
       "background_covered_seconds": 4.339,
       "background_whole_covered_seconds": 4.0,
       "decision": {
@@ -49,20 +49,20 @@
     {
       "seq": 3,
       "status": "skipped_policy_transition",
-      "start_monotonic": 95653.004018982,
-      "end_monotonic": 95658.004900523,
+      "start_monotonic": 122861.89213368,
+      "end_monotonic": 122866.892040216,
       "policy_revision": 1,
-      "policy_since_monotonic": 95653.546230454
+      "policy_since_monotonic": 122862.054111314
     },
     {
       "seq": 4,
       "status": "submitted",
       "policy_before": "scx.slice",
       "revision_before": 1,
-      "frontend_p99_ms": 1.987,
-      "frontend_rps": 25601.38,
-      "background_eps": 3234.39,
-      "background_covered_seconds": 4.337,
+      "frontend_p99_ms": 2.135,
+      "frontend_rps": 25598.81,
+      "background_eps": 2590.05,
+      "background_covered_seconds": 4.339,
       "background_whole_covered_seconds": 4.0,
       "decision": {
         "action": "hold",
@@ -79,9 +79,9 @@
             "latency_improvement": true
           },
           "percent_changes": {
-            "frontend_p99_ms": -43.26099371787549,
-            "frontend_rps": 0.003478824342795228,
-            "background_eps": -0.7601777754027816
+            "frontend_p99_ms": -49.34756820877818,
+            "frontend_rps": 0.011597419921116625,
+            "background_eps": 4.557313395870821
           },
           "scope": "provided metric windows; caller must establish comparable workload",
           "slo_met": true,
@@ -106,10 +106,10 @@
       "status": "submitted",
       "policy_before": "scx.slice",
       "revision_before": 1,
-      "frontend_p99_ms": 1.984,
-      "frontend_rps": 25599.51,
-      "background_eps": 3252.82,
-      "background_covered_seconds": 4.337,
+      "frontend_p99_ms": 2.243,
+      "frontend_rps": 25599.89,
+      "background_eps": 2540.65,
+      "background_covered_seconds": 4.338,
       "background_whole_covered_seconds": 4.0,
       "decision": {
         "action": "hold",
@@ -126,9 +126,9 @@
             "latency_improvement": true
           },
           "percent_changes": {
-            "frontend_p99_ms": -43.346659051970306,
-            "frontend_rps": -0.00383971210142775,
-            "background_eps": -0.19462489260398952
+            "frontend_p99_ms": -46.785290628707,
+            "frontend_rps": 0.015817927576655677,
+            "background_eps": 2.5631029772051006
           },
           "scope": "provided metric windows; caller must establish comparable workload",
           "slo_met": true,
@@ -153,10 +153,10 @@
       "status": "submitted",
       "policy_before": "scx.slice",
       "revision_before": 1,
-      "frontend_p99_ms": 1.964,
-      "frontend_rps": 25598.61,
-      "background_eps": 3262.31,
-      "background_covered_seconds": 4.336,
+      "frontend_p99_ms": 2.143,
+      "frontend_rps": 25599.95,
+      "background_eps": 2586.66,
+      "background_covered_seconds": 4.338,
       "background_whole_covered_seconds": 4.0,
       "decision": {
         "action": "hold",
@@ -173,9 +173,9 @@
             "latency_improvement": true
           },
           "percent_changes": {
-            "frontend_p99_ms": -43.91776127926899,
-            "frontend_rps": -0.007333083625493675,
-            "background_eps": 0.09647675306283521
+            "frontend_p99_ms": -49.15776986951364,
+            "frontend_rps": 0.016056725419044682,
+            "background_eps": 4.420518227688941
           },
           "scope": "provided metric windows; caller must establish comparable workload",
           "slo_met": true,
@@ -196,8 +196,8 @@
       "feedback_stage": "accepted"
     }
   ],
-  "footer_export_duration_ns": 2048206,
-  "agent_thread_cpu_seconds": 0.342152,
+  "footer_export_duration_ns": 2351401,
+  "agent_thread_cpu_seconds": 0.419665,
   "controller_errors": [],
   "cleanup_errors": [],
   "final_sched_ext": "disabled",
@@ -207,8 +207,8 @@
     "confirming_windows": 1,
     "probe_triggered": true,
     "scx_evaluated_windows": 3,
-    "baseline_p99_ms": 3.505,
-    "scx_p99_ms": 1.987,
+    "baseline_p99_ms": 4.691,
+    "scx_p99_ms": 2.135,
     "final_feedback_stage": "accepted"
   }
 }

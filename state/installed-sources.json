@@ -2,7 +2,7 @@
   "kernel_tree": "/root/rpmbuild/BUILD/kernel-6.6.0/linux-6.6.0-159.4.3.154.x86_64",
   "sha256": {
     "scx_oe_adaptive.c": "c68fe1a62e61d8589abfcd50c6affc9e3239e434b99d8b3480654549b3403e7e",
-    "scx_oe_adaptive.bpf.c": "fa6a446078f04bfac707c99ab68eeb16f21c14632797dbb91df889942c956e65",
-    "oe_adaptive.h": "350a23509ae597a1161e9e53ab5eadbf11fd9f6b5184e0bc14abf22a32b4230e"
+    "scx_oe_adaptive.bpf.c": "6c86ab461fc3a9bd33ab1dfeaa863bacfa10f7524228f1f2e5e7106971635a2b",
+    "oe_adaptive.h": "ca9ff49e98fd687ed7a094c05a6705e731517c03037f66f81d62b8e6bb79160c"
   }
 }
