@@ -160,17 +160,20 @@ class NetworkHookPlugin(Plugin):
     PIN_DIR = Path("/sys/fs/bpf/oeagent_net")
     SOURCE_PATH = ROOT / "native/oe_net_hook.bpf.c"
     OBJECT_PATH = ROOT / "state/oe_net_hook.bpf.o"
+    PROTECTED_PORTS = (80, 443, 18080, 18086, 18091)
 
     def describe(self):
         linux = platform.system() == "Linux"
         tools_ok = bool(linux and shutil.which("clang") and shutil.which("bpftool") and shutil.which("tc"))
         bpffs_ok = bool(linux and Path("/sys/fs/bpf").is_dir())
         return {"name": self.name, "available": bool(tools_ok and bpffs_ok and self.SOURCE_PATH.is_file()),
-                "program_type": "sched_cls", "attach_point": "tc egress (lo)",
+                "program_type": "sched_cls", "attach_point": "tc egress/ingress (lo)",
                 "source": str(self.SOURCE_PATH.relative_to(ROOT).as_posix()),
                 "object_built": self.OBJECT_PATH.is_file(),
                 "active": (self.PIN_DIR / "prog").exists() if linux else False,
-                "capabilities": ["packet_byte_accounting", "target_port_monitoring", "target_port_drop_isolation"]}
+                "protected_ports": list(self.PROTECTED_PORTS),
+                "capabilities": ["packet_byte_accounting", "target_port_monitoring", "target_port_drop_isolation",
+                                 "protected_port_guard", "egress_ingress_direction"]}
 
     def _ensure_object(self):
         self.OBJECT_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -206,6 +209,11 @@ class NetworkHookPlugin(Plugin):
             raise ToolError("INVALID_INTERFACE", "当前演示仅允许在回环接口 lo 挂载 eBPF 策略。")
         target_port = arguments["target_port"]
         drop_target = bool(arguments.get("drop_target", False))
+        direction = arguments.get("direction", "egress")
+        if direction not in ("egress", "ingress", "both"):
+            raise ToolError("INVALID_DIRECTION", "direction 必须是 egress、ingress 或 both。")
+        if drop_target and target_port in self.PROTECTED_PORTS:
+            raise ToolError("PROTECTED_PORT_REFUSED", f"端口 {target_port} 属于受保护业务白名单，拒绝下发丢包阻断策略。")
         try:
             self._ensure_object()
             if not (self.PIN_DIR / "prog").exists():
@@ -214,8 +222,10 @@ class NetworkHookPlugin(Plugin):
                 subprocess.run(["bpftool", "prog", "load", str(self.OBJECT_PATH), str(self.PIN_DIR / "prog"),
                                 "type", "classifier", "pinmaps", str(self.PIN_DIR)], check=True, capture_output=True, text=True)
                 subprocess.run(["tc", "qdisc", "replace", "dev", interface, "clsact"], check=True, capture_output=True, text=True)
-                subprocess.run(["tc", "filter", "replace", "dev", interface, "egress", "prio", "49152", "handle", "1",
-                                "bpf", "da", "pinned", str(self.PIN_DIR / "prog")], check=True, capture_output=True, text=True)
+                dirs = ("egress", "ingress") if direction == "both" else (direction,)
+                for d in dirs:
+                    subprocess.run(["tc", "filter", "replace", "dev", interface, d, "prio", "49152", "handle", "1",
+                                    "bpf", "da", "pinned", str(self.PIN_DIR / "prog")], check=True, capture_output=True, text=True)
             value_hex = self._u32_hex(target_port) + self._u32_hex(1 if drop_target else 0)
             subprocess.run(["bpftool", "map", "update", "pinned", str(self.PIN_DIR / "oe_net_cfg_map"),
                             "key", "hex", "00", "00", "00", "00", "value", "hex", *value_hex],
@@ -230,7 +240,8 @@ class NetworkHookPlugin(Plugin):
         if platform.system() != "Linux" or os.geteuid() != 0:
             raise ToolError("ROOT_REQUIRED", "卸载 eBPF 网络 hook 需要 Linux root。")
         before = self.status()
-        subprocess.run(["tc", "filter", "del", "dev", "lo", "egress", "prio", "49152"], check=False, capture_output=True)
+        for d in ("egress", "ingress"):
+            subprocess.run(["tc", "filter", "del", "dev", "lo", d, "prio", "49152"], check=False, capture_output=True)
         subprocess.run(["tc", "qdisc", "del", "dev", "lo", "clsact"], check=False, capture_output=True)
         shutil.rmtree(self.PIN_DIR, ignore_errors=True)
         return {"detached": True, "before": before, "after": self.status()}
@@ -240,6 +251,7 @@ class NetworkHookPlugin(Plugin):
         registry.register("network.ebpf.status", "读取已加载 eBPF 网络 hook 的配置与实时包/字节/丢包计数", object_schema(), self.status)
         registry.register("network.ebpf.attach", "加载或更新 lo 上的 eBPF TC 分类器（统计端口流量或执行端口级丢包隔离）", object_schema(
             {"interface": {"type": "string", "enum": ["lo"]},
+             "direction": {"type": "string", "enum": ["egress", "ingress", "both"]},
              "target_port": {"type": "integer", "minimum": 1, "maximum": 65535},
              "drop_target": {"type": "boolean"}}, ["target_port"]), self.attach, mutates=True)
         registry.register("network.ebpf.detach", "卸载 lo 上的 eBPF TC 网络分类器并清理 bpffs 引脚", object_schema(), self.detach, mutates=True)
@@ -258,7 +270,8 @@ class SecurityHookPlugin(Plugin):
         lsms = self._lsm_list()
         return {"name": self.name, "available": platform.system() == "Linux" and bool(lsms),
                 "active_lsm_stack": lsms, "bpf_lsm_enabled": "bpf" in lsms,
-                "capabilities": ["lsm_stack_discovery", "process_capability_and_confinement_audit"]}
+                "capabilities": ["lsm_stack_discovery", "process_capability_and_confinement_audit",
+                                 "unconfined_process_priority_and_cpu_confinement"]}
 
     def audit(self, arguments):
         if platform.system() != "Linux":
@@ -285,19 +298,57 @@ class SecurityHookPlugin(Plugin):
                 "has_cap_net_admin": cap_net_admin,
                 "cgroups": (read(f"/proc/{pid}/cgroup") or "").strip()}
 
+    def enforce(self, arguments):
+        if platform.system() != "Linux" or os.geteuid() != 0:
+            raise ToolError("ROOT_REQUIRED", "执行安全隔离策略需要 Linux root。")
+        pid = arguments["pid"]
+        snap = process_snapshot(pid)
+        if snap is None:
+            raise ToolError("PROCESS_NOT_FOUND", "目标进程不存在或不可读。")
+        expected_ticks = arguments.get("expected_start_ticks")
+        if expected_ticks is not None and snap["start_ticks"] != expected_ticks:
+            raise ToolError("STALE_PROCESS_IDENTITY", "目标 PID 启动时间不匹配，拒绝执行安全限制。")
+        audit_before = self.audit({"pid": pid})
+        nice_val = int(arguments.get("nice", 19))
+        if not -20 <= nice_val <= 19:
+            raise ToolError("INVALID_SECURITY_POLICY", "nice 值必须在 -20..19 之间。")
+        iso_cpus = arguments.get("isolation_cpus")
+        try:
+            os.setpriority(os.PRIO_PROCESS, pid, nice_val)
+            if iso_cpus is not None:
+                os.sched_setaffinity(pid, set(iso_cpus))
+        except OSError as exc:
+            raise ToolError("SECURITY_ENFORCE_FAILED", f"执行安全隔离策略失败：{exc}") from exc
+        snap_after = process_snapshot(pid)
+        actual_nice = os.getpriority(os.PRIO_PROCESS, pid)
+        return {"pid": pid, "comm": snap["comm"], "start_ticks": snap["start_ticks"],
+                "enforced": True, "nice": actual_nice,
+                "allowed_cpus_before": snap["allowed_cpus"],
+                "allowed_cpus_after": snap_after["allowed_cpus"] if snap_after else None,
+                "audit": audit_before}
+
     def register(self, registry):
+        pid = {"type": "integer", "minimum": 1, "maximum": 4194304}
+        ticks = {"type": "integer", "minimum": 1}
         registry.register("security.lsm.describe", "读取内核 LSM 模块栈与 BPF LSM 状态", object_schema(), lambda args: self.describe())
         registry.register("security.lsm.audit", "审计目标进程的 LSM 标签、Capability 掩码、Seccomp 与 cgroup 隔离上下文", object_schema(
-            {"pid": {"type": "integer", "minimum": 1, "maximum": 4194304}}, ["pid"]), self.audit)
+            {"pid": pid}, ["pid"]), self.audit)
+        registry.register("security.lsm.enforce", "核对进程身份与 LSM 上下文后执行安全降权与 CPU 亲和性隔离策略", object_schema(
+            {"pid": pid, "expected_start_ticks": ticks,
+             "nice": {"type": "integer", "minimum": -20, "maximum": 19},
+             "isolation_cpus": {"type": "array", "items": {"type": "integer", "minimum": 0, "maximum": 1024}}},
+            ["pid"]), self.enforce, mutates=True)
 
 
 class PluginAutoConfig:
     def __init__(self, enabled=True, cgroup_enabled=True, latency_group="auto_latency",
                  batch_group="auto_batch", latency_shares=4096, batch_shares=1024,
                  ebpf_enabled=True, monitor_port=18095, drop_threshold_pps=20.0,
-                 drop_hold_windows=3, lsm_audit_enabled=True):
+                 drop_hold_windows=3, lsm_audit_enabled=True, lsm_enforce_batch_nice=True,
+                 batch_nice_value=15):
         for flag, val in (("enabled", enabled), ("cgroup_enabled", cgroup_enabled),
-                          ("ebpf_enabled", ebpf_enabled), ("lsm_audit_enabled", lsm_audit_enabled)):
+                          ("ebpf_enabled", ebpf_enabled), ("lsm_audit_enabled", lsm_audit_enabled),
+                          ("lsm_enforce_batch_nice", lsm_enforce_batch_nice)):
             if not isinstance(val, bool):
                 raise ToolError("INVALID_PLUGIN_CONFIG", f"{flag} 必须是布尔值。")
         if not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", str(latency_group)) or not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", str(batch_group)):
@@ -309,10 +360,14 @@ class PluginAutoConfig:
                 raise ToolError("INVALID_PLUGIN_CONFIG", f"{name} 超出有效范围。")
         if not isinstance(monitor_port, int) or isinstance(monitor_port, bool) or not 1 <= monitor_port <= 65535:
             raise ToolError("INVALID_PLUGIN_CONFIG", "monitor_port 必须在 1..65535 之间。")
+        if monitor_port in NetworkHookPlugin.PROTECTED_PORTS:
+            raise ToolError("INVALID_PLUGIN_CONFIG", f"monitor_port {monitor_port} 属于受保护业务白名单端口，禁止设为熔断目标。")
         if not isinstance(drop_threshold_pps, (int, float)) or isinstance(drop_threshold_pps, bool) or drop_threshold_pps <= 0:
             raise ToolError("INVALID_PLUGIN_CONFIG", "drop_threshold_pps 必须为正数。")
         if not isinstance(drop_hold_windows, int) or isinstance(drop_hold_windows, bool) or not 1 <= drop_hold_windows <= 120:
             raise ToolError("INVALID_PLUGIN_CONFIG", "drop_hold_windows 超出有效范围。")
+        if not isinstance(batch_nice_value, int) or isinstance(batch_nice_value, bool) or not 0 <= batch_nice_value <= 19:
+            raise ToolError("INVALID_PLUGIN_CONFIG", "batch_nice_value 必须在 0..19 之间。")
         self.enabled = enabled
         self.cgroup_enabled = cgroup_enabled
         self.latency_group = latency_group
@@ -324,6 +379,8 @@ class PluginAutoConfig:
         self.drop_threshold_pps = float(drop_threshold_pps)
         self.drop_hold_windows = drop_hold_windows
         self.lsm_audit_enabled = lsm_audit_enabled
+        self.lsm_enforce_batch_nice = lsm_enforce_batch_nice
+        self.batch_nice_value = batch_nice_value
 
 
 class AutoPluginCoordinator:
@@ -337,6 +394,7 @@ class AutoPluginCoordinator:
         self.ebpf = net_plugin or NetworkHookPlugin()
         self.lsm = lsm_plugin or SecurityHookPlugin()
         self.audited_identities = set()
+        self.enforced_identities = set()
         self.cgroup_active = False
         self.attached_pids = {"latency": set(), "batch": set()}
         self.ebpf_attached = False
@@ -375,6 +433,20 @@ class AutoPluginCoordinator:
                              "roles": task.get("roles", []), "audit": audit_info}
                     self.log(event)
                     actions.append(event)
+                    if self.config.lsm_enforce_batch_nice and "batch" in task.get("roles", []) and ident not in self.enforced_identities:
+                        if self.dry_run:
+                            enforce_info = {"pid": pid, "enforced": True, "nice": self.config.batch_nice_value, "simulated": True}
+                        else:
+                            try:
+                                enforce_info = self.lsm.enforce({"pid": pid, "expected_start_ticks": start_ticks,
+                                                                 "nice": self.config.batch_nice_value})
+                            except ToolError as exc:
+                                enforce_info = {"pid": pid, "enforced": False, "error": exc.code, "message": str(exc)}
+                        self.enforced_identities.add(ident)
+                        enf_event = {"event": "plugin_security_enforced", "pid": pid, "start_ticks": start_ticks,
+                                     "roles": task.get("roles", []), "enforcement": enforce_info}
+                        self.log(enf_event)
+                        actions.append(enf_event)
 
         # 2. Automatic Cgroup Weight Isolation & Task Migration
         if self.config.cgroup_enabled:
@@ -504,6 +576,7 @@ class AutoPluginCoordinator:
         return {
             "enabled": self.config.enabled,
             "lsm_audited_count": len(self.audited_identities),
+            "lsm_enforced_count": len(self.enforced_identities),
             "cgroup": {
                 "enabled": self.config.cgroup_enabled,
                 "active": self.cgroup_active,

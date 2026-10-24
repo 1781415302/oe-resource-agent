@@ -21,21 +21,28 @@
 
 ## 实验结果汇总
 
-完整实验设计与数据详见 **[课程设计总结报告](docs/course-project-report.md)**：
+完整实验设计、负载强度梯度与多资源定量消融数据详见 **[课程设计总结报告](docs/course-project-report.md)** 与 **[交互式 HTML 实验报告](docs/experiment-report.html)**：
 
-### 1. 开题报告第 10 页：6 策略 × 4 场景完整消融矩阵（`experiments/run_ppt_matrix.py`）
-在 `25,600 RPS` 连续窗口 `wrk2` 与 `CPU0` 同核混部下实测（原始数据：`state/ppt-matrix-validation.json`）：
+### 1. 开题报告第 10 页：6 策略 × 4 场景多周期平衡消融矩阵（`experiments/run_rigorous_suite.py`）
+在 `25,600 RPS` 连续窗口 `wrk2`（`OE_WRK2_WINDOW_MS=5000`）与 `CPU0` 同核混部下，采用 **5 周期独立运行与拉丁方平衡旋转顺序（N=5 周期，Mean ± SD）** 实测（原始数据：[`state/rigorous-suite-validation.json`](state/rigorous-suite-validation.json)，报告：[`docs/experiment-report.html`](docs/experiment-report.html)）：
 
-| 对照组策略 | 场景 1：纯网页 (`service_only`) | 场景 2：网页加后台 (`mixed`) | 场景 3：动态负载 (`dynamic` 四阶段 `p99`) | 场景 4：纯后台 (`batch_only`, 2线程) |
+| 对照组策略 | 场景 1：纯网页 (`service_only`)<br>p99 / RPS保留率 / 排队等待 | 场景 2：网页加后台 (`mixed`)<br>p99 / RPS & EPS保留率 / 等待 | 场景 3：动态负载 (`dynamic` 四阶段 `p99`)<br>前稳态 → 混部稳态 → 恢复过渡 → 后稳态 | 场景 4：纯后台 (`batch_only`, 2线程)<br>后台 EPS (保留率) / 非自愿切换 /s |
 |---|---|---|---|---|
-| **1. 默认调度 (`default`)** | `1.919 ms` \| 排队 `0.2%` (`disabled`) | `3.509 ms` \| 等待 `1535.2 µs` \| `3187.6 EPS` | `1.919 → 3.509 → 2.479 → 1.934 ms` | `4005.1 EPS` \| 切换 `333.7/s` (`disabled`) |
-| **2. 原始 `scx_simple`** | `1.904 ms` \| 排队 `0.6%` (`enabled`) | `43.103 ms (+1128%)` \| 等待 `19461.9 µs` | `1.904 → 43.103 → 20.367 → 1.928 ms` | `3976.9 EPS` \| 切换 `47.9/s` (`enabled`) |
-| **3. 固定 SCX (`20ms`)** | `1.936 ms` \| 排队 `0.8%` (`enabled`) | `42.367 ms (+1107%)` \| 等待 `19339.0 µs` | `1.936 → 42.367 → 20.991 → 1.943 ms` | `3866.9 EPS` \| 切换 `48.2/s` (`enabled`) |
-| **4. 固定 SCX (`1ms` 无抢占)** | `1.953 ms` \| 排队 `0.8%` (`enabled`) | `2.717 ms (-22.6%)` \| 等待 `637.4 µs` | `1.953 → 2.717 → 2.045 → 1.938 ms` | `3982.2 EPS` \| **切换 `534.7/s (+60%)`** |
-| **5. 固定 SCX (`1ms+唤醒抢占`)** | `1.922 ms` \| 排队 `1.1%` (`enabled`) | **`2.010 ms (-42.7%)`** \| 等待 **`18.8 µs`** | `1.922 → 2.010 → 1.912 → 1.918 ms` | `3943.1 EPS` \| **切换 `532.9/s (+60%)`** |
-| **6. 自适应 Agent (`adaptive`)** | **`1.942 ms` \| 排队 `0.2%` (`disabled`)** | **`1.982 ms (-43.5% 最优)`** \| 等待 **`23.3 µs`** \| `97.2% EPS` | **`1.942 → 1.982 → 1.929 → 1.932 ms`** (切入`1.08s`/回退`0.69s`) | **`3897.5 EPS` \| 切换 `333.4/s` (`disabled`)** |
+| **1. 默认调度 (`default`)** | `1.932 ± 0.012 ms`<br>RPS保留 `100.0%` \| 等待 `0.4 µs` | `3.514 ± 0.015 ms`<br>RPS `100.01%` \| EPS `100.34%` \| 等待 `1497.6 µs` | `1.922 → 3.507 → 2.387 → 1.948 ms`<br>*(全程 `kernel.default`)* | `3882.7 ± 25.1 EPS` (`100.0%`)<br>切换 `334.3 /s` (`disabled`) |
+| **2. 原始 `scx_simple`** | `1.921 ± 0.013 ms`<br>RPS保留 `100.0%` \| 等待 `1.7 µs` | `35.193 ± 4.716 ms (+901%)`<br>RPS `99.98%` \| EPS `101.72%` \| 等待 `19340.4 µs` | `1.928 → 31.999 → 18.799 → 1.909 ms`<br>*(20ms 粗片引发严重排队积压)* | `3875.7 ± 32.9 EPS` (`99.82%`)<br>切换 `48.3 /s` (`enabled`) |
+| **3. 固定 SCX (`20ms`)** | `1.942 ± 0.006 ms`<br>RPS保留 `100.01%` \| 等待 `1.7 µs` | `74.380 ± 51.548 ms (+2016%)`<br>RPS `100.11%` \| EPS `100.66%` \| 等待 `19351.1 µs` | `1.951 → 164.991 → 32.799 → 1.941 ms`<br>*(大方差，排队等待突破 19ms)* | `3851.4 ± 58.6 EPS` (`99.19%`)<br>切换 `48.5 /s` (`enabled`) |
+| **4. 固定 SCX (`1ms` 无抢占)** | `1.949 ± 0.010 ms`<br>RPS保留 `100.0%` \| 等待 `1.9 µs` | `2.796 ± 0.061 ms (-20.4%)`<br>RPS `100.0%` \| EPS `97.31%` \| 等待 `654.7 µs` | `1.952 → 2.807 → 2.030 → 1.941 ms`<br>*(缩短时间片但无抢占，仍有半片等待)* | `3885.3 ± 44.2 EPS` (`100.07%`)<br>切换 **`543.1 /s` (+62.5%)** (`enabled`) |
+| **5. 固定 SCX (`1ms+唤醒抢占`)** | `1.919 ± 0.006 ms`<br>RPS保留 `100.0%` \| 等待 `2.0 µs` | **`2.037 ± 0.068 ms` (-42.0%)**<br>RPS `100.0%` \| EPS `97.44%` \| 等待 **`19.8 µs`** | `1.912 → 1.994 → 1.928 → 1.929 ms`<br>*(混部极优，但常驻内核增加后台开销)* | `3888.9 ± 29.3 EPS` (`100.16%`)<br>切换 **`541.1 /s` (+61.9%)** (`enabled`) |
+| **6. 自适应 Agent (`adaptive`)** | **`1.949 ± 0.024 ms`**<br>RPS `100.01%` \| 等待 **`0.4 µs`** | **`2.020 ± 0.048 ms` (-42.5% 最优)**<br>RPS `100.0%` \| EPS `97.78%` \| 等待 **`19.7 µs`** | **`1.992 → 2.091 → 1.931 → 1.941 ms`**<br>*(自动切入 `805.5ms`，自动回退 `565.4ms`)* | **`3878.2 ± 27.4 EPS` (`99.88%`)**<br>切换 **`333.8 /s` (零额外切换)** (`disabled`) |
 
-### 2. 多维资源协同自治闭环实验（`experiments/check_multi_resource_auto.py`）
+> **开题指标百分百达标**：混部场景下自适应 Agent 实现 **`网页 RPS 保留率 100.0%`（≥90%）**、**`后台 EPS 保留率 97.78%`（≥90%）**、**`请求错误率 0.00%`**，单次唤醒排队等待从默认调度的 `1497.6 µs` 骤降至 **`19.7 µs`（压降 76 倍）**，且纯后台零额外上下文切换开销。
+
+### 2. 多资源闭环定量 A/B 消融对照（`experiments/run_rigorous_suite.py`）
+- **Cgroup (4096:1024) + LSM 兜底防线**：在默认调度下发生同核争抢时，Cgroup 自动赋权将单次唤醒排队等待从 `1506.7 µs` 压降至 **`1107.0 µs`（-26.5%）**；完整多资源自治切入后进一步压降至 **`15.5 µs`（压降 97 倍）**，`p99` 降至 **`1.920 ms`**。
+- **eBPF TC 端口自动熔断**：旁路端口并发洪泛冲击下，未熔断时前台排队等待 `1541.4 µs`（占比 79.5%）、`p99` 恶化至 `3.559 ms`；开启 eBPF `TC_ACT_SHOT` 后**内核零拷贝丢包拦截 972 包**，前台排队等待降至 **`0.4 µs`（排队完全消除）**，前台 `p99` 恢复至 **`1.920 ms`**。
+- **安全策略与白名单防误伤**：`security.lsm.enforce` 自动将未授权竞争进程 `nice` 降权为 19 并**驱逐至隔离核心 CPU3**；内置白名单坚决拒绝阻断 `80/18086` 等核心业务端口（`PROTECTED_PORT_REFUSED` 校验通过）。
+
+### 3. 多维资源协同自治闭环阶段实验（`experiments/check_multi_resource_auto.py`）
 使用 [`profiles/nginx-multi-auto.json`](profiles/nginx-multi-auto.json) 验证 Agent 根据运行态势自动控制全部子系统（原始数据：`state/multi-resource-auto-validation.json`）：
 - **阶段 1（纯前台服务）**：保持 `kernel.default` 与 Cgroup 未隔离，**自动审计 Nginx 进程**并**自动在 `lo` 挂载 eBPF TC 观测模式**（`18095` 端口探测 `200 OK`）；
 - **阶段 2（注入后台算力争抢）**：**自动审计新进程 `sysbench`**、**自动创建并迁入 `4096:1024` 受管 Cgroup**、**自动切入 `scx.slice (1ms + 唤醒抢占)`**；
@@ -94,8 +101,9 @@ python3 experiments/check_ebpf_hooks.py
 python3 experiments/check_slo_continuous.py
 python3 experiments/check_multi_resource_auto.py
 
-# 3. 开题报告 6 策略 × 4 场景完整消融矩阵实验
+# 3. 开题报告 6 策略 × 4 场景完整消融矩阵与严谨多周期基准测试
 python3 experiments/run_ppt_matrix.py
+python3 experiments/run_rigorous_suite.py  # 5 周期平衡统计 (Mean±SD) + 负载梯度 + 多资源定量消融 + HTML报告生成
 
 # 4. 课程答辩命令行一键全流程演示
 python3 experiments/run_demo.py
@@ -106,6 +114,7 @@ python3 experiments/run_demo.py
 ## 相关文档导航
 
 - [课程设计总结报告（含架构、优化细节、6×4 矩阵与多维闭环实测）](docs/course-project-report.md)
+- [交互式 HTML 实验报告（N=5 周期 Mean±SD、负载梯度与多资源定量消融）](docs/experiment-report.html)
 - [真机实时交互沙盒与可视化大屏](docs/demo-dashboard.html)
 - [唤醒抢占专家与 BPF 调度优化说明](docs/wakeup-preemption.md)
 - [在线业务 SLO 反馈机制说明](docs/business-feedback.md)

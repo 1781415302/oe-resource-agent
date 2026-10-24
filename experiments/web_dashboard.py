@@ -921,6 +921,9 @@ class LiveDashboardHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(err)
 
+    def do_HEAD(self) -> None:
+        self.do_GET()
+
     def do_GET(self) -> None:
         if self.path in ("/", "/index.html", "/demo-dashboard.html"):
             content = HTML_PATH.read_bytes()
@@ -929,8 +932,22 @@ class LiveDashboardHandler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Content-Length", str(len(content)))
             self.end_headers()
-            self.wfile.write(content)
+            if self.command != "HEAD":
+                self.wfile.write(content)
             return
+
+        if self.path in ("/report", "/experiment-report.html"):
+            rep_path = REPO_ROOT / "docs" / "experiment-report.html"
+            if rep_path.is_file():
+                content = rep_path.read_bytes()
+                self.send_response(200)
+                self._send_cors()
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(content)))
+                self.end_headers()
+                if self.command != "HEAD":
+                    self.wfile.write(content)
+                return
 
         if self.path.startswith("/api/live-state"):
             if IS_LINUX and SANDBOX is not None:

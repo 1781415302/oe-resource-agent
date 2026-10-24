@@ -127,12 +127,13 @@ class MetricsChecks(unittest.TestCase):
         names = {item["name"] for item in registry.list()}
         for expected in ("resource.cgroup.attach", "resource.cgroup.detach",
                          "network.ebpf.describe", "network.ebpf.status", "network.ebpf.attach", "network.ebpf.detach",
-                         "security.lsm.describe", "security.lsm.audit"):
+                         "security.lsm.describe", "security.lsm.audit", "security.lsm.enforce"):
             self.assertIn(expected, names)
         self.assertTrue(registry.call("network.ebpf.describe", {})["ok"])
         self.assertTrue(registry.call("security.lsm.describe", {})["ok"])
         self.assertFalse(registry.call("network.ebpf.attach", {"target_port": 70000})["ok"])
         self.assertFalse(registry.call("resource.cgroup.attach", {"group": "bad/name", "pid": 1})["ok"])
+        self.assertFalse(registry.call("security.lsm.enforce", {"pid": 1, "nice": 30})["ok"])
 
     def test_plugin_auto_config_validation(self):
         from oeagent.plugins import PluginAutoConfig
@@ -142,6 +143,8 @@ class MetricsChecks(unittest.TestCase):
             PluginAutoConfig(latency_group="same", batch_group="same")
         with self.assertRaises(ToolError):
             PluginAutoConfig(monitor_port=70000)
+        with self.assertRaises(ToolError):
+            PluginAutoConfig(monitor_port=80)
         with self.assertRaises(ToolError):
             PluginAutoConfig(drop_threshold_pps=0)
 
@@ -166,6 +169,7 @@ class MetricsChecks(unittest.TestCase):
                         {"pid": 202, "comm": "sysbench", "roles": ["batch"], "identity": {"pid": 202, "start_ticks": 600}}]}
         coord.step(w2, "kernel.default")
         self.assertEqual(coord.status()["lsm_audited_count"], 2)
+        self.assertEqual(coord.status()["lsm_enforced_count"], 1)
         self.assertTrue(coord.status()["cgroup"]["active"])
         self.assertEqual(coord.status()["cgroup"]["latency_pids"], [101])
         self.assertEqual(coord.status()["cgroup"]["batch_pids"], [202])
@@ -191,9 +195,9 @@ class MetricsChecks(unittest.TestCase):
         self.assertFalse(coord.status()["cgroup"]["active"])
         coord.close()
         event_names = [e["event"] for e in events]
-        for expected_event in ("plugin_security_audited", "plugin_ebpf_attached", "plugin_cgroup_isolated",
-                               "plugin_ebpf_isolated", "plugin_ebpf_recovered", "plugin_cgroup_released",
-                               "plugin_cleanup_completed"):
+        for expected_event in ("plugin_security_audited", "plugin_security_enforced", "plugin_ebpf_attached",
+                               "plugin_cgroup_isolated", "plugin_ebpf_isolated", "plugin_ebpf_recovered",
+                               "plugin_cgroup_released", "plugin_cleanup_completed"):
             self.assertIn(expected_event, event_names)
 
 

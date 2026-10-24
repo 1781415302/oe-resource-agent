@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>openEuler 资源管控 Agent — 完整多周期统计与消融实验报告</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif; background: #0b1120; color: #e2e8f0; margin: 0; padding: 24px 32px; line-height: 1.55; }
+  h1, h2, h3 { color: #f8fafc; margin-top: 0; }
+  .header { border-bottom: 1px solid #1e293b; padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .badge { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.4); padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+  .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; margin-bottom: 22px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+  th, td { border-bottom: 1px solid #1f2937; padding: 10px 12px; text-align: left; vertical-align: top; }
+  th { color: #94a3b8; background: rgba(15,23,42,0.6); font-weight: 600; }
+  .sub { font-size: 11.5px; color: #94a3b8; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  code { background: #1e293b; padding: 2px 6px; border-radius: 4px; color: #38bdf8; font-family: Consolas, monospace; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>openEuler 自适应资源管控 Agent — 多周期统计与多资源消融实验报告</h1>
+      <div class="sub">生成时间 (UTC): 2026-10-24T08:51:04Z | 内核: openEuler 24.03 LTS-SP4 (6.6.0-scx) | 统计口径: N=5 独立周期 (Mean ± SD)</div>
+    </div>
+    <div class="badge">✓ 全部开题验收指标通过 (RPS/EPS 保留 ≥ 90%, 错误率 0.00%)</div>
+  </div>
+
+  <div class="card">
+    <h2>一、 6 策略 × 4 场景多周期消融实验矩阵（N = 5 独立周期，均值 ± 标准差）</h2>
+    <div class="sub">测试速率：25,600 RPS | 验收标准：混部 p99 显著下降，网页 RPS 保留率 ≥ 90%，后台 EPS 保留率 ≥ 90%，请求错误率 = 0%</div>
+    <table>
+      <thead>
+        <tr>
+          <th>策略对照组</th>
+          <th>场景 1：纯网页 (service_only)<br><span class="sub">p99 (Mean±SD) / RPS保留 / 排队等待</span></th>
+          <th>场景 2：网页+后台混部 (mixed)<br><span class="sub">p99 (Mean±SD) / RPS &amp; EPS保留 / 等待</span></th>
+          <th>场景 3：动态负载切换 (dynamic)<br><span class="sub">混部前 → 混部稳态 → 恢复过渡 → 恢复稳态 p99</span></th>
+          <th>场景 4：纯后台计算 (batch_only, 2线程)<br><span class="sub">后台 EPS (Mean±SD, 保留率) / 非自愿切换</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td><strong>1. 默认调度 (default)</strong></td>
+          <td>1.932 ± 0.012 ms<br><span class="sub">RPS保留: 100.0% | 错: 0% | 等待: 0.4µs</span></td>
+          <td><strong>3.514 ± 0.015 ms</strong><br><span class="sub">RPS保留: 100.01% | EPS保留: 100.34% | 等待: 1497.6µs</span></td>
+          <td>1.922 → <strong>3.507</strong> → 2.387 → 1.948 ms<br><span class="sub">切入: Nonems | 回退: Nonems | 失败: 0/5</span></td>
+          <td>3882.7 ± 25.1 EPS (100.0%)<br><span class="sub">非自愿切换: 334.3/s</span></td>
+        </tr>
+        <tr>
+          <td><strong>2. 原始 scx_simple</strong></td>
+          <td>1.921 ± 0.013 ms<br><span class="sub">RPS保留: 100.0% | 错: 0% | 等待: 1.7µs</span></td>
+          <td><strong>35.193 ± 4.716 ms</strong><br><span class="sub">RPS保留: 99.98% | EPS保留: 101.72% | 等待: 19340.4µs</span></td>
+          <td>1.928 → <strong>31.999</strong> → 18.799 → 1.909 ms<br><span class="sub">切入: Nonems | 回退: Nonems | 失败: 0/5</span></td>
+          <td>3875.7 ± 32.9 EPS (99.82%)<br><span class="sub">非自愿切换: 48.3/s</span></td>
+        </tr>
+        <tr>
+          <td><strong>3. 固定 SCX (20ms)</strong></td>
+          <td>1.942 ± 0.006 ms<br><span class="sub">RPS保留: 100.01% | 错: 0% | 等待: 1.7µs</span></td>
+          <td><strong>74.38 ± 51.548 ms</strong><br><span class="sub">RPS保留: 100.11% | EPS保留: 100.66% | 等待: 19351.1µs</span></td>
+          <td>1.951 → <strong>164.991</strong> → 32.799 → 1.941 ms<br><span class="sub">切入: Nonems | 回退: Nonems | 失败: 0/5</span></td>
+          <td>3851.4 ± 58.6 EPS (99.19%)<br><span class="sub">非自愿切换: 48.5/s</span></td>
+        </tr>
+        <tr>
+          <td><strong>4. 固定 SCX (1ms 无抢占)</strong></td>
+          <td>1.949 ± 0.01 ms<br><span class="sub">RPS保留: 100.0% | 错: 0% | 等待: 1.9µs</span></td>
+          <td><strong>2.796 ± 0.061 ms</strong><br><span class="sub">RPS保留: 100.0% | EPS保留: 97.31% | 等待: 654.7µs</span></td>
+          <td>1.952 → <strong>2.807</strong> → 2.03 → 1.941 ms<br><span class="sub">切入: Nonems | 回退: Nonems | 失败: 0/5</span></td>
+          <td>3885.3 ± 44.2 EPS (100.07%)<br><span class="sub">非自愿切换: 543.1/s</span></td>
+        </tr>
+        <tr>
+          <td><strong>5. 固定 SCX (1ms+唤醒抢占)</strong></td>
+          <td>1.919 ± 0.006 ms<br><span class="sub">RPS保留: 100.0% | 错: 0% | 等待: 2.0µs</span></td>
+          <td><strong>2.037 ± 0.068 ms</strong><br><span class="sub">RPS保留: 100.0% | EPS保留: 97.44% | 等待: 19.8µs</span></td>
+          <td>1.912 → <strong>1.994</strong> → 1.928 → 1.929 ms<br><span class="sub">切入: Nonems | 回退: Nonems | 失败: 0/5</span></td>
+          <td>3888.9 ± 29.3 EPS (100.16%)<br><span class="sub">非自愿切换: 541.1/s</span></td>
+        </tr>
+        <tr style="background:rgba(16,185,129,0.12);font-weight:600;">
+          <td><strong>6. 自适应 Agent (adaptive)</strong></td>
+          <td>1.949 ± 0.024 ms<br><span class="sub">RPS保留: 100.01% | 错: 0% | 等待: 0.4µs</span></td>
+          <td><strong>2.02 ± 0.048 ms</strong><br><span class="sub">RPS保留: 100.0% | EPS保留: 97.78% | 等待: 19.7µs</span></td>
+          <td>1.992 → <strong>2.091</strong> → 1.931 → 1.941 ms<br><span class="sub">切入: 805.5ms | 回退: 565.4ms | 失败: 0/5</span></td>
+          <td>3878.2 ± 27.4 EPS (99.88%)<br><span class="sub">非自愿切换: 333.8/s</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>二、 混部负载强度梯度实验（低/中/高请求速率 × 1/2 后台线程）</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>负载梯度组合</th>
+            <th>默认调度 p99 (Mean±SD)</th>
+            <th>自适应 Agent p99 (Mean±SD)</th>
+            <th>网页 RPS 保留率</th>
+            <th>后台吞吐 EPS</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+          <td>12800 RPS × 1 线程</td>
+          <td>3.747 ± 0.0 ms (等待 1692.0µs)</td>
+          <td><strong style="color:#10b981;">1.81 ± 0.02 ms (-51.7%)</strong> (等待 13.3µs)</td>
+          <td>100.0% (错误率 0.00%)</td>
+          <td>3443.4 EPS</td>
+        </tr>
+        <tr>
+          <td>12800 RPS × 2 线程</td>
+          <td>3.746 ± 0.004 ms (等待 1695.2µs)</td>
+          <td><strong style="color:#10b981;">1.817 ± 0.029 ms (-51.5%)</strong> (等待 13.7µs)</td>
+          <td>100.02% (错误率 0.00%)</td>
+          <td>3457.9 EPS</td>
+        </tr>
+        <tr>
+          <td>25600 RPS × 1 线程</td>
+          <td>3.515 ± 0.017 ms (等待 1488.2µs)</td>
+          <td><strong style="color:#10b981;">2.03 ± 0.049 ms (-42.2%)</strong> (等待 18.8µs)</td>
+          <td>100.0% (错误率 0.00%)</td>
+          <td>3055.8 EPS</td>
+        </tr>
+        <tr>
+          <td>25600 RPS × 2 线程</td>
+          <td>3.564 ± 0.042 ms (等待 1536.5µs)</td>
+          <td><strong style="color:#10b981;">1.937 ± 0.03 ms (-45.7%)</strong> (等待 13.6µs)</td>
+          <td>100.0% (错误率 0.00%)</td>
+          <td>3109.8 EPS</td>
+        </tr>
+        <tr>
+          <td>38400 RPS × 1 线程</td>
+          <td>4.547 ± 0.272 ms (等待 1874.7µs)</td>
+          <td><strong style="color:#10b981;">2.472 ± 0.033 ms (-45.6%)</strong> (等待 55.9µs)</td>
+          <td>100.0% (错误率 0.00%)</td>
+          <td>2714.1 EPS</td>
+        </tr>
+        <tr>
+          <td>38400 RPS × 2 线程</td>
+          <td>7.661 ± 0.535 ms (等待 2103.2µs)</td>
+          <td><strong style="color:#10b981;">2.468 ± 0.021 ms (-67.8%)</strong> (等待 58.3µs)</td>
+          <td>100.0% (错误率 0.00%)</td>
+          <td>2722.9 EPS</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>三、 纯后台线程数梯度实验（1 / 2 / 4 线程，N=5 周期）</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>后台规模</th>
+            <th>默认调度 (default)</th>
+            <th>固定 1ms+抢占 (常驻 SCX)</th>
+            <th>自适应 Agent (自动保持 default)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+          <td>纯后台 1 线程</td>
+          <td>3937.7 ± 15.2 EPS | 切换 1.5/s</td>
+          <td>3865.7 EPS | <span style="color:#f43f5e;">切换 1.7/s (+13.3%)</span></td>
+          <td><strong style="color:#10b981;">3882.2 ± 23.1 EPS (98.59%) | 切换 1.5/s (disabled)</strong></td>
+        </tr>
+        <tr>
+          <td>纯后台 2 线程</td>
+          <td>3882.7 ± 25.1 EPS | 切换 334.3/s</td>
+          <td>3888.9 EPS | <span style="color:#f43f5e;">切换 541.1/s (+61.9%)</span></td>
+          <td><strong style="color:#10b981;">3878.2 ± 27.4 EPS (99.88%) | 切换 333.8/s (disabled)</strong></td>
+        </tr>
+        <tr>
+          <td>纯后台 4 线程</td>
+          <td>3881.4 ± 12.2 EPS | 切换 334.3/s</td>
+          <td>3853.9 EPS | <span style="color:#f43f5e;">切换 543.6/s (+62.6%)</span></td>
+          <td><strong style="color:#10b981;">3838.9 ± 56.1 EPS (98.91%) | 切换 334.1/s (disabled)</strong></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>四、 多资源闭环（SCX + Cgroup + eBPF TC + LSM）定量 A/B 消融对照</h2>
+    <div class="grid-2">
+      <div>
+        <h3>4.1 算力争抢双层防线：默认调度/过渡期 Cgroup+LSM 兜底 vs 完整 SCX 协同</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>控制配置 (CPU0 同核 25.6k RPS + sysbench)</th>
+              <th>前台 CPU 份额</th>
+              <th>单次唤醒等待</th>
+              <th>前台 p99 (Mean±SD)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1. 无插件默认调度 (CFS 1024:1024)</td>
+              <td>14.3%</td>
+              <td>1506.7 µs</td>
+              <td>3.546 ± 0.027 ms</td>
+            </tr>
+            <tr>
+              <td>2. 开启 Cgroup(4096:1024) + LSM(nice=15) 自动兜底</td>
+              <td><strong>14.6%</strong></td>
+              <td><strong>1107.0 µs</strong></td>
+              <td><strong style="color:#38bdf8;">3.845 ± 0.043 ms</strong></td>
+            </tr>
+            <tr style="background:rgba(16,185,129,0.12);">
+              <td><strong>3. 完整多资源自治 (SCX 1ms+抢占 + Cgroup + LSM)</strong></td>
+              <td><strong>13.8%</strong></td>
+              <td><strong>15.5 µs</strong></td>
+              <td><strong style="color:#10b981;">1.92 ± 0.023 ms</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>4.2 异常端口洪泛冲击：无 eBPF 熔断 vs 开启 eBPF TC_ACT_SHOT 自动熔断</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>网络防护模式 (CPU0 旁路端口 18095 并发洪泛)</th>
+              <th>内核丢包拦截数</th>
+              <th>前台 Nginx 排队等待</th>
+              <th>前台 Nginx p99</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1. 未开启 eBPF 熔断 (洪泛打入用户态抢占 CPU0)</td>
+              <td>0</td>
+              <td>1541.4 µs (79.5%)</td>
+              <td style="color:#f43f5e;font-weight:700;">3.559 ms</td>
+            </tr>
+            <tr style="background:rgba(16,185,129,0.12);">
+              <td><strong>2. 开启 eBPF TC 自动熔断 (TC_ACT_SHOT 零拷贝丢包)</strong></td>
+              <td><strong>972 包</strong></td>
+              <td><strong>0.4 µs (0.2%)</strong></td>
+              <td><strong style="color:#10b981;">1.92 ms (受保护)</strong></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="sub" style="margin-top:10px;">
+          ✓ <strong>边界与安全策略执行验证</strong>：白名单业务端口（80/18086）防误封拦截 = <code>True</code> |
+          Ingress+Egress 双向挂载 = <code>True</code> |
+          LSM 越权进程强制驱逐至隔离核 CPU3 并降权 nice=19 = <code>True</code>
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
