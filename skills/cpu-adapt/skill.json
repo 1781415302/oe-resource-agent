@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "id": "cpu-adapt",
-  "version": "0.1.3",
-  "description": "观察服务与后台负载，以确认窗口和最短驻留时间选择默认调度或可配置 SCX",
+  "version": "0.2.0",
+  "description": "观察服务与后台负载，以确认窗口和最短驻留时间选择默认调度、可配置 SCX 或多维自治闭环",
   "entry_tool": "agent.run",
   "required_tools": [
     "system.capabilities",
@@ -17,7 +17,10 @@
       "profile": {
         "type": "string",
         "enum": [
-          "nginx-cpu"
+          "nginx-cpu",
+          "nginx-slo",
+          "nginx-wakeup-slo",
+          "nginx-multi-auto"
         ]
       },
       "duration_seconds": {
@@ -41,5 +44,5 @@
     "观测不足时不执行新策略",
     "不将CPU指标当作请求p99"
   ],
-  "status": "behavior-routing skill verified; business feedback uses the separate nginx-slo session"
+  "status": "verified on v0.2.0; supports nginx-cpu, nginx-slo, nginx-wakeup-slo, and nginx-multi-auto"
 }
