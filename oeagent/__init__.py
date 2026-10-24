@@ -1,5 +1,5 @@
 """openEuler resource control Agent."""
-__version__ = "0.1.3"
+__version__ = "0.2.0"
 
 
 def _prepare_checked_cache():

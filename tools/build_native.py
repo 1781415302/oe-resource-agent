@@ -60,9 +60,9 @@ def main():
     if len(config_lines) != 1:
         raise SystemExit("后端构建后配置读取失败。")
     config = json.loads(config_lines[0].split(" ", 1)[1])
-    if config["version"] != "0.1.3" or config["max_slice_ns"] <= 0:
+    if config["version"] != "0.2.0" or config["max_slice_ns"] <= 0:
         raise SystemExit("后端版本或内核默认值不符。")
-    manifest = {"version": "0.1.3", "kernel_release": release, "architecture": platform.machine(),
+    manifest = {"version": "0.2.0", "kernel_release": release, "architecture": platform.machine(),
                 "binary": str(binary), "binary_sha256": digest(binary), "configuration": config,
                 "btf_sha256": digest("/sys/kernel/btf/vmlinux"), "source": evidence,
                 "native_load_verified": False, "performance_verified": False}

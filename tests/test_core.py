@@ -127,12 +127,13 @@ class MetricsChecks(unittest.TestCase):
         names = {item["name"] for item in registry.list()}
         for expected in ("resource.cgroup.attach", "resource.cgroup.detach",
                          "network.ebpf.describe", "network.ebpf.status", "network.ebpf.attach", "network.ebpf.detach",
-                         "security.lsm.describe", "security.lsm.audit", "security.lsm.enforce"):
+                         "security.lsm.describe", "security.lsm.audit", "security.lsm.enforce", "security.policy.enforce"):
             self.assertIn(expected, names)
         self.assertTrue(registry.call("network.ebpf.describe", {})["ok"])
         self.assertTrue(registry.call("security.lsm.describe", {})["ok"])
         self.assertFalse(registry.call("network.ebpf.attach", {"target_port": 70000})["ok"])
         self.assertFalse(registry.call("resource.cgroup.attach", {"group": "bad/name", "pid": 1})["ok"])
+        self.assertFalse(registry.call("security.policy.enforce", {"pid": 1, "nice": 30})["ok"])
         self.assertFalse(registry.call("security.lsm.enforce", {"pid": 1, "nice": 30})["ok"])
 
     def test_plugin_auto_config_validation(self):

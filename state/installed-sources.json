@@ -3,6 +3,6 @@
   "sha256": {
     "scx_oe_adaptive.c": "c68fe1a62e61d8589abfcd50c6affc9e3239e434b99d8b3480654549b3403e7e",
     "scx_oe_adaptive.bpf.c": "6c86ab461fc3a9bd33ab1dfeaa863bacfa10f7524228f1f2e5e7106971635a2b",
-    "oe_adaptive.h": "ca9ff49e98fd687ed7a094c05a6705e731517c03037f66f81d62b8e6bb79160c"
+    "oe_adaptive.h": "769c19e2ac180da0bcf7461bb694ea5130d18dde71a7c5aacbe7275b93f7c988"
   }
 }

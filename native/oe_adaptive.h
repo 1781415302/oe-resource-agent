@@ -2,7 +2,7 @@
 #ifndef OE_ADAPTIVE_H
 #define OE_ADAPTIVE_H
 
-#define OE_AGENT_VERSION "0.1.3"
+#define OE_AGENT_VERSION "0.2.0"
 #define OE_MIN_SLICE_US 100ULL
 #define OE_MAX_SLICE_US 50000ULL
 #define OE_STAT_COUNT 13

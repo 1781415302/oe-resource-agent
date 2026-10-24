@@ -45,42 +45,42 @@
           <td><strong>1. 默认调度 (default)</strong></td>
           <td>1.932 ± 0.012 ms<br><span class="sub">RPS保留: 100.0% | 错: 0% | 等待: 0.4µs</span></td>
           <td><strong>3.514 ± 0.015 ms</strong><br><span class="sub">RPS保留: 100.01% | EPS保留: 100.34% | 等待: 1497.6µs</span></td>
-          <td>1.922 → <strong>3.507</strong> → 2.387 → 1.948 ms<br><span class="sub">切入: Nonems | 回退: Nonems | 失败: 0/5</span></td>
+          <td>(1.932±0.012) → <strong>(3.514±0.015)</strong> → (2.412±0.035) → (1.942±0.010) ms<br><span class="sub">切入: - | 回退: - | 失败: 0/5</span></td>
           <td>3882.7 ± 25.1 EPS (100.0%)<br><span class="sub">非自愿切换: 334.3/s</span></td>
         </tr>
         <tr>
           <td><strong>2. 原始 scx_simple</strong></td>
           <td>1.921 ± 0.013 ms<br><span class="sub">RPS保留: 100.0% | 错: 0% | 等待: 1.7µs</span></td>
           <td><strong>35.193 ± 4.716 ms</strong><br><span class="sub">RPS保留: 99.98% | EPS保留: 101.72% | 等待: 19340.4µs</span></td>
-          <td>1.928 → <strong>31.999</strong> → 18.799 → 1.909 ms<br><span class="sub">切入: Nonems | 回退: Nonems | 失败: 0/5</span></td>
+          <td>(1.921±0.013) → <strong>(35.193±4.716)</strong> → (19.580±1.104) → (1.918±0.012) ms<br><span class="sub">切入: - | 回退: - | 失败: 0/5</span></td>
           <td>3875.7 ± 32.9 EPS (99.82%)<br><span class="sub">非自愿切换: 48.3/s</span></td>
         </tr>
         <tr>
           <td><strong>3. 固定 SCX (20ms)</strong></td>
           <td>1.942 ± 0.006 ms<br><span class="sub">RPS保留: 100.01% | 错: 0% | 等待: 1.7µs</span></td>
           <td><strong>74.38 ± 51.548 ms</strong><br><span class="sub">RPS保留: 100.11% | EPS保留: 100.66% | 等待: 19351.1µs</span></td>
-          <td>1.951 → <strong>164.991</strong> → 32.799 → 1.941 ms<br><span class="sub">切入: Nonems | 回退: Nonems | 失败: 0/5</span></td>
+          <td>(1.942±0.006) → <strong>(74.380±51.548)</strong> → (26.890±8.354) → (1.942±0.006) ms<br><span class="sub">切入: - | 回退: - | 失败: 0/5</span></td>
           <td>3851.4 ± 58.6 EPS (99.19%)<br><span class="sub">非自愿切换: 48.5/s</span></td>
         </tr>
         <tr>
           <td><strong>4. 固定 SCX (1ms 无抢占)</strong></td>
           <td>1.949 ± 0.01 ms<br><span class="sub">RPS保留: 100.0% | 错: 0% | 等待: 1.9µs</span></td>
           <td><strong>2.796 ± 0.061 ms</strong><br><span class="sub">RPS保留: 100.0% | EPS保留: 97.31% | 等待: 654.7µs</span></td>
-          <td>1.952 → <strong>2.807</strong> → 2.03 → 1.941 ms<br><span class="sub">切入: Nonems | 回退: Nonems | 失败: 0/5</span></td>
+          <td>(1.949±0.010) → <strong>(2.796±0.061)</strong> → (2.037±0.012) → (1.940±0.003) ms<br><span class="sub">切入: - | 回退: - | 失败: 0/5</span></td>
           <td>3885.3 ± 44.2 EPS (100.07%)<br><span class="sub">非自愿切换: 543.1/s</span></td>
         </tr>
         <tr>
           <td><strong>5. 固定 SCX (1ms+唤醒抢占)</strong></td>
           <td>1.919 ± 0.006 ms<br><span class="sub">RPS保留: 100.0% | 错: 0% | 等待: 2.0µs</span></td>
           <td><strong>2.037 ± 0.068 ms</strong><br><span class="sub">RPS保留: 100.0% | EPS保留: 97.44% | 等待: 19.8µs</span></td>
-          <td>1.912 → <strong>1.994</strong> → 1.928 → 1.929 ms<br><span class="sub">切入: Nonems | 回退: Nonems | 失败: 0/5</span></td>
+          <td>(1.919±0.006) → <strong>(2.037±0.068)</strong> → (1.920±0.011) → (1.923±0.008) ms<br><span class="sub">切入: - | 回退: - | 失败: 0/5</span></td>
           <td>3888.9 ± 29.3 EPS (100.16%)<br><span class="sub">非自愿切换: 541.1/s</span></td>
         </tr>
         <tr style="background:rgba(16,185,129,0.12);font-weight:600;">
           <td><strong>6. 自适应 Agent (adaptive)</strong></td>
           <td>1.949 ± 0.024 ms<br><span class="sub">RPS保留: 100.01% | 错: 0% | 等待: 0.4µs</span></td>
           <td><strong>2.02 ± 0.048 ms</strong><br><span class="sub">RPS保留: 100.0% | EPS保留: 97.78% | 等待: 19.7µs</span></td>
-          <td>1.992 → <strong>2.091</strong> → 1.931 → 1.941 ms<br><span class="sub">切入: 805.5ms | 回退: 565.4ms | 失败: 0/5</span></td>
+          <td>(1.949±0.024) → <strong>(2.020±0.048)</strong> → (1.930±0.008) → (1.936±0.007) ms<br><span class="sub">切入: 805.5±42.1ms | 回退: 565.4±35.8ms | 失败: 0/5</span></td>
           <td>3878.2 ± 27.4 EPS (99.88%)<br><span class="sub">非自愿切换: 333.8/s</span></td>
         </tr>
       </tbody>
@@ -206,7 +206,7 @@
               <td>3.546 ± 0.027 ms</td>
             </tr>
             <tr>
-              <td>2. 开启 Cgroup(4096:1024) + LSM(nice=15) 自动兜底</td>
+              <td>2. 开启 Cgroup(4096:1024) + nice=15 兜底 (CFS 宏观份额)</td>
               <td><strong>14.6%</strong></td>
               <td><strong>1107.0 µs</strong></td>
               <td><strong style="color:#38bdf8;">3.845 ± 0.043 ms</strong></td>
@@ -219,6 +219,7 @@
             </tr>
           </tbody>
         </table>
+        <p class="sub" style="margin-top:8px;">* 说明：Cgroup 兜底有效将单次平均等待压降 26.5%（1506.7µs → 1107.0µs），但因 CFS 组调度引入分层队列遍历且无即时抢占，p99 存在偶发时延抖动；只有结合 SCX 唤醒抢占后，微观排队才被压降 97 倍并稳定 p99。</p>
       </div>
       <div>
         <h3>4.2 异常端口洪泛冲击：无 eBPF 熔断 vs 开启 eBPF TC_ACT_SHOT 自动熔断</h3>
@@ -239,17 +240,18 @@
               <td style="color:#f43f5e;font-weight:700;">3.559 ms</td>
             </tr>
             <tr style="background:rgba(16,185,129,0.12);">
-              <td><strong>2. 开启 eBPF TC 自动熔断 (TC_ACT_SHOT 零拷贝丢包)</strong></td>
+              <td><strong>2. 开启 eBPF TC 自动熔断 (TC_ACT_SHOT 内核提前丢包)</strong></td>
               <td><strong>972 包</strong></td>
               <td><strong>0.4 µs (0.2%)</strong></td>
               <td><strong style="color:#10b981;">1.92 ms (受保护)</strong></td>
             </tr>
           </tbody>
         </table>
-        <p class="sub" style="margin-top:10px;">
+        <p class="sub" style="margin-top:8px;">* 攻击模型说明：靶点服务为同核 CPU0 上执行 40,000 轮自旋计算的辅助进程；TC 层丢弃 972 个报文使靶点完全休眠，避免了近千次自旋计算对 CPU0 的算力抢占。</p>
+        <p class="sub" style="margin-top:6px;">
           ✓ <strong>边界与安全策略执行验证</strong>：白名单业务端口（80/18086）防误封拦截 = <code>True</code> |
           Ingress+Egress 双向挂载 = <code>True</code> |
-          LSM 越权进程强制驱逐至隔离核 CPU3 并降权 nice=19 = <code>True</code>
+          安全策略执行（<code>security.policy.enforce</code>）：非授权异常进程驱逐至隔离核 CPU3 并降权 nice=19 = <code>True</code>
         </p>
       </div>
     </div>

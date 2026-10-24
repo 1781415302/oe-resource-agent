@@ -333,7 +333,12 @@ class SecurityHookPlugin(Plugin):
         registry.register("security.lsm.describe", "读取内核 LSM 模块栈与 BPF LSM 状态", object_schema(), lambda args: self.describe())
         registry.register("security.lsm.audit", "审计目标进程的 LSM 标签、Capability 掩码、Seccomp 与 cgroup 隔离上下文", object_schema(
             {"pid": pid}, ["pid"]), self.audit)
-        registry.register("security.lsm.enforce", "核对进程身份与 LSM 上下文后执行安全降权与 CPU 亲和性隔离策略", object_schema(
+        registry.register("security.policy.enforce", "核对进程身份与安全上下文后对非授权竞争进程执行降权与 CPU 隔离策略", object_schema(
+            {"pid": pid, "expected_start_ticks": ticks,
+             "nice": {"type": "integer", "minimum": -20, "maximum": 19},
+             "isolation_cpus": {"type": "array", "items": {"type": "integer", "minimum": 0, "maximum": 1024}}},
+            ["pid"]), self.enforce, mutates=True)
+        registry.register("security.lsm.enforce", "核对进程身份与 LSM 上下文后执行安全降权与 CPU 亲和性隔离策略（兼容别名）", object_schema(
             {"pid": pid, "expected_start_ticks": ticks,
              "nice": {"type": "integer", "minimum": -20, "maximum": 19},
              "isolation_cpus": {"type": "array", "items": {"type": "integer", "minimum": 0, "maximum": 1024}}},
