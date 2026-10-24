@@ -88,7 +88,7 @@
 | eBPF 网络与安全策略 | `python3 experiments/check_ebpf_hooks.py` | **通过**（观测计数、`TC_ACT_SHOT` 端口熔断、白名单端口防误封拒绝、`security.policy.enforce` 异常进程隔离验证通过） |
 
 ### 4.2 Hyper-V 阶段一：极限容量定档（57,600 RPS）与排队雪崩现象分析
-在阶段一（唤醒抢占优化前），我们先通过 Survey 测得单核 Nginx 混部极限吞吐容量约为 `64,000 RPS`，并选取 90% 极限容量点（**`57,600 RPS`**）进行了初步压力探索（原始度量数据归档保存在 [`state/baseline-pilot-57600-validation.json`](../state/baseline-pilot-57600-validation.json) 及 [`results/baseline-baseline-pilot-20261023T064422Z-188d9c-a1`](../results/baseline-baseline-pilot-20261023T064422Z-188d9c-a1)，交接记录见 [baseline-measurement.md](baseline-measurement.md)）：
+在阶段一（唤醒抢占优化前），我们先通过 Survey 测得单核 Nginx 混部极限吞吐容量约为 `64,000 RPS`，并选取 90% 极限容量点（**`57,600 RPS`**）进行了初步压力探索（原始度量数据归档保存在 [`state/baseline-pilot-57600-validation.json`](../state/baseline-pilot-57600-validation.json)，对应 6 组 client.log 原始日志在实验机 `results/baseline-baseline-pilot-20261023T064422Z-188d9c-a1` 本地存档，没有入库，交接记录见 [baseline-measurement.md](baseline-measurement.md)）：
 
 | 策略条件 | 场景 | 计划速率 (RPS) | 实测吞吐 (RPS) | 尾延迟 p99 (ms) | 状态转移与行为观测 |
 |---|---|---|---|---|---|
