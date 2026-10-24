@@ -1,16 +1,23 @@
 {
   "schema_version": 1,
-  "snapshot_local_date": "2026-10-15",
-  "cpu_model": "AMD Ryzen 9 9955HX 16-Core Processor",
+  "snapshot_local_date": "2026-10-24",
+  "cpu_model": "Intel(R) Core(TM) i7-14650HX",
   "physical_cores": 16,
-  "logical_processors": 32,
-  "power_scheme_name": "silent",
-  "power_scheme_guid": "64a64f24-65b9-4b56-befd-5ec1eaced9b3",
-  "virtualization": "VMware",
+  "logical_processors": 24,
+  "power_scheme_name": "High performance",
+  "power_scheme_guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+  "virtualization": "Hyper-V",
+  "guest_virtualization": "microsoft",
   "guest_vcpus": 4,
+  "collection_commands": {
+    "host_cpu": "pwsh -Command \"Get-CimInstance Win32_Processor | Select-Object Name, NumberOfCores, NumberOfLogicalProcessors\"",
+    "host_power": "powercfg /getactivescheme",
+    "guest_virt": "systemd-detect-virt",
+    "guest_cpu": "lscpu"
+  },
   "notes": [
-    "Read-only host snapshot after the first two exploratory batches; does not prove full-run host stability",
-    "Host CPU activity not continuously sampled",
-    "No power scheme change was performed"
+    "Hyper-V virtualized environment on openEuler 24.03 LTS-SP4 guest",
+    "4 vCPUs allocated to guest (CPU0 business, CPU1 wrk2, CPU2 Agent, CPU3 isolation)",
+    "Host power scheme set to High performance"
   ]
 }
