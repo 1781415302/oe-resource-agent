@@ -467,6 +467,7 @@
       <button class="btn" id="btnEbpfDrop" onclick="sendControl({action:'ebpf_mode',mode:'drop'})">🔴 端口阻断 (TC_ACT_SHOT)</button>
       <button class="btn" id="btnEbpfDet" onclick="sendControl({action:'ebpf_mode',mode:'detach'})">⚪ 卸载</button>
       <button class="btn cyan-on" onclick="probeEbpf()">📡 发送真实 HTTP 探测</button>
+      <button class="btn" style="border-color:rgba(244,63,94,0.45);color:#fda4af;" onclick="sendControl({action:'ebpf_flood'})">💥 注入端口突发洪泛 (触发 Agent 自动熔断)</button>
     </div>
     <div class="mini-stat-grid">
       <div class="mini-stat">
@@ -556,6 +557,64 @@
           <td style="padding:8px 10px;"><strong style="color:#34d399;">1.982 ms (-43.5% 最优)</strong> | 等待 <strong>23.3 µs (↓66倍)</strong> | 3098.8 EPS (97.2%)</td>
           <td style="padding:8px 10px;"><strong style="color:#34d399;">1.942 → 1.982 → 1.929 → 1.932 ms</strong> (切入1.08s / 回退0.69s)</td>
           <td style="padding:8px 10px;"><strong style="color:#34d399;">3897.5 EPS (97.3%) | 切换 333.4/s (disabled 零额外切换)</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Multi-Resource Automatic Orchestration Validation Table -->
+<section class="card" style="margin-top:14px;">
+  <div class="card-header">
+    <div class="card-title">🤖 多维资源协同自治闭环实验：Agent 根据运行态势自动控制 CPU (SCX) + Cgroup + eBPF TC + LSM 审计</div>
+    <span style="font-size:11.5px;color:var(--cyan);font-weight:700;">state/multi-resource-auto-validation.json (ALL PASSED)</span>
+  </div>
+  <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.2px;text-align:left;">
+      <thead>
+        <tr style="border-bottom:1px solid rgba(148,163,184,0.25);color:var(--muted);">
+          <th style="padding:8px 10px;">运行阶段与实时工况 (Runtime Stage)</th>
+          <th style="padding:8px 10px;">CPU 调度器自动决策 (<code>sched_ext</code>)</th>
+          <th style="padding:8px 10px;">Cgroup 控制器自动决策 (<code>resource.cgroup</code>)</th>
+          <th style="padding:8px 10px;">eBPF 网络钩子自动决策 (<code>network.ebpf_tc</code>)</th>
+          <th style="padding:8px 10px;">LSM 安全审计与实测验证结果</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
+          <td style="padding:8px 10px;"><strong>阶段 1：纯前台服务 (<code>service_only</code>)</strong><br><span style="color:var(--muted);font-size:11px;">仅 Nginx 运行，无后台争抢，端口流量正常</span></td>
+          <td style="padding:8px 10px;">保持 <code>kernel.default</code> (<code>disabled</code>)</td>
+          <td style="padding:8px 10px;">保持未隔离 (<code>active=false</code>，不产生额外开销)</td>
+          <td style="padding:8px 10px;"><span style="color:#38bdf8;font-weight:700;">自动挂载 lo 观测模式</span> (<code>drop_target=false</code>)</td>
+          <td style="padding:8px 10px;"><span style="color:#34d399;">✓ 自动审计 Nginx 进程</span> | 端口 18095 探测 HTTP 200 (0.48 ms)</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
+          <td style="padding:8px 10px;"><strong>阶段 2：注入后台算力争抢 (<code>mixed</code>)</strong><br><span style="color:var(--muted);font-size:11px;">CPU0 启动 sysbench 与 Nginx 混部争抢</span></td>
+          <td style="padding:8px 10px;"><span style="color:#34d399;font-weight:700;">自动切入 <code>scx.slice</code></span> (1ms + 唤醒抢占)</td>
+          <td style="padding:8px 10px;"><span style="color:#34d399;font-weight:700;">自动创建并迁入受管组</span><br><code>auto_latency=4096</code> : <code>auto_batch=1024</code></td>
+          <td style="padding:8px 10px;">持续监测包速 (<code>0.0 pps &lt; 20 pps</code>，保持放行)</td>
+          <td style="padding:8px 10px;"><span style="color:#34d399;">✓ 自动审计新进程 sysbench</span> | SCX 下核实双组 PID 归属生效</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
+          <td style="padding:8px 10px;"><strong>阶段 3：受控端口突发洪泛 (<code>port_flood</code>)</strong><br><span style="color:var(--muted);font-size:11px;">向 18095 端口突发高频请求 (315.3 pkt/s)</span></td>
+          <td style="padding:8px 10px;">维持 <code>scx.slice</code> 保护前台 Nginx</td>
+          <td style="padding:8px 10px;">维持 <code>4096 : 1024</code> Cgroup 隔离</td>
+          <td style="padding:8px 10px;"><span style="color:#fb7185;font-weight:700;">检测到 315.3 pps ≥ 20 pps → 自动切换 <code>drop_target=true</code> (<code>TC_ACT_SHOT</code>)</span></td>
+          <td style="padding:8px 10px;"><span style="color:#34d399;">✓ 18095 端口探测被内核直接阻断 (<code>dropped_packets+1</code>)，前台 Nginx 200 OK 不受影响</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
+          <td style="padding:8px 10px;"><strong>阶段 4：洪泛平息 &amp; 争抢退出 (<code>recovery</code>)</strong><br><span style="color:var(--muted);font-size:11px;">端口冲击停止 + sysbench 退出</span></td>
+          <td style="padding:8px 10px;"><span style="color:#38bdf8;font-weight:700;">自动回退 <code>kernel.default</code></span> (<code>disabled</code>)</td>
+          <td style="padding:8px 10px;"><span style="color:#38bdf8;font-weight:700;">自动解绑释放</span>，将 Nginx 迁回根 Cgroup</td>
+          <td style="padding:8px 10px;"><span style="color:#34d399;font-weight:700;">冷却 2 窗后自动恢复 <code>drop_target=false</code></span>，退出时自动卸载</td>
+          <td style="padding:8px 10px;"><span style="color:#34d399;">✓ 18095 端口自动恢复连通 (HTTP 200, 0.43 ms) | 零内核残留状态</span></td>
+        </tr>
+        <tr style="background:rgba(16,185,129,0.11);">
+          <td style="padding:8px 10px;"><strong>阶段 5：CFS 默认调度下 Cgroup 自动隔离实测</strong><br><span style="color:var(--muted);font-size:11px;"><code>mode=default</code> 同核争抢自动赋权验证</span></td>
+          <td style="padding:8px 10px;">固定 <code>kernel.default</code> (CFS)</td>
+          <td style="padding:8px 10px;"><strong style="color:#34d399;">自动识别争抢并下发 <code>4096 : 1024</code> 权重</strong></td>
+          <td style="padding:8px 10px;">自动挂载观测模式</td>
+          <td style="padding:8px 10px;"><strong style="color:#34d399;">✓ 实测前台算力占比提升至 79.8% vs 20.2% (3.94 : 1，吻合理论 4 : 1)</strong></td>
         </tr>
       </tbody>
     </table>

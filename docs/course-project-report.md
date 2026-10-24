@@ -121,6 +121,17 @@
 2. **为什么仅靠 `fixed-1ms` 还不够？** 将时间片缩至 `1ms`（无抢占）可将单次唤醒等待从 `1535 µs` 压至 `637 µs`、`p99` 降至 `2.717 ms`，但仍无法突破 `2.5 ms` SLO；加上**短睡眠唤醒抢占与 `vtime` 置顶信用（`1ms + 唤醒抢占`）**后，单次唤醒等待骤降至 **`18.8 ~ 23.3 µs`（降低 66 倍）**，`p99` 降至 **`1.982 ~ 2.010 ms`（基本抹平混部干扰，接近纯网页无干扰时的 `1.919 ms`！）**。
 3. **为什么需要 `adaptive` 自适应 Agent 而不是永久开启 `fixed-1ms-preempt`？** 在 **场景 1（纯网页）** 和 **场景 4（纯后台）** 中，`fixed-1ms-preempt` 依然常驻内核，导致纯后台双线程 `sysbench` 每秒多发生 **60% 的非自愿抢占上下文切换（`532.9 /s` vs `333.4 /s`）**；而 **`adaptive` Agent 在纯网页与纯后台下保持 `kernel.default`（`sched_ext=disabled`），仅在混部冲突发生后 `1.08 秒` 内自动切入 `1ms + 唤醒抢占`，并在后台退出后 `0.69 秒` 内自动卸载回退**，兼顾了混部极致低延迟与单负载零额外损耗。
 
+### 4.5 多维内核资源协同自治闭环实验（`check_multi_resource_auto.py`）
+为验证 Agent 不仅能自动调节 CPU 调度策略，还能根据实时运行态势**自动协同控制 Cgroup 资源隔离、eBPF TC 网络钩子与 LSM 安全审计**，我们在 [`oeagent/plugins.py`](../oeagent/plugins.py) 中实现了 `AutoPluginCoordinator` 并将其集成至 [`AgentRuntime.run()`](../oeagent/runtime.py)，使用配置 [`profiles/nginx-multi-auto.json`](../profiles/nginx-multi-auto.json) 进行了 5 阶段全自动态势切换实验（完整证据保存在 [`state/multi-resource-auto-validation.json`](../state/multi-resource-auto-validation.json)）：
+
+| 实验阶段与动态工况 | `sched_ext` CPU 自动决策 | `resource.cgroup` 自动决策 | `network.ebpf_tc` 自动决策 | `security.lsm` 审计与实测验证结果 |
+|---|---|---|---|---|
+| **阶段 1：纯前台服务 (`service_only`)**<br>仅 Nginx 运行，无后台争抢，端口流量正常 | 保持 `kernel.default` (`disabled`) | 保持未隔离 (`active=false`，避免单负载额外开销) | **自动在 `lo` 挂载观测模式** (`target_port=18095`, `drop_target=false`) | **自动审计 Nginx 进程** (`lsm_stack=[lockdown,capability,yama,apparmor,bpf]`)；端口探测 `HTTP 200 OK` (`0.484 ms`) |
+| **阶段 2：注入后台算力争抢 (`mixed`)**<br>CPU0 启动 `sysbench` 与 Nginx 混部争抢 | **自动切入 `scx.slice`** (`1000µs + wakeup_preempt`) | **自动创建并迁入受管组**<br>`auto_latency=4096` vs `auto_batch=1024` | 持续监测包速 (`0.0 pps < 20.0 pps`，保持放行) | **自动审计新进程 `sysbench`**；在 SCX 运行期核实双组 `cgroup.procs` PID 归属生效 |
+| **阶段 3：受控端口突发洪泛 (`port_flood`)**<br>向 `18095` 端口注入突发高频请求 (`315.3 pkt/s`) | 维持 `scx.slice` 保护前台 Nginx | 维持 `4096 : 1024` Cgroup 隔离 | **检测到 `315.3 pps >= 20.0 pps` → 自动下发 `drop_target=true` (`TC_ACT_SHOT`)** | **`18095` 端口探测被内核直接丢包阻断** (`dropped_packets` 递增)，同时前台 Nginx (`18086`) 返回 `200 OK` 零受影响 |
+| **阶段 4：洪泛平息 & 争抢退出 (`recovery`)**<br>端口冲击停止 + `sysbench` 退出 + Agent 停止 | **自动卸载回退 `kernel.default`** (`disabled`) | **自动解绑释放**，将 Nginx 迁回根 Cgroup (`procs=[]`) | **冷却 2 窗后自动恢复 `drop_target=false` (`TC_ACT_OK`)**，Agent 退出时自动卸载钩子 | **`18095` 端口自动恢复连通** (`HTTP 200 OK`, `0.435 ms`)；退出后零内核残留状态，控制线程 CPU 占比仅 `0.52%` |
+| **阶段 5：默认调度下 Cgroup 自动赋权实测**<br>`mode=default` 同核争抢自动隔离效果 | 固定 `kernel.default` (CFS) | **自动识别同核争抢并下发 `4096 : 1024` 权重** | 自动挂载观测模式 | 实测前台 `latency` 与后台 `batch` CPU 时间占比达 **`79.8% vs 20.2%`（`3.94 : 1`，高度吻合理论 `4.0 : 1`）** |
+
 ---
 
 ## 5. 一键演示说明（课程答辩 Demo）

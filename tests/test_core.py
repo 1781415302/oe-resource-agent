@@ -134,6 +134,69 @@ class MetricsChecks(unittest.TestCase):
         self.assertFalse(registry.call("network.ebpf.attach", {"target_port": 70000})["ok"])
         self.assertFalse(registry.call("resource.cgroup.attach", {"group": "bad/name", "pid": 1})["ok"])
 
+    def test_plugin_auto_config_validation(self):
+        from oeagent.plugins import PluginAutoConfig
+        cfg = PluginAutoConfig(latency_shares=4096, batch_shares=1024, monitor_port=18095, drop_threshold_pps=20.0)
+        self.assertTrue(cfg.enabled)
+        with self.assertRaises(ToolError):
+            PluginAutoConfig(latency_group="same", batch_group="same")
+        with self.assertRaises(ToolError):
+            PluginAutoConfig(monitor_port=70000)
+        with self.assertRaises(ToolError):
+            PluginAutoConfig(drop_threshold_pps=0)
+
+    def test_auto_plugin_coordinator_lifecycle(self):
+        from oeagent.plugins import AutoPluginCoordinator, PluginAutoConfig
+        events = []
+        cfg = PluginAutoConfig(drop_threshold_pps=20.0, drop_hold_windows=2)
+        coord = AutoPluginCoordinator(cfg, events.append, dry_run=True)
+
+        # Window 1: Service only -> LSM audit on nginx + eBPF attach in observe mode; Cgroup remains inactive
+        w1 = {"ended_monotonic": 10.0, "ebpf_stats": {"target_packets": 0, "dropped_packets": 0},
+              "tasks": [{"pid": 101, "comm": "nginx", "roles": ["latency"], "identity": {"pid": 101, "start_ticks": 500}}]}
+        coord.step(w1, "kernel.default")
+        self.assertEqual(coord.status()["lsm_audited_count"], 1)
+        self.assertFalse(coord.status()["cgroup"]["active"])
+        self.assertTrue(coord.status()["ebpf"]["attached"])
+        self.assertFalse(coord.status()["ebpf"]["drop_target"])
+
+        # Window 2: Mixed contention arrives -> LSM audit on sysbench + Cgroup auto-isolates 4096:1024
+        w2 = {"ended_monotonic": 11.0, "ebpf_stats": {"target_packets": 5, "dropped_packets": 0},
+              "tasks": [{"pid": 101, "comm": "nginx", "roles": ["latency"], "identity": {"pid": 101, "start_ticks": 500}},
+                        {"pid": 202, "comm": "sysbench", "roles": ["batch"], "identity": {"pid": 202, "start_ticks": 600}}]}
+        coord.step(w2, "kernel.default")
+        self.assertEqual(coord.status()["lsm_audited_count"], 2)
+        self.assertTrue(coord.status()["cgroup"]["active"])
+        self.assertEqual(coord.status()["cgroup"]["latency_pids"], [101])
+        self.assertEqual(coord.status()["cgroup"]["batch_pids"], [202])
+
+        # Window 3: High-rate burst on monitored port (50 pkt/s >= 20 pkt/s) -> eBPF auto-isolates (drop_target=True)
+        w3 = {"ended_monotonic": 12.0, "ebpf_stats": {"target_packets": 55, "dropped_packets": 0},
+              "tasks": w2["tasks"]}
+        coord.step(w3, "scx.slice")
+        self.assertTrue(coord.status()["ebpf"]["drop_target"])
+
+        # Window 4 & 5: Burst subsides -> after hold_windows=2 cooldown, eBPF auto-recovers (drop_target=False)
+        w4 = {"ended_monotonic": 13.0, "ebpf_stats": {"target_packets": 56, "dropped_packets": 10}, "tasks": w2["tasks"]}
+        coord.step(w4, "scx.slice")
+        self.assertTrue(coord.status()["ebpf"]["drop_target"])
+        w5 = {"ended_monotonic": 14.0, "ebpf_stats": {"target_packets": 57, "dropped_packets": 10}, "tasks": w2["tasks"]}
+        coord.step(w5, "scx.slice")
+        self.assertFalse(coord.status()["ebpf"]["drop_target"])
+
+        # Window 6: Batch exits and policy returns to kernel.default -> Cgroup auto-releases
+        w6 = {"ended_monotonic": 15.0, "ebpf_stats": {"target_packets": 58, "dropped_packets": 10},
+              "tasks": [w1["tasks"][0]]}
+        coord.step(w6, "kernel.default")
+        self.assertFalse(coord.status()["cgroup"]["active"])
+        coord.close()
+        event_names = [e["event"] for e in events]
+        for expected_event in ("plugin_security_audited", "plugin_ebpf_attached", "plugin_cgroup_isolated",
+                               "plugin_ebpf_isolated", "plugin_ebpf_recovered", "plugin_cgroup_released",
+                               "plugin_cleanup_completed"):
+            self.assertIn(expected_event, event_names)
+
+
 
 if __name__ == "__main__":
     unittest.main()

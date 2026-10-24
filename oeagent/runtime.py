@@ -13,6 +13,7 @@ from . import __version__
 
 from .backend import NativeBackend, ROOT, sched_state
 from .observe import WorkloadObserver
+from .plugins import AutoPluginCoordinator, PluginAutoConfig
 from .policy import PolicyConfig, Router
 from .feedback import FeedbackConfig, SloGuard, validate_window
 from .protocol import ToolError
@@ -72,6 +73,8 @@ def load_profile(path):
     PolicyConfig(**profile["policy"])
     if "feedback" in profile:
         FeedbackConfig(**profile["feedback"])
+    if "plugins" in profile:
+        PluginAutoConfig(**profile["plugins"])
     for selector in profile["selectors"]:
         if selector.get("role") not in ("latency", "batch"):
             raise ToolError("INVALID_PROFILE", "角色必须是 latency 或 batch。")
@@ -111,6 +114,8 @@ class AgentRuntime:
         self.thread_cpu_seconds = 0.0
         self._state_lock = threading.RLock()
         self.feedback = SloGuard(FeedbackConfig(**profile["feedback"])) if mode == "feedback" else None
+        plugin_cfg = PluginAutoConfig(**profile["plugins"]) if "plugins" in profile else None
+        self.auto_plugins = AutoPluginCoordinator(plugin_cfg, self.log, dry_run=dry_run) if plugin_cfg and plugin_cfg.enabled else None
         self.history = deque(maxlen=4096)
         self.nonmixed_windows = 0
         self.emit_changes = emit_changes
@@ -135,7 +140,8 @@ class AgentRuntime:
             snapshot = self.policy_snapshot()
             metadata = {key: snapshot[key] for key in ("revision", "policy_since_monotonic", "boot_id", "profile_id")}
             return {**metadata, **actual, "control_mode": self.mode,
-                    "observation_ready": bool(self.history), "feedback": self.feedback.status() if self.feedback else None}
+                    "observation_ready": bool(self.history), "feedback": self.feedback.status() if self.feedback else None,
+                    "plugins": self.auto_plugins.status() if self.auto_plugins else None}
 
     def _business_identity(self, start, end):
         selected = [row for row in self.history if row["ended_monotonic"] > start
@@ -252,17 +258,24 @@ class AgentRuntime:
                     "action": "hold", "reason": "frozen_reference_policy", "mode": self.mode,
                     "policy_id": self.current["policy_id"], "slice_us": self.current["slice_us"]}
                 self.log({"event": "policy_decided", "decision": decision, "revision": self.revision})
+                if self.auto_plugins and not (decision["action"] == "apply" and decision["policy_id"] == "kernel.default"):
+                    self.auto_plugins.step(observation, self.current["policy_id"])
                 if decision["action"] == "apply":
-                    applied = self.apply(decision["policy_id"], decision["slice_us"], self.revision)
+                    preempt = bool(self.router.config.wakeup_preempt and decision["policy_id"] == "scx.slice")
+                    applied = self.apply(decision["policy_id"], decision["slice_us"], self.revision, wakeup_preempt=preempt)
                     self.router.applied(observation["ended_monotonic"])
                     if self.emit_changes:
                         print(json.dumps({"event": "policy_changed", "mode": decision["mode"], **applied}, ensure_ascii=False), flush=True)
+                if self.auto_plugins and decision["action"] == "apply" and decision["policy_id"] == "kernel.default":
+                    self.auto_plugins.step(observation, self.current["policy_id"])
         except BaseException as exc:
             self.log({"event": "agent_error", "type": type(exc).__name__, "message": str(exc)})
             raise
         finally:
             if self.backend:
                 self.backend.stop()
+            if self.auto_plugins:
+                self.auto_plugins.close()
             self.thread_cpu_seconds = time.thread_time() - cpu_started
             self.log({"event": "agent_stopped", "dry_run": self.dry_run, "sched_ext": sched_state(),
                       "revision": self.revision, "elapsed_seconds": time.monotonic() - started,

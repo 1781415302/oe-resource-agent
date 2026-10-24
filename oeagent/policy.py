@@ -12,6 +12,7 @@ class PolicyConfig:
     batch_active_cpu_percent: float = 10
     latency_switches_per_sec: float = 20
     latency_wait_fraction: float = 0.05
+    wakeup_preempt: bool = False
 
 
 class Router:

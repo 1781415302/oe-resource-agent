@@ -116,6 +116,9 @@ class LiveSandbox:
 
         self._high_wait_streak = 0
         self._no_batch_streak = 0
+        self._auto_cgroup_pids: dict[str, list[int]] = {"latency": [], "batch": []}
+        self._prev_ebpf_target_pkts: int | None = None
+        self._ebpf_auto_cooldown = 0
 
         wrk_meta_path = REPO_ROOT / "state" / "wrk2-window-build.json"
         self.wrk_bin = json.loads(wrk_meta_path.read_text(encoding="utf-8"))["binary"]
@@ -357,6 +360,55 @@ class LiveSandbox:
             self._no_batch_streak = 0
             return
 
+        # 1. Auto-attach & auto-monitor eBPF TC hook on port 18095
+        if not self.ebpf_state["attached"]:
+            try:
+                res = self.net_plugin.attach({"interface": "lo", "target_port": self.ebpf_port, "drop_target": False})
+                self.ebpf_state["attached"] = True
+                self.ebpf_state["drop_target"] = False
+                if res.get("stats"):
+                    self.ebpf_state["stats"] = res["stats"]
+                    self._prev_ebpf_target_pkts = int(res["stats"].get("target_packets", 0))
+                self._log(
+                    f"🛡️ [Agent 自动闭环 · eBPF] 已自动在 lo 挂载 TC 流量监测探针 (port={self.ebpf_port}, drop_target=0)",
+                    "ok",
+                )
+            except Exception as exc:
+                self._log(f"Agent 自动挂载 eBPF 失败: {exc}", "err")
+        else:
+            try:
+                st = self.net_plugin.status()
+                stats = st.get("stats") or {}
+                if stats:
+                    self.ebpf_state["stats"] = stats
+                cur_pkts = int(stats.get("target_packets", 0))
+                delta_pkts = max(0, cur_pkts - (self._prev_ebpf_target_pkts if self._prev_ebpf_target_pkts is not None else cur_pkts))
+                self._prev_ebpf_target_pkts = cur_pkts
+                if not self.ebpf_state["drop_target"] and delta_pkts >= 15:
+                    res = self.net_plugin.attach({"interface": "lo", "target_port": self.ebpf_port, "drop_target": True})
+                    self.ebpf_state["drop_target"] = True
+                    self._ebpf_auto_cooldown = 4
+                    if res.get("stats"):
+                        self.ebpf_state["stats"] = res["stats"]
+                    self._log(
+                        f"🔴 [Agent 自动闭环 · eBPF 熔断] 检测到端口 {self.ebpf_port} 突发高频流量 "
+                        f"(Δpackets={delta_pkts}/窗) → 自动下发 drop_target=1 (TC_ACT_SHOT 零拷贝阻断)！",
+                        "warn",
+                    )
+                elif self.ebpf_state["drop_target"] and self._ebpf_auto_cooldown > 0:
+                    self._ebpf_auto_cooldown -= 1
+                    if self._ebpf_auto_cooldown == 0 and delta_pkts < 15:
+                        res = self.net_plugin.attach({"interface": "lo", "target_port": self.ebpf_port, "drop_target": False})
+                        self.ebpf_state["drop_target"] = False
+                        if res.get("stats"):
+                            self.ebpf_state["stats"] = res["stats"]
+                        self._log(
+                            f"🟢 [Agent 自动闭环 · eBPF 恢复] 端口 {self.ebpf_port} 流量恢复正常 → 自动解除阻断 (TC_ACT_OK)",
+                            "ok",
+                        )
+            except Exception:
+                pass
+
         snap = self.backend.snapshot()
         scx_active = snap.get("policy_id") == "scx.slice"
 
@@ -373,9 +425,51 @@ class LiveSandbox:
         if not scx_active and self._high_wait_streak >= 2:
             self._high_wait_streak = 0
             try:
+                # Step A: Automatic LSM security audit on nginx & sysbench
+                ng_pids = self._get_nginx_worker_pids()
+                sb_pid = self.sysbench_proc.pid if (self.sysbench_proc and self.sysbench_proc.poll() is None) else None
+                for pid in (ng_pids[:1] + ([sb_pid] if sb_pid else [])):
+                    try:
+                        audit = self.sec_plugin.audit({"pid": pid})
+                        self._log(
+                            f"🔒 [Agent 自动闭环 · LSM 审计] 核验 PID={pid} ({audit.get('comm')}): "
+                            f"label={audit.get('lsm_label')}, cap_eff={audit.get('cap_eff_hex')}",
+                            "info",
+                        )
+                    except Exception:
+                        pass
+
+                # Step B: Automatic Cgroup isolation (4096 vs 1024) before activating SCX
+                try:
+                    g_lat = self.cgroup_plugin.create({"group": "auto_latency"})
+                    g_bat = self.cgroup_plugin.create({"group": "auto_batch"})
+                    if g_lat["value"] != 4096:
+                        self.cgroup_plugin.apply({"group": "auto_latency", "expected_value": g_lat["value"], "value": 4096})
+                    if g_bat["value"] != 1024:
+                        self.cgroup_plugin.apply({"group": "auto_batch", "expected_value": g_bat["value"], "value": 1024})
+                    self._auto_cgroup_pids = {"latency": [], "batch": []}
+                    for pid in ng_pids:
+                        ps = process_snapshot(pid)
+                        if ps:
+                            self.cgroup_plugin.attach({"group": "auto_latency", "pid": pid, "expected_start_ticks": ps["start_ticks"]})
+                            self._auto_cgroup_pids["latency"].append(pid)
+                    if sb_pid:
+                        ps = process_snapshot(sb_pid)
+                        if ps:
+                            self.cgroup_plugin.attach({"group": "auto_batch", "pid": sb_pid, "expected_start_ticks": ps["start_ticks"]})
+                            self._auto_cgroup_pids["batch"].append(sb_pid)
+                    self._log(
+                        f"📦 [Agent 自动闭环 · Cgroup 隔离] 自动迁移 Nginx({self._auto_cgroup_pids['latency']}) → auto_latency(4096), "
+                        f"sysbench({self._auto_cgroup_pids['batch']}) → auto_batch(1024)",
+                        "ok",
+                    )
+                except Exception as exc:
+                    self._log(f"Agent 自动 Cgroup 隔离跳过: {exc}", "info")
+
+                # Step C: Activate SCX scheduler (1000us + wakeup_preempt)
                 res = self.backend.start(1000, wakeup_preempt=True)
                 self._log(
-                    f"⚡ [Agent 自动闭环] 连续 2 窗检测到 CPU0 排队激增 "
+                    f"⚡ [Agent 自动闭环 · SCX 调度] 连续 2 窗检测到 CPU0 排队激增 "
                     f"(排队占比={metrics['nginx_wait_pct']}%, 唤醒等待={metrics['nginx_avg_wait_us']}µs) "
                     f"→ 自动激活 scx.slice (1000µs + 唤醒抢占, map_id={res.get('map_id')})",
                     "warn",
@@ -388,9 +482,18 @@ class LiveSandbox:
             try:
                 self.backend.stop()
                 self._log(
-                    "✓ [Agent 自动闭环] 连续 2 窗确认后台批处理争用消除 → 自动卸载 SCX 恢复 kernel.default",
+                    "✓ [Agent 自动闭环 · SCX 回退] 连续 2 窗确认后台批处理争用消除 → 自动卸载 SCX 恢复 kernel.default",
                     "ok",
                 )
+                for role, grp in (("latency", "auto_latency"), ("batch", "auto_batch")):
+                    for pid in list(self._auto_cgroup_pids.get(role, [])):
+                        try:
+                            self.cgroup_plugin.detach({"group": grp, "pid": pid})
+                        except Exception:
+                            pass
+                if any(self._auto_cgroup_pids.values()):
+                    self._log("📦 [Agent 自动闭环 · Cgroup 释放] 已自动将业务进程从受管 Cgroup 迁回根组", "ok")
+                self._auto_cgroup_pids = {"latency": [], "batch": []}
             except Exception as exc:
                 self._log(f"Agent 卸载 SCX 失败: {exc}", "err")
 
@@ -517,7 +620,10 @@ class LiveSandbox:
         if action == "toggle_auto_agent":
             enable = bool(payload.get("enable", not self.auto_agent))
             self.auto_agent = enable
-            self._log(f"🤖 Agent 自动闭环管控已{'开启 (将自动检测排队并启停 SCX)' if enable else '关闭 (切换为手动模式)'}", "ok")
+            self._log(
+                f"🤖 Agent 自动闭环管控已{'开启 (自动协同控制 SCX 调度 + Cgroup 权重隔离 + eBPF 流量熔断 + LSM 审计)' if enable else '关闭 (切换为手动模式)'}",
+                "ok",
+            )
             return {"ok": True}
 
         if action == "set_policy":
@@ -582,7 +688,21 @@ class LiveSandbox:
         if action == "ebpf_probe":
             return self._do_ebpf_probe()
 
+        if action == "ebpf_flood":
+            threading.Thread(target=self._do_ebpf_flood, daemon=True).start()
+            return {"ok": True}
+
         return {"ok": False, "error": f"Unknown action: {action}"}
+
+    def _do_ebpf_flood(self) -> None:
+        self._log(f"💥 [端口突发洪泛注入] 正在向 127.0.0.1:{self.ebpf_port} 连续突发 25 个高频请求...", "warn")
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        for _ in range(25):
+            try:
+                with opener.open(f"http://127.0.0.1:{self.ebpf_port}/ping", timeout=0.12) as resp:
+                    resp.read()
+            except Exception:
+                pass
 
     def _do_ebpf_probe(self) -> dict:
         t0 = time.perf_counter_ns()

@@ -5,6 +5,7 @@ import platform
 import re
 import shutil
 import subprocess
+import time
 from pathlib import Path
 
 from .backend import ROOT, sched_state
@@ -288,3 +289,262 @@ class SecurityHookPlugin(Plugin):
         registry.register("security.lsm.describe", "读取内核 LSM 模块栈与 BPF LSM 状态", object_schema(), lambda args: self.describe())
         registry.register("security.lsm.audit", "审计目标进程的 LSM 标签、Capability 掩码、Seccomp 与 cgroup 隔离上下文", object_schema(
             {"pid": {"type": "integer", "minimum": 1, "maximum": 4194304}}, ["pid"]), self.audit)
+
+
+class PluginAutoConfig:
+    def __init__(self, enabled=True, cgroup_enabled=True, latency_group="auto_latency",
+                 batch_group="auto_batch", latency_shares=4096, batch_shares=1024,
+                 ebpf_enabled=True, monitor_port=18095, drop_threshold_pps=20.0,
+                 drop_hold_windows=3, lsm_audit_enabled=True):
+        for flag, val in (("enabled", enabled), ("cgroup_enabled", cgroup_enabled),
+                          ("ebpf_enabled", ebpf_enabled), ("lsm_audit_enabled", lsm_audit_enabled)):
+            if not isinstance(val, bool):
+                raise ToolError("INVALID_PLUGIN_CONFIG", f"{flag} 必须是布尔值。")
+        if not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", str(latency_group)) or not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", str(batch_group)):
+            raise ToolError("INVALID_PLUGIN_CONFIG", "受管 cgroup 组名格式无效。")
+        if latency_group == batch_group:
+            raise ToolError("INVALID_PLUGIN_CONFIG", "latency 与 batch 受管组不能相同。")
+        for name, shares in (("latency_shares", latency_shares), ("batch_shares", batch_shares)):
+            if not isinstance(shares, int) or isinstance(shares, bool) or not 2 <= shares <= 262144:
+                raise ToolError("INVALID_PLUGIN_CONFIG", f"{name} 超出有效范围。")
+        if not isinstance(monitor_port, int) or isinstance(monitor_port, bool) or not 1 <= monitor_port <= 65535:
+            raise ToolError("INVALID_PLUGIN_CONFIG", "monitor_port 必须在 1..65535 之间。")
+        if not isinstance(drop_threshold_pps, (int, float)) or isinstance(drop_threshold_pps, bool) or drop_threshold_pps <= 0:
+            raise ToolError("INVALID_PLUGIN_CONFIG", "drop_threshold_pps 必须为正数。")
+        if not isinstance(drop_hold_windows, int) or isinstance(drop_hold_windows, bool) or not 1 <= drop_hold_windows <= 120:
+            raise ToolError("INVALID_PLUGIN_CONFIG", "drop_hold_windows 超出有效范围。")
+        self.enabled = enabled
+        self.cgroup_enabled = cgroup_enabled
+        self.latency_group = latency_group
+        self.batch_group = batch_group
+        self.latency_shares = latency_shares
+        self.batch_shares = batch_shares
+        self.ebpf_enabled = ebpf_enabled
+        self.monitor_port = monitor_port
+        self.drop_threshold_pps = float(drop_threshold_pps)
+        self.drop_hold_windows = drop_hold_windows
+        self.lsm_audit_enabled = lsm_audit_enabled
+
+
+class AutoPluginCoordinator:
+    """Autonomous multi-resource controller for LSM security audit, Cgroup isolation, and eBPF TC port protection."""
+
+    def __init__(self, config, log, dry_run=False, cgroup_plugin=None, net_plugin=None, lsm_plugin=None):
+        self.config = config
+        self.log = log
+        self.dry_run = dry_run
+        self.cgroup = cgroup_plugin or CgroupPlugin()
+        self.ebpf = net_plugin or NetworkHookPlugin()
+        self.lsm = lsm_plugin or SecurityHookPlugin()
+        self.audited_identities = set()
+        self.cgroup_active = False
+        self.attached_pids = {"latency": set(), "batch": set()}
+        self.ebpf_attached = False
+        self.ebpf_dropping = False
+        self.ebpf_hold_remaining = 0
+        self.prev_ebpf_packets = None
+        self.prev_ebpf_mono = None
+        self.last_observed_pps = 0.0
+
+    def step(self, observation, current_policy_id):
+        if not self.config.enabled:
+            return {"actions": []}
+        actions = []
+        tasks = observation.get("tasks", [])
+        roles_present = {role for task in tasks for role in task.get("roles", [])}
+        is_mixed = {"latency", "batch"} <= roles_present
+        has_latency = "latency" in roles_present
+        now_mono = observation.get("ended_monotonic") or time.monotonic()
+
+        # 1. Automatic LSM Security Audit for newly observed processes
+        if self.config.lsm_audit_enabled:
+            for task in tasks:
+                pid = task["pid"]
+                start_ticks = (task.get("identity") or {}).get("start_ticks")
+                ident = (pid, start_ticks)
+                if ident not in self.audited_identities:
+                    if self.dry_run:
+                        audit_info = {"pid": pid, "comm": task.get("comm"), "lsm_label": "simulated", "simulated": True}
+                    else:
+                        try:
+                            audit_info = self.lsm.audit({"pid": pid})
+                        except ToolError as exc:
+                            audit_info = {"pid": pid, "error": exc.code, "message": str(exc)}
+                    self.audited_identities.add(ident)
+                    event = {"event": "plugin_security_audited", "pid": pid, "start_ticks": start_ticks,
+                             "roles": task.get("roles", []), "audit": audit_info}
+                    self.log(event)
+                    actions.append(event)
+
+        # 2. Automatic Cgroup Weight Isolation & Task Migration
+        if self.config.cgroup_enabled:
+            if is_mixed:
+                latency_tasks = [t for t in tasks if "latency" in t.get("roles", [])]
+                batch_tasks = [t for t in tasks if "batch" in t.get("roles", [])]
+                need_attach = (not self.cgroup_active
+                               or any(t["pid"] not in self.attached_pids["latency"] for t in latency_tasks)
+                               or any(t["pid"] not in self.attached_pids["batch"] for t in batch_tasks))
+                if need_attach and (self.dry_run or (current_policy_id == "kernel.default" and sched_state() != "enabled")):
+                    try:
+                        if not self.dry_run:
+                            for grp, shares in ((self.config.latency_group, self.config.latency_shares),
+                                                (self.config.batch_group, self.config.batch_shares)):
+                                info = self.cgroup.create({"group": grp})
+                                if info["value"] != shares:
+                                    self.cgroup.apply({"group": grp, "expected_value": info["value"], "value": shares})
+                            for t in latency_tasks:
+                                if t["pid"] not in self.attached_pids["latency"]:
+                                    self.cgroup.attach({"group": self.config.latency_group, "pid": t["pid"],
+                                                        "expected_start_ticks": (t.get("identity") or {}).get("start_ticks")})
+                                    self.attached_pids["latency"].add(t["pid"])
+                            for t in batch_tasks:
+                                if t["pid"] not in self.attached_pids["batch"]:
+                                    self.cgroup.attach({"group": self.config.batch_group, "pid": t["pid"],
+                                                        "expected_start_ticks": (t.get("identity") or {}).get("start_ticks")})
+                                    self.attached_pids["batch"].add(t["pid"])
+                        else:
+                            for t in latency_tasks:
+                                self.attached_pids["latency"].add(t["pid"])
+                            for t in batch_tasks:
+                                self.attached_pids["batch"].add(t["pid"])
+                        self.cgroup_active = True
+                        event = {"event": "plugin_cgroup_isolated", "reason": "mixed_contention_detected",
+                                 "latency_group": self.config.latency_group, "batch_group": self.config.batch_group,
+                                 "latency_shares": self.config.latency_shares, "batch_shares": self.config.batch_shares,
+                                 "latency_pids": sorted(self.attached_pids["latency"]),
+                                 "batch_pids": sorted(self.attached_pids["batch"]), "dry_run": self.dry_run}
+                        self.log(event)
+                        actions.append(event)
+                    except ToolError as exc:
+                        self.log({"event": "plugin_cgroup_error", "code": exc.code, "message": str(exc)})
+            elif self.cgroup_active and (self.dry_run or (current_policy_id == "kernel.default" and sched_state() != "enabled")):
+                if not self.dry_run:
+                    for role, grp in (("latency", self.config.latency_group), ("batch", self.config.batch_group)):
+                        for pid in list(self.attached_pids[role]):
+                            try:
+                                self.cgroup.detach({"group": grp, "pid": pid})
+                            except ToolError:
+                                pass
+                released_lat = sorted(self.attached_pids["latency"])
+                released_bat = sorted(self.attached_pids["batch"])
+                self.attached_pids["latency"].clear()
+                self.attached_pids["batch"].clear()
+                self.cgroup_active = False
+                event = {"event": "plugin_cgroup_released", "reason": "mixed_contention_cleared",
+                         "latency_group": self.config.latency_group, "batch_group": self.config.batch_group,
+                         "released_latency_pids": released_lat, "released_batch_pids": released_bat,
+                         "dry_run": self.dry_run}
+                self.log(event)
+                actions.append(event)
+
+        # 3. Automatic eBPF TC Network Monitoring & Port Anomaly Isolation
+        if self.config.ebpf_enabled:
+            if not self.ebpf_attached and has_latency:
+                try:
+                    if not self.dry_run:
+                        st = self.ebpf.attach({"interface": "lo", "target_port": self.config.monitor_port, "drop_target": False})
+                        pkts = int((st.get("stats") or {}).get("target_packets", 0))
+                    else:
+                        pkts = int((observation.get("ebpf_stats") or {}).get("target_packets", 0))
+                    self.ebpf_attached = True
+                    self.ebpf_dropping = False
+                    self.prev_ebpf_packets = pkts
+                    self.prev_ebpf_mono = now_mono
+                    event = {"event": "plugin_ebpf_attached", "mode": "observe", "interface": "lo",
+                             "target_port": self.config.monitor_port, "drop_target": False, "dry_run": self.dry_run}
+                    self.log(event)
+                    actions.append(event)
+                except ToolError as exc:
+                    self.log({"event": "plugin_ebpf_error", "code": exc.code, "message": str(exc)})
+            elif self.ebpf_attached:
+                try:
+                    if not self.dry_run:
+                        st = self.ebpf.status()
+                        stats = st.get("stats") or {}
+                    else:
+                        stats = observation.get("ebpf_stats") or {"target_packets": self.prev_ebpf_packets or 0, "dropped_packets": 0}
+                    cur_packets = int(stats.get("target_packets", 0))
+                    elapsed = max(0.2, now_mono - (self.prev_ebpf_mono if self.prev_ebpf_mono is not None else (now_mono - 1.0)))
+                    delta_packets = max(0, cur_packets - (self.prev_ebpf_packets or 0))
+                    observed_pps = delta_packets / elapsed
+                    self.prev_ebpf_packets = cur_packets
+                    self.prev_ebpf_mono = now_mono
+                    self.last_observed_pps = round(observed_pps, 2)
+
+                    if not self.ebpf_dropping and observed_pps >= self.config.drop_threshold_pps:
+                        if not self.dry_run:
+                            st = self.ebpf.attach({"interface": "lo", "target_port": self.config.monitor_port, "drop_target": True})
+                            stats = st.get("stats") or stats
+                        self.ebpf_dropping = True
+                        self.ebpf_hold_remaining = self.config.drop_hold_windows
+                        event = {"event": "plugin_ebpf_isolated", "reason": "target_port_rate_exceeded",
+                                 "target_port": self.config.monitor_port, "observed_pps": round(observed_pps, 2),
+                                 "threshold_pps": self.config.drop_threshold_pps, "drop_target": True,
+                                 "stats": stats, "dry_run": self.dry_run}
+                        self.log(event)
+                        actions.append(event)
+                    elif self.ebpf_dropping:
+                        self.ebpf_hold_remaining = max(0, self.ebpf_hold_remaining - 1)
+                        if self.ebpf_hold_remaining <= 0 and observed_pps < self.config.drop_threshold_pps:
+                            if not self.dry_run:
+                                st = self.ebpf.attach({"interface": "lo", "target_port": self.config.monitor_port, "drop_target": False})
+                                stats = st.get("stats") or stats
+                            self.ebpf_dropping = False
+                            event = {"event": "plugin_ebpf_recovered", "reason": "cooldown_elapsed_rate_normal",
+                                     "target_port": self.config.monitor_port, "observed_pps": round(observed_pps, 2),
+                                     "threshold_pps": self.config.drop_threshold_pps, "drop_target": False,
+                                     "stats": stats, "dry_run": self.dry_run}
+                            self.log(event)
+                            actions.append(event)
+                except ToolError as exc:
+                    self.log({"event": "plugin_ebpf_error", "code": exc.code, "message": str(exc)})
+        return {"actions": actions}
+
+    def status(self):
+        return {
+            "enabled": self.config.enabled,
+            "lsm_audited_count": len(self.audited_identities),
+            "cgroup": {
+                "enabled": self.config.cgroup_enabled,
+                "active": self.cgroup_active,
+                "latency_group": self.config.latency_group,
+                "batch_group": self.config.batch_group,
+                "latency_shares": self.config.latency_shares,
+                "batch_shares": self.config.batch_shares,
+                "latency_pids": sorted(self.attached_pids["latency"]),
+                "batch_pids": sorted(self.attached_pids["batch"]),
+            },
+            "ebpf": {
+                "enabled": self.config.ebpf_enabled,
+                "attached": self.ebpf_attached,
+                "target_port": self.config.monitor_port,
+                "drop_target": self.ebpf_dropping,
+                "threshold_pps": self.config.drop_threshold_pps,
+                "last_observed_pps": self.last_observed_pps,
+                "hold_remaining": self.ebpf_hold_remaining,
+            },
+        }
+
+    def close(self):
+        if not self.config.enabled:
+            return
+        if not self.dry_run:
+            if self.cgroup_active:
+                for role, grp in (("latency", self.config.latency_group), ("batch", self.config.batch_group)):
+                    for pid in list(self.attached_pids[role]):
+                        try:
+                            self.cgroup.detach({"group": grp, "pid": pid})
+                        except Exception:
+                            pass
+            if self.ebpf_attached:
+                try:
+                    self.ebpf.detach()
+                except Exception:
+                    pass
+        self.attached_pids["latency"].clear()
+        self.attached_pids["batch"].clear()
+        self.cgroup_active = False
+        self.ebpf_attached = False
+        self.ebpf_dropping = False
+        self.log({"event": "plugin_cleanup_completed", "dry_run": self.dry_run})
+
