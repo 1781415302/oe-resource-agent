@@ -231,7 +231,7 @@
             </tr>
           </tbody>
         </table>
-        <p class="sub" style="margin-top:8px;">* 机制说明：Linux 6.6 采用 EEVDF 调度器（base_slice_ns 约 2.1ms）。单独启用 Cgroup 权重将平均等待压降 34.0%，但因 EEVDF 仅依据虚拟截止期（deadline）分时，缺乏微秒级强制即时抢占，p99 尾延迟仍在 3.8ms 以上；唯有结合 SCX（1ms 切片 + 50µs 节流抢占）才能将单次排队压降 58 倍，从根本上消灭长尾积压。</p>
+        <p class="sub" style="margin-top:8px;">* 机制说明：Linux 6.6 采用 EEVDF 调度器（base_slice_ns 约 2.1ms）。单独启用 Cgroup 权重将平均等待压降 34.0%，但因 EEVDF 仅依据虚拟截止期（deadline）分时，缺乏微秒级强制即时抢占，p99 尾延迟仍在 3.8ms 以上；唯有结合 SCX（1ms 切片 + 50µs 节流抢占）才能将单次排队压降 58 倍，将尾部排队积压稳定控制在微秒级（26.8µs，降幅达 98.3%）。</p>
       </div>
       <div>
         <h3>4.2 异常端口洪泛冲击：无 eBPF 熔断 vs 开启 eBPF TC_ACT_SHOT 自动熔断</h3>
