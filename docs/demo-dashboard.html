@@ -497,6 +497,71 @@
   </div>
 </section>
 
+<!-- Full 6x4 PPT Matrix Comparison Table -->
+<section class="card" style="margin-top:14px;">
+  <div class="card-header">
+    <div class="card-title">📋 开题报告第 10 页完整消融实验矩阵：6 种调度组 × 4 种测试场景真机实测对照 (wrk2 25,600 RPS)</div>
+    <span style="font-size:11.5px;color:var(--emerald);font-weight:700;">state/ppt-matrix-validation.json</span>
+  </div>
+  <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.2px;text-align:left;">
+      <thead>
+        <tr style="border-bottom:1px solid rgba(148,163,184,0.25);color:var(--muted);">
+          <th style="padding:8px 10px;">对照组策略 (Condition)</th>
+          <th style="padding:8px 10px;">场景 1：纯网页 (service_only)<br><span style="font-weight:400;font-size:11px;">p99 / 排队占比 / 调度状态</span></th>
+          <th style="padding:8px 10px;">场景 2：网页加后台 (mixed)<br><span style="font-weight:400;font-size:11px;">p99 / 单次唤醒等待 / 后台 EPS</span></th>
+          <th style="padding:8px 10px;">场景 3：动态负载 (dynamic)<br><span style="font-weight:400;font-size:11px;">纯网页 → 混部稳态 → 恢复过渡 → 恢复稳态 p99</span></th>
+          <th style="padding:8px 10px;">场景 4：纯后台 (batch_only, 2线程)<br><span style="font-weight:400;font-size:11px;">后台 EPS (保留率) / 非自愿切换 / 调度状态</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
+          <td style="padding:8px 10px;"><strong>1. 默认调度 (<code>default</code>)</strong></td>
+          <td style="padding:8px 10px;">1.919 ms | 排队 0.2% <span style="color:#94a3b8;">(disabled)</span></td>
+          <td style="padding:8px 10px;"><span style="color:#fbbf24;font-weight:700;">3.509 ms</span> | 等待 <strong>1535.2 µs</strong> | 3187.6 EPS</td>
+          <td style="padding:8px 10px;">1.919 → <span style="color:#fbbf24;">3.509</span> → 2.479 → 1.934 ms</td>
+          <td style="padding:8px 10px;">4005.1 EPS (100%) | 切换 <strong>333.7/s</strong> <span style="color:#94a3b8;">(disabled)</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
+          <td style="padding:8px 10px;"><strong>2. 原始 <code>scx_simple</code></strong></td>
+          <td style="padding:8px 10px;">1.904 ms | 排队 0.6% <span style="color:#38bdf8;">(enabled)</span></td>
+          <td style="padding:8px 10px;"><span style="color:#fb7185;font-weight:700;">43.103 ms (+1128%)</span> | 等待 19461.9 µs | 3188.3 EPS</td>
+          <td style="padding:8px 10px;">1.904 → <span style="color:#fb7185;font-weight:700;">43.103</span> → <span style="color:#fb7185;">20.367</span> → 1.928 ms</td>
+          <td style="padding:8px 10px;">3976.9 EPS (99.3%) | 切换 47.9/s <span style="color:#38bdf8;">(enabled)</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
+          <td style="padding:8px 10px;"><strong>3. 固定 SCX (<code>20ms</code>)</strong></td>
+          <td style="padding:8px 10px;">1.936 ms | 排队 0.8% <span style="color:#38bdf8;">(enabled)</span></td>
+          <td style="padding:8px 10px;"><span style="color:#fb7185;font-weight:700;">42.367 ms (+1107%)</span> | 等待 19339.0 µs | 3175.6 EPS</td>
+          <td style="padding:8px 10px;">1.936 → <span style="color:#fb7185;font-weight:700;">42.367</span> → <span style="color:#fb7185;">20.991</span> → 1.943 ms</td>
+          <td style="padding:8px 10px;">3866.9 EPS (96.6%) | 切换 48.2/s <span style="color:#38bdf8;">(enabled)</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
+          <td style="padding:8px 10px;"><strong>4. 固定 SCX (<code>1ms</code> 无抢占)</strong></td>
+          <td style="padding:8px 10px;">1.953 ms | 排队 0.8% <span style="color:#38bdf8;">(enabled)</span></td>
+          <td style="padding:8px 10px;"><span style="color:#38bdf8;font-weight:700;">2.717 ms (-22.6%)</span> | 等待 637.4 µs | 3153.0 EPS</td>
+          <td style="padding:8px 10px;">1.953 → 2.717 → 2.045 → 1.938 ms</td>
+          <td style="padding:8px 10px;">3982.2 EPS (99.4%) | <span style="color:#fb7185;">切换 534.7/s (+60%)</span> <span style="color:#38bdf8;">(enabled)</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
+          <td style="padding:8px 10px;"><strong>5. 固定 SCX (<code>1ms+唤醒抢占</code>)</strong></td>
+          <td style="padding:8px 10px;">1.922 ms | 排队 1.1% <span style="color:#38bdf8;">(enabled)</span></td>
+          <td style="padding:8px 10px;"><span style="color:#34d399;font-weight:700;">2.010 ms (-42.7%)</span> | 等待 <strong>18.8 µs</strong> | 3160.4 EPS</td>
+          <td style="padding:8px 10px;">1.922 → <span style="color:#34d399;">2.010</span> → 1.912 → 1.918 ms</td>
+          <td style="padding:8px 10px;">3943.1 EPS (98.5%) | <span style="color:#fb7185;">切换 532.9/s (+60%)</span> <span style="color:#38bdf8;">(enabled)</span></td>
+        </tr>
+        <tr style="background:rgba(16,185,129,0.11);">
+          <td style="padding:8px 10px;"><strong style="color:#34d399;">6. 自适应 Agent (<code>adaptive</code>)</strong></td>
+          <td style="padding:8px 10px;"><strong style="color:#34d399;">1.942 ms | 排队 0.2% (disabled 零开销)</strong></td>
+          <td style="padding:8px 10px;"><strong style="color:#34d399;">1.982 ms (-43.5% 最优)</strong> | 等待 <strong>23.3 µs (↓66倍)</strong> | 3098.8 EPS (97.2%)</td>
+          <td style="padding:8px 10px;"><strong style="color:#34d399;">1.942 → 1.982 → 1.929 → 1.932 ms</strong> (切入1.08s / 回退0.69s)</td>
+          <td style="padding:8px 10px;"><strong style="color:#34d399;">3897.5 EPS (97.3%) | 切换 333.4/s (disabled 零额外切换)</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 <script>
 // Automatically determine API base URL: works both via http://172.26.1.3:8899, http://127.0.0.1:8899, and file://
 const API_BASE = (window.location.protocol === "http:" || window.location.protocol === "https:")
