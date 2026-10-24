@@ -1,6 +1,6 @@
 # openEuler 自适应资源管控 Agent
 
-版本 0.2.0，GPL-2.0。面向 **openEuler 24.03 LTS-SP4（x86_64，自建内核 `6.6.0-scx`）** 的多维内核资源自治管控系统，协同控制 **`sched_ext` 可编程 CPU 调度器**、**Cgroup v1 CPU 权重隔离**、**eBPF TC 网络流量观测与熔断** 以及 **BPF LSM 安全审计与策略限制（`security.policy.enforce`）**。
+版本 0.2.0，GPL-2.0。面向 **openEuler 24.03 LTS-SP4（x86_64，自建内核 `6.6.0-scx`）** 的多维内核资源自治管控系统，协同控制 **`sched_ext` 可编程 CPU 调度器**、**Cgroup v1 CPU 权重隔离**、**eBPF TC 网络流量观测与熔断** 以及 **LSM 栈发现与 Capability 审计 + 用户态策略执行（nice/CPU 亲和性，`security.policy.enforce`）**。
 
 ---
 
@@ -35,7 +35,7 @@
 | **5. 固定 SCX (`1ms+唤醒抢占`)** | `1.919 ± 0.006 ms`<br>RPS保留 `100.0%` \| 等待 `2.0 µs` | **`2.037 ± 0.068 ms` (-42.0%)**<br>RPS `100.0%` \| EPS `97.44%` \| 等待 **`19.8 µs`** | `1.912 → (2.087) → 1.994 → 1.928 → 1.929 ms`<br>*(混部极优，但常驻内核增加后台开销)* | `3888.9 ± 29.3 EPS` (`100.16%`)<br>切换 **`541.1 /s` (+61.9%)** (`enabled`) |
 | **6. 自适应 Agent (`adaptive`)** | **`1.949 ± 0.024 ms`**<br>RPS `100.01%` \| 等待 **`0.4 µs`** | **`2.020 ± 0.048 ms` (-42.5% 最优)**<br>RPS `100.0%` \| EPS `97.78%` \| 等待 **`19.7 µs`** | **`1.992 → (3.117) → 2.091 → 1.931 → 1.941 ms`**<br>*(切入 **`805.5 ms`**，回退 **`565.4 ms`**)* | **`3878.2 ± 27.4 EPS` (`99.88%`)**<br>切换 **`333.8 /s` (零额外切换)** (`disabled`) |
 
-> **开题指标全面达标**：混部场景下自适应 Agent 实现 **`网页 RPS 保留率 100.0%`（≥90%）**、**`后台 EPS 保留率 97.78%`（≥90%）**、**`请求错误率 0.00%`**，单次唤醒排队等待从默认调度的 `1497.6 µs` 骤降至 **`19.7 µs`（压降 76 倍）**，且纯后台零额外上下文切换开销。
+> **开题指标全面达标**：混部场景下自适应 Agent 实现 **`混部 p99 3.514 → 2.020 ms`（降低 42.5%，指标要求 ≥10%）**、**`网页 RPS 保留率 100.0%`（≥90%）**、**`后台 EPS 保留率 97.78%`（≥90%）**、**`请求错误率 0.00%`**，单次唤醒排队等待从默认调度的 `1497.6 µs` 骤降至 **`19.7 µs`（压降 76 倍）**，且纯后台零额外上下文切换开销。
 
 ### 2. 多资源闭环定量 A/B 消融对照（`experiments/run_split_ablation.py` 与 `experiments/run_rigorous_suite.py`）
 - **Cgroup (4096:1024) 与 nice 细粒度消融**：在 EEVDF 默认调度下发生同核争抢时，单靠 Cgroup 宏观赋权将单次平均等待从 `1556.0 µs` 压降至 **`1026.7 µs`（-34.0%）**；但由于 EEVDF 依据虚拟截止期（deadline）分时且无微秒级即时抢占，尾延迟 p99 仍为 `3.846 ms`（单靠 nice 15 为 `4.216 ms`，双重降权为 `1073.8 µs / 3.913 ms`）；而全栈多资源自治（SCX 1ms+抢占 + Cgroup + LSM）介入后，单次等待骤降至 **`26.8 µs`（压降 58 倍）**，`p99` 降至 **`2.131 ms`**（独立细粒度消融重测，与主矩阵测得的 19.7µs / 2.020ms 处于同一微秒级水平），实验数据证实了宏观份额保障与微观内核即时抢占的互补必要性。
@@ -76,13 +76,13 @@ bash build.sh
 ./agent run --profile nginx-wakeup-slo --duration 60
 ```
 
-### 启动真机实时交互沙盒与双通道示波器大屏
+### 启动真机实时交互沙盒与双通道示波器大屏（辅助交互工具，演示以录屏视频为准）
 
 ```bash
 python3 experiments/web_dashboard.py --host 0.0.0.0 --port 8899
 ```
 
-浏览器访问 `http://<虚拟机IP>:8899/`（如 `http://172.26.1.3:8899/`），即可在线操控真实 `Nginx + wrk2 (25.6k RPS)`、`sysbench` 干扰注入、`SCX` BPF Map 热更新、25 秒一键全自动实况剧本、Cgroup 权重争用测试以及 eBPF 端口突发洪泛自动熔断。
+浏览器访问 `http://<虚拟机IP>:8899/`，即可在线操控真实 `Nginx + wrk2 (25.6k RPS)`、`sysbench` 干扰注入、`SCX` BPF Map 热更新、25 秒一键全自动实况剧本、Cgroup 权重争用测试以及 eBPF 端口突发洪泛自动熔断。
 
 ---
 
@@ -115,8 +115,10 @@ python3 experiments/run_demo.py
 
 - [课程设计总结报告（含架构、优化细节、6×4 矩阵与多维闭环实测）](docs/course-project-report.md)
 - [交互式 HTML 实验报告（N=5 周期 Mean±SD、负载梯度与多资源定量消融）](docs/experiment-report.html)
+- [版本变更记录（CHANGELOG.md）](CHANGELOG.md)
 - [真机实时交互沙盒与可视化大屏](docs/demo-dashboard.html)
 - [唤醒抢占专家与 BPF 调度优化说明](docs/wakeup-preemption.md)
 - [在线业务 SLO 反馈机制说明](docs/business-feedback.md)
 - [连续窗口基线测量规范](docs/baseline-measurement.md)
 - [openEuler 6.6.0-scx 环境复现指南](docs/reproduce-openeuler.md)
+- [历史过程记录（0.1.x 设计与迭代过程归档）](docs/archive/)
