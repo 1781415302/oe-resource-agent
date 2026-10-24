@@ -12,7 +12,7 @@
   - 运行期通过 BPF Map（`oe_adaptive_ctl_map`）零重启热更新时间片与唤醒抢占参数，核对 `map_id`、`generation` 并内置 15s 看门狗心跳失联自动卸载；
   - 针对短突发唤醒任务实现 **`vtime` 队列置顶信用补偿（`vtime = vtime_now - slice`）**、**解耦突发判定窗口（`>= 750µs`）**、**即时忙态标记（`busy_runs >= 1`）** 与 **`50µs` 抢占节流间隔**，将混部下 Nginx 单次唤醒排队等待从 `1497.6 µs` 压降至 **`19.7 µs`（降低 76 倍，降幅 98.7%）**。
 - **多维插件自动闭环协同（`AutoPluginCoordinator`）**：
-  - **`security.lsm` 安全审计与策略执行（`security.policy.enforce`）**：自动发现内核活跃 LSM 栈（`lockdown, capability, yama, apparmor, bpf`），审计进程安全上下文；合法混部任务（如 `sysbench`）保留同核混部，而非授权异常进程则强制压制优先级（`nice=19`）并驱逐至隔离核心（`CPU3`）；
+  - **`security.lsm` 安全审计与策略执行（`security.policy.enforce`）**：自动发现内核活跃 LSM 栈（`lockdown, capability, yama, apparmor, bpf`），审计进程安全上下文与特权 Capability；支持通过 `security.policy.enforce` 工具对异常竞争进程核验身份后执行精准降权（`nice=19`）并驱逐至隔离核心（`CPU3`）；自治运行时（`AutoPluginCoordinator`）自动审计受管任务并对批处理任务执行 `nice: 15` 优先级降权；
   - **`resource.cgroup` 自动分级隔离**：检测到混合算力争抢时自动创建受管组 `auto_latency`（`cpu.shares=4096`）与 `auto_batch`（`cpu.shares=1024`）并安全迁入进程（EEVDF 默认公平调度下动态混部实测算力分配达 **`3.97 : 1` / `79.9% vs 20.1%`**，独立纯 CPU 争用单测实测达 **`3.96 : 1` / `79.8% vs 20.2%`**，SCX 下保留组归属），争抢消除后自动迁回根 Cgroup；
   - **`network.ebpf_tc` 自动流量护航与端口熔断**：基于 `native/oe_net_hook.bpf.c` 在 `lo` 网卡挂载 `sched_cls` 分类器实时统计端口速率，检测到异常高频流量冲击时**在内核 TC（qdisc/cls_bpf）层直接执行 `TC_ACT_SHOT` 提前丢弃报文**，避免其进入传输层或争抢 CPU0，冷却后自动恢复放行；内置业务白名单（`80, 443, 18080, 18086, 18091`）拒绝阻断核心端口。
 - **版本化 JSON 工具、Skills 与真机实时交互沙盒**：提供标准化 Schema 校验工具、持久 JSON 行控制会话（`./agent serve`）以及带双通道实时示波器的 Web 交互大屏（`experiments/web_dashboard.py`）。
@@ -39,8 +39,8 @@
 
 ### 2. 多资源闭环定量 A/B 消融对照（`experiments/run_split_ablation.py` 与 `experiments/run_rigorous_suite.py`）
 - **Cgroup (4096:1024) 与 nice 细粒度消融**：在 EEVDF 默认调度下发生同核争抢时，单靠 Cgroup 宏观赋权将单次平均等待从 `1556.0 µs` 压降至 **`1026.7 µs`（-34.0%）**；但由于 EEVDF 依据虚拟截止期（deadline）分时且无微秒级即时抢占，尾延迟 p99 仍为 `3.846 ms`（单靠 nice 15 为 `4.216 ms`，双重降权为 `1073.8 µs / 3.913 ms`）；而全栈多资源自治（SCX 1ms+抢占 + Cgroup + LSM）介入后，单次等待骤降至 **`26.8 µs`（压降 58 倍）**，`p99` 降至 **`2.131 ms`**（独立细粒度消融重测，与主矩阵测得的 19.7µs / 2.020ms 处于同一微秒级水平），实验数据证实了宏观份额保障与微观内核即时抢占的互补必要性。
-- **eBPF TC 端口自动熔断**：旁路攻击靶点（执行 40,000 轮自旋计算的辅助服务）遭遇并发洪泛冲击时，未熔断时请求穿透 TCP 栈并在 CPU0 耗尽算力，前台排队等待达 `1541.4 µs`（占比 79.5%）、`p99` 恶化至 `3.559 ms`；开启 eBPF `TC_ACT_SHOT` 后**在内核 TC（qdisc/cls_bpf）层提前丢弃 972 个异常 TCP 报文（SYN 建立被阻断）**，靶点服务在 5 秒内处理 0 个 HTTP 请求且处于 `epoll_wait` 空闲休眠（CPU 占比 0.0%），前台排队等待降至 **`0.4 µs`（排队基本归零）**，前台 `p99` 恢复至 **`1.920 ms`**。
-- **安全策略与白名单防误伤**：`security.policy.enforce` 自动对非授权竞争进程执行安全约束（`nice` 降为 19 并**驱逐至隔离核心 CPU3**）；内置白名单坚决拒绝阻断 `80/18086` 等核心业务端口（`PROTECTED_PORT_REFUSED` 校验通过）。
+- **eBPF TC 端口自动熔断**：旁路攻击靶点遭遇并发洪泛冲击时，未熔断时洪泛报文涌入 CPU0 引发严重争抢，前台排队等待达 `1541.4 µs`（占比 79.5%）、`p99` 恶化至 `3.559 ms`；开启 eBPF TC 自动熔断后**在内核 TC（qdisc/cls_bpf）层执行 `TC_ACT_SHOT` 提前丢弃 972 个异常 TCP 报文（SYN 建立被阻断）**，前台排队等待降至 **`0.4 µs`（排队基本归零，占比 0.2%）**，前台 `p99` 恢复至 **`1.920 ms`**。
+- **安全策略执行与白名单防误伤**：`security.policy.enforce` 验证支持对异常竞争进程核验身份后执行安全约束（`nice` 降为 19 并**驱逐至隔离核心 CPU3**）；网络钩子内置业务白名单坚决拒绝阻断 `80/18086` 等核心业务端口（`PROTECTED_PORT_REFUSED` 校验通过）。
 
 ### 3. 多维资源协同自治闭环阶段实验（`experiments/check_multi_resource_auto.py`）
 使用 [`profiles/nginx-multi-auto.json`](profiles/nginx-multi-auto.json) 验证 Agent 根据运行态势自动控制全部子系统（原始数据：`state/multi-resource-auto-validation.json`）：

@@ -239,30 +239,27 @@
           <thead>
             <tr>
               <th>网络防护模式 (CPU0 旁路端口 18095 并发洪泛)</th>
-              <th>TC 拦截报文</th>
-              <th>靶点 HTTP / CPU0</th>
-              <th>前台排队等待</th>
-              <th>前台 p99</th>
+              <th>内核丢包拦截数</th>
+              <th>前台 Nginx 排队等待</th>
+              <th>前台 Nginx p99</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>1. 未开启 eBPF 熔断 (洪泛穿透 TCP 栈争抢 CPU0)</td>
+              <td>1. 未开启 eBPF 熔断 (洪泛打入用户态抢占 CPU0)</td>
               <td>0</td>
-              <td>~180 req/s (76.2%)</td>
               <td>1541.4 µs (79.5%)</td>
               <td style="color:#f43f5e;font-weight:700;">3.559 ms</td>
             </tr>
             <tr style="background:rgba(16,185,129,0.12);">
-              <td><strong>2. 开启 eBPF TC 自动熔断 (TC_ACT_SHOT 提前丢包)</strong></td>
+              <td><strong>2. 开启 eBPF TC 自动熔断 (TC_ACT_SHOT 内核提前丢包)</strong></td>
               <td><strong>972 包 (阻断 SYN)</strong></td>
-              <td><strong>0 req/s (0.0% 休眠)</strong></td>
               <td><strong>0.4 µs (0.2%)</strong></td>
-              <td><strong style="color:#10b981;">1.92 ms (受保护)</strong></td>
+              <td><strong style="color:#10b981;">1.920 ms (受保护)</strong></td>
             </tr>
           </tbody>
         </table>
-        <p class="sub" style="margin-top:8px;">* 攻击模型与机理：靶点服务为同核 CPU0 上执行 40,000 轮自旋的 HTTP 进程；未熔断时靶点持续以 180 req/s 自旋消耗 76% CPU0 导致前台严重饥饿；开启熔断后，内核在网络协议栈排队规则（qdisc/cls_bpf）层直接提前丢弃 972 个 TCP 报文（SYN 连接被阻断），靶点服务处理 0 个 HTTP 请求且处于 epoll_wait 空闲休眠（CPU 占比 0.0%），CPU0 完全释放给前台业务。</p>
+        <p class="sub" style="margin-top:8px;">* 攻击模型说明：靶点服务为同核 CPU0 上执行 40,000 轮自旋计算的辅助进程；开启熔断后内核在网络协议栈排队规则（qdisc/cls_bpf）层直接提前丢弃 972 个 TCP 报文（SYN 连接被阻断），避免了异常洪泛对 CPU0 的算力抢占，使前台单次排队等待降至 0.4 µs（降幅 99.9%）。</p>
         <p class="sub" style="margin-top:6px;">
           ✓ <strong>边界与安全策略执行验证</strong>：白名单业务端口（80/18086）防误封拦截 = <code>True</code> |
           Ingress+Egress 双向挂载 = <code>True</code> |
