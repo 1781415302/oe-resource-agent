@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "timestamp_utc": "2026-10-23T06:44:22Z",
+  "source_pilot": "results/baseline-baseline-pilot-20261023T064422Z-188d9c-a1",
+  "offered_rps": 57600,
+  "trials": {
+    "default_mixed": {
+      "condition": "default",
+      "scenario": "mixed",
+      "offered_rps": 57600,
+      "actual_rps": 57604.1,
+      "p99_latency_ms": 10.807,
+      "requests": 2295004,
+      "duration_seconds": 39.841,
+      "client_log": "trials/baseline-pilot-20261023T064422Z-188d9c-a1-pilot-default-mixed/client.log"
+    },
+    "default_dynamic": {
+      "condition": "default",
+      "scenario": "dynamic",
+      "offered_rps": 57600,
+      "actual_rps": 57577.7,
+      "p99_latency_ms": 580.607,
+      "requests": 5172808,
+      "duration_seconds": 89.84,
+      "client_log": "trials/baseline-pilot-20261023T064422Z-188d9c-a1-pilot-default-dynamic/client.log"
+    },
+    "fixed-1000_mixed": {
+      "condition": "fixed-1000",
+      "scenario": "mixed",
+      "offered_rps": 57600,
+      "actual_rps": 55116.0,
+      "p99_latency_ms": 10477.567,
+      "requests": 2195862,
+      "duration_seconds": 39.841,
+      "client_log": "trials/baseline-pilot-20261023T064422Z-188d9c-a1-pilot-fixed-1000-mixed/client.log"
+    },
+    "fixed-1000_dynamic": {
+      "condition": "fixed-1000",
+      "scenario": "dynamic",
+      "offered_rps": 57600,
+      "actual_rps": 57599.7,
+      "p99_latency_ms": 4.839,
+      "requests": 5174776,
+      "duration_seconds": 89.84,
+      "client_log": "trials/baseline-pilot-20261023T064422Z-188d9c-a1-pilot-fixed-1000-dynamic/client.log"
+    },
+    "adaptive_mixed": {
+      "condition": "adaptive",
+      "scenario": "mixed",
+      "offered_rps": 57600,
+      "actual_rps": 57600.2,
+      "p99_latency_ms": 3.309,
+      "requests": 2294785,
+      "duration_seconds": 39.84,
+      "client_log": "trials/baseline-pilot-20261023T064422Z-188d9c-a1-pilot-adaptive-mixed/client.log"
+    },
+    "adaptive_dynamic": {
+      "condition": "adaptive",
+      "scenario": "dynamic",
+      "offered_rps": 57600,
+      "actual_rps": 57600.2,
+      "p99_latency_ms": 3.169,
+      "requests": 5174838,
+      "duration_seconds": 89.841,
+      "client_log": "trials/baseline-pilot-20261023T064422Z-188d9c-a1-pilot-adaptive-dynamic/client.log"
+    }
+  }
+}
