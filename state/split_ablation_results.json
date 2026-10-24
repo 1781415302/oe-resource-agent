@@ -1,0 +1,596 @@
+{
+  "timestamp_utc": "2026-10-24T09:57:58Z",
+  "five_condition_ablation": {
+    "1_baseline_default": {
+      "label": "1. 默认调度 (EEVDF root, shares 1024:1024, nice 0)",
+      "condition_id": "default",
+      "apply_cgroup": false,
+      "apply_nice": 0,
+      "summary": {
+        "p99_ms": {
+          "mean": 3.688,
+          "sd": 0.123,
+          "min": 3.551,
+          "max": 3.787,
+          "n": 3,
+          "values": [
+            3.551,
+            3.787,
+            3.727
+          ]
+        },
+        "avg_wait_us": {
+          "mean": 1556.0,
+          "sd": 28.5,
+          "min": 1525.7,
+          "max": 1582.2,
+          "n": 3,
+          "values": [
+            1525.7,
+            1560.2,
+            1582.2
+          ]
+        },
+        "wait_pct": {
+          "mean": 78.4,
+          "sd": 0.3,
+          "min": 78.2,
+          "max": 78.7,
+          "n": 3,
+          "values": [
+            78.2,
+            78.3,
+            78.7
+          ]
+        },
+        "nginx_cpu_share_pct": {
+          "mean": 15.0,
+          "sd": 0.1,
+          "min": 14.9,
+          "max": 15.1,
+          "n": 3,
+          "values": [
+            14.9,
+            14.9,
+            15.1
+          ]
+        },
+        "rps_retention_pct": {
+          "mean": 100.0,
+          "sd": 0.03,
+          "min": 99.98,
+          "max": 100.03,
+          "n": 3,
+          "values": [
+            99.98,
+            100.03,
+            99.98
+          ]
+        },
+        "background_eps": {
+          "mean": 3013.4,
+          "sd": 15.0,
+          "min": 3001.5,
+          "max": 3030.2,
+          "n": 3,
+          "values": [
+            3030.2,
+            3001.5,
+            3008.4
+          ]
+        }
+      },
+      "raw_samples": [
+        {
+          "seq": 1,
+          "p99_ms": 3.551,
+          "rps": 25595.8,
+          "rps_retention_pct": 99.98,
+          "background_eps": 3030.2,
+          "nginx_wait_pct": 78.2,
+          "nginx_avg_wait_us": 1525.7,
+          "nginx_cpu_share_pct": 14.9
+        },
+        {
+          "seq": 2,
+          "p99_ms": 3.787,
+          "rps": 25607.9,
+          "rps_retention_pct": 100.03,
+          "background_eps": 3001.5,
+          "nginx_wait_pct": 78.3,
+          "nginx_avg_wait_us": 1560.2,
+          "nginx_cpu_share_pct": 14.9
+        },
+        {
+          "seq": 3,
+          "p99_ms": 3.727,
+          "rps": 25594.4,
+          "rps_retention_pct": 99.98,
+          "background_eps": 3008.4,
+          "nginx_wait_pct": 78.7,
+          "nginx_avg_wait_us": 1582.2,
+          "nginx_cpu_share_pct": 15.1
+        }
+      ]
+    },
+    "2_only_cgroup": {
+      "label": "2. 仅启用 Cgroup 权重 (EEVDF, shares 4096:1024, nice 0)",
+      "condition_id": "default",
+      "apply_cgroup": true,
+      "apply_nice": 0,
+      "summary": {
+        "p99_ms": {
+          "mean": 3.846,
+          "sd": 0.074,
+          "min": 3.773,
+          "max": 3.921,
+          "n": 3,
+          "values": [
+            3.845,
+            3.773,
+            3.921
+          ]
+        },
+        "avg_wait_us": {
+          "mean": 1026.7,
+          "sd": 35.4,
+          "min": 989.9,
+          "max": 1060.5,
+          "n": 3,
+          "values": [
+            989.9,
+            1060.5,
+            1029.8
+          ]
+        },
+        "wait_pct": {
+          "mean": 75.1,
+          "sd": 0.3,
+          "min": 74.8,
+          "max": 75.3,
+          "n": 3,
+          "values": [
+            74.8,
+            75.3,
+            75.3
+          ]
+        },
+        "nginx_cpu_share_pct": {
+          "mean": 15.2,
+          "sd": 0.2,
+          "min": 15.1,
+          "max": 15.4,
+          "n": 3,
+          "values": [
+            15.1,
+            15.4,
+            15.1
+          ]
+        },
+        "rps_retention_pct": {
+          "mean": 100.0,
+          "sd": 0.01,
+          "min": 99.99,
+          "max": 100.01,
+          "n": 3,
+          "values": [
+            99.99,
+            100.01,
+            99.99
+          ]
+        },
+        "background_eps": {
+          "mean": 2987.0,
+          "sd": 30.2,
+          "min": 2954.1,
+          "max": 3013.4,
+          "n": 3,
+          "values": [
+            3013.4,
+            2954.1,
+            2993.5
+          ]
+        }
+      },
+      "raw_samples": [
+        {
+          "seq": 1,
+          "p99_ms": 3.845,
+          "rps": 25598.6,
+          "rps_retention_pct": 99.99,
+          "background_eps": 3013.4,
+          "nginx_wait_pct": 74.8,
+          "nginx_avg_wait_us": 989.9,
+          "nginx_cpu_share_pct": 15.1
+        },
+        {
+          "seq": 2,
+          "p99_ms": 3.773,
+          "rps": 25603.0,
+          "rps_retention_pct": 100.01,
+          "background_eps": 2954.1,
+          "nginx_wait_pct": 75.3,
+          "nginx_avg_wait_us": 1060.5,
+          "nginx_cpu_share_pct": 15.4
+        },
+        {
+          "seq": 3,
+          "p99_ms": 3.921,
+          "rps": 25597.5,
+          "rps_retention_pct": 99.99,
+          "background_eps": 2993.5,
+          "nginx_wait_pct": 75.3,
+          "nginx_avg_wait_us": 1029.8,
+          "nginx_cpu_share_pct": 15.1
+        }
+      ]
+    },
+    "3_only_nice": {
+      "label": "3. 仅调整 Nice 优先级 (EEVDF root, nice 15)",
+      "condition_id": "default",
+      "apply_cgroup": false,
+      "apply_nice": 15,
+      "summary": {
+        "p99_ms": {
+          "mean": 4.216,
+          "sd": 0.592,
+          "min": 3.721,
+          "max": 4.871,
+          "n": 3,
+          "values": [
+            3.721,
+            4.871,
+            4.055
+          ]
+        },
+        "avg_wait_us": {
+          "mean": 1634.1,
+          "sd": 34.1,
+          "min": 1604.2,
+          "max": 1671.2,
+          "n": 3,
+          "values": [
+            1604.2,
+            1671.2,
+            1627.0
+          ]
+        },
+        "wait_pct": {
+          "mean": 79.0,
+          "sd": 0.5,
+          "min": 78.5,
+          "max": 79.4,
+          "n": 3,
+          "values": [
+            79.4,
+            78.5,
+            79.0
+          ]
+        },
+        "nginx_cpu_share_pct": {
+          "mean": 15.1,
+          "sd": 0.6,
+          "min": 14.6,
+          "max": 15.8,
+          "n": 3,
+          "values": [
+            14.6,
+            15.8,
+            14.9
+          ]
+        },
+        "rps_retention_pct": {
+          "mean": 100.0,
+          "sd": 0.02,
+          "min": 99.99,
+          "max": 100.02,
+          "n": 3,
+          "values": [
+            99.99,
+            100.0,
+            100.02
+          ]
+        },
+        "background_eps": {
+          "mean": 3007.5,
+          "sd": 69.8,
+          "min": 2928.2,
+          "max": 3059.6,
+          "n": 3,
+          "values": [
+            3059.6,
+            2928.2,
+            3034.8
+          ]
+        }
+      },
+      "raw_samples": [
+        {
+          "seq": 1,
+          "p99_ms": 3.721,
+          "rps": 25596.9,
+          "rps_retention_pct": 99.99,
+          "background_eps": 3059.6,
+          "nginx_wait_pct": 79.4,
+          "nginx_avg_wait_us": 1604.2,
+          "nginx_cpu_share_pct": 14.6
+        },
+        {
+          "seq": 2,
+          "p99_ms": 4.871,
+          "rps": 25601.3,
+          "rps_retention_pct": 100.0,
+          "background_eps": 2928.2,
+          "nginx_wait_pct": 78.5,
+          "nginx_avg_wait_us": 1671.2,
+          "nginx_cpu_share_pct": 15.8
+        },
+        {
+          "seq": 3,
+          "p99_ms": 4.055,
+          "rps": 25605.1,
+          "rps_retention_pct": 100.02,
+          "background_eps": 3034.8,
+          "nginx_wait_pct": 79.0,
+          "nginx_avg_wait_us": 1627.0,
+          "nginx_cpu_share_pct": 14.9
+        }
+      ]
+    },
+    "4_cgroup_and_nice": {
+      "label": "4. Cgroup + Nice 双重降权兜底 (EEVDF, shares 4096:1024 + nice 15)",
+      "condition_id": "default",
+      "apply_cgroup": true,
+      "apply_nice": 15,
+      "summary": {
+        "p99_ms": {
+          "mean": 3.913,
+          "sd": 0.161,
+          "min": 3.727,
+          "max": 4.017,
+          "n": 3,
+          "values": [
+            3.727,
+            4.017,
+            3.995
+          ]
+        },
+        "avg_wait_us": {
+          "mean": 1073.8,
+          "sd": 28.7,
+          "min": 1047.7,
+          "max": 1104.5,
+          "n": 3,
+          "values": [
+            1069.3,
+            1104.5,
+            1047.7
+          ]
+        },
+        "wait_pct": {
+          "mean": 76.0,
+          "sd": 1.1,
+          "min": 74.9,
+          "max": 77.0,
+          "n": 3,
+          "values": [
+            77.0,
+            76.0,
+            74.9
+          ]
+        },
+        "nginx_cpu_share_pct": {
+          "mean": 14.8,
+          "sd": 1.0,
+          "min": 13.7,
+          "max": 15.6,
+          "n": 3,
+          "values": [
+            13.7,
+            15.1,
+            15.6
+          ]
+        },
+        "rps_retention_pct": {
+          "mean": 100.01,
+          "sd": 0.03,
+          "min": 99.98,
+          "max": 100.03,
+          "n": 3,
+          "values": [
+            100.01,
+            99.98,
+            100.03
+          ]
+        },
+        "background_eps": {
+          "mean": 3033.4,
+          "sd": 103.5,
+          "min": 2932.9,
+          "max": 3139.6,
+          "n": 3,
+          "values": [
+            3139.6,
+            3027.6,
+            2932.9
+          ]
+        }
+      },
+      "raw_samples": [
+        {
+          "seq": 1,
+          "p99_ms": 3.727,
+          "rps": 25603.1,
+          "rps_retention_pct": 100.01,
+          "background_eps": 3139.6,
+          "nginx_wait_pct": 77.0,
+          "nginx_avg_wait_us": 1069.3,
+          "nginx_cpu_share_pct": 13.7
+        },
+        {
+          "seq": 2,
+          "p99_ms": 4.017,
+          "rps": 25594.8,
+          "rps_retention_pct": 99.98,
+          "background_eps": 3027.6,
+          "nginx_wait_pct": 76.0,
+          "nginx_avg_wait_us": 1104.5,
+          "nginx_cpu_share_pct": 15.1
+        },
+        {
+          "seq": 3,
+          "p99_ms": 3.995,
+          "rps": 25608.1,
+          "rps_retention_pct": 100.03,
+          "background_eps": 2932.9,
+          "nginx_wait_pct": 74.9,
+          "nginx_avg_wait_us": 1047.7,
+          "nginx_cpu_share_pct": 15.6
+        }
+      ]
+    },
+    "5_full_scx_multi": {
+      "label": "5. 全栈多资源自治联动 (SCX 1ms+抢占 + Cgroup + Nice)",
+      "condition_id": "adaptive",
+      "apply_cgroup": true,
+      "apply_nice": 15,
+      "summary": {
+        "p99_ms": {
+          "mean": 2.131,
+          "sd": 0.17,
+          "min": 1.941,
+          "max": 2.269,
+          "n": 3,
+          "values": [
+            1.941,
+            2.269,
+            2.183
+          ]
+        },
+        "avg_wait_us": {
+          "mean": 26.8,
+          "sd": 8.7,
+          "min": 16.9,
+          "max": 33.1,
+          "n": 3,
+          "values": [
+            16.9,
+            33.1,
+            30.5
+          ]
+        },
+        "wait_pct": {
+          "mean": 11.9,
+          "sd": 2.8,
+          "min": 8.7,
+          "max": 14.0,
+          "n": 3,
+          "values": [
+            8.7,
+            14.0,
+            13.1
+          ]
+        },
+        "nginx_cpu_share_pct": {
+          "mean": 15.7,
+          "sd": 1.1,
+          "min": 14.5,
+          "max": 16.5,
+          "n": 3,
+          "values": [
+            14.5,
+            16.5,
+            16.1
+          ]
+        },
+        "rps_retention_pct": {
+          "mean": 100.0,
+          "sd": 0.01,
+          "min": 100.0,
+          "max": 100.01,
+          "n": 3,
+          "values": [
+            100.0,
+            100.0,
+            100.01
+          ]
+        },
+        "background_eps": {
+          "mean": 2973.3,
+          "sd": 131.2,
+          "min": 2869.1,
+          "max": 3120.7,
+          "n": 3,
+          "values": [
+            3120.7,
+            2869.1,
+            2930.1
+          ]
+        }
+      },
+      "raw_samples": [
+        {
+          "seq": 1,
+          "p99_ms": 1.941,
+          "rps": 25599.2,
+          "rps_retention_pct": 100.0,
+          "background_eps": 3120.7,
+          "nginx_wait_pct": 8.7,
+          "nginx_avg_wait_us": 16.9,
+          "nginx_cpu_share_pct": 14.5
+        },
+        {
+          "seq": 2,
+          "p99_ms": 2.269,
+          "rps": 25600.8,
+          "rps_retention_pct": 100.0,
+          "background_eps": 2869.1,
+          "nginx_wait_pct": 14.0,
+          "nginx_avg_wait_us": 33.1,
+          "nginx_cpu_share_pct": 16.5
+        },
+        {
+          "seq": 3,
+          "p99_ms": 2.183,
+          "rps": 25601.9,
+          "rps_retention_pct": 100.01,
+          "background_eps": 2930.1,
+          "nginx_wait_pct": 13.1,
+          "nginx_avg_wait_us": 30.5,
+          "nginx_cpu_share_pct": 16.1
+        }
+      ]
+    }
+  },
+  "ebpf_detailed_ablation": {
+    "without_ebpf_isolation": {
+      "drop_target": false,
+      "foreground_p99_ms": 2.199,
+      "foreground_rps": 25598.5,
+      "foreground_rps_retention_pct": 99.99,
+      "foreground_wait_pct": 18.4,
+      "foreground_avg_wait_us": 41.5,
+      "secondary_completed_reqs_per_5s": 0,
+      "secondary_req_rate_rps": 0.0,
+      "secondary_cpu_ticks_per_5s": 0
+    },
+    "with_ebpf_tc_act_shot": {
+      "drop_target": true,
+      "foreground_p99_ms": 1.922,
+      "foreground_rps": 25605.5,
+      "foreground_rps_retention_pct": 100.02,
+      "foreground_wait_pct": 0.4,
+      "foreground_avg_wait_us": 0.8,
+      "secondary_completed_reqs_per_5s": 0,
+      "secondary_req_rate_rps": 0.0,
+      "secondary_cpu_ticks_per_5s": 0,
+      "ebpf_stats": {
+        "total_packets": 8764984,
+        "total_bytes": 8018039328,
+        "target_packets": 2008656,
+        "target_bytes": 177085578,
+        "dropped_packets": 950
+      }
+    }
+  }
+}
