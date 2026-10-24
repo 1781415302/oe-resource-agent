@@ -1,5 +1,7 @@
 # 阶段一基线测量交接
 
+> 本文记录 0.1.x 阶段设计，当前版本 0.2.0，最新数据见课程报告。
+
 本文保留阶段一原始 study、失败记录与修复过程。最新结果见第 15 节：新 survey 与 pilot 独立审计通过，阶段一默认环境测量与小规模对照验收通过。宿主 CPU 未用于筛选，未排除宿主后台干扰；本结果不是低干扰基准或正式性能收益。
 
 ## 1. 指定 survey 的历史结论
@@ -10,7 +12,7 @@
 |---|---|
 | 指定 survey | `C:/oe-baseline-output/baseline-survey-20261022T045103Z-0e9f60` |
 | 指定 pilot | 无。S7 的 pilot 目录为空，没有创建，也没有分析 |
-| S8 重跑 | `python Z:/research/analyze_baseline.py` 指向上述 survey。标准输出 `status=quality_incomplete`，`selected_run_key=null`，`issues` 只有 `baseline-survey-20261022T045103Z-0e9f60-a1:host_quality_rejected`。进程退出码 2 |
+| S8 重跑 | `python research/analyze_baseline.py` 指向上述 survey。标准输出 `status=quality_incomplete`，`selected_run_key=null`，`issues` 只有 `baseline-survey-20261022T045103Z-0e9f60-a1:host_quality_rejected`。进程退出码 2 |
 | 定档 | `audit.calibration` 为 null。目录中没有 `calibration.json`。HTML 选档节为“没有可写入的有效定档。” |
 | 来宾尝试 | 只有 `a1`。来宾 `summary.status=completed`，`final_sched_ext=disabled`，`cleanup_errors` 为空，guest/fetch 返回码都是 0。宿主运行门槛拒绝了这次尝试 |
 | manifest | `status=quality_incomplete`，`error=host preflight unavailable before retry`，`collector_returncode=0` |
@@ -27,13 +29,13 @@
 | 项 | 本次阶段一 Hyper-V | 历史 VMware |
 |---|---|---|
 | 时间 | 2026-10-22，study `baseline-survey-20261022T045103Z-0e9f60` | 2026-10-15 宿主快照，以及更早的 quick、dynamic、wakeup 记录 |
-| 虚拟化 | 来宾 `virtualization=microsoft`。来宾 lscpu 的 Hypervisor vendor 为 Microsoft | `Z:/oe-resource-agent/repro/host-snapshot.json` 写明 `virtualization=VMware` |
-| CPU | 来宾看到 Intel Core i7-14650HX，4 个 vCPU，允许 CPU 0–3。Windows 宿主 `platform=Windows-10-10.0.26300-SP0`，`machine=AMD64`，计算机名出现在 Hyper-V 权限错误里，为 `LQL` | 宿主 AMD Ryzen 9 9955HX，16 核 32 线程；来宾 4 vCPU。见 `docs/reproduce-openeuler.md` 与 `docs/progress-20261015.md` |
+| 虚拟化 | 来宾 `virtualization=microsoft`。来宾 lscpu 的 Hypervisor vendor 为 Microsoft | 历史 `repro/host-snapshot.json` 曾记录 `virtualization=VMware`（当前已更新为 Hyper-V） |
+| CPU | 来宾看到 Intel Core i7-14650HX，4 个 vCPU，允许 CPU 0–3。Windows 宿主 `platform=Windows-10-10.0.26300-SP0`，`machine=AMD64`，计算机名出现在 Hyper-V 权限错误里，为 `LQL` | 宿主 AMD Ryzen 9 9955HX，16 核 32 线程；来宾 4 vCPU。见 `docs/reproduce-openeuler.md` 与 `docs/archive/progress-20261015.md` |
 | 电源方案 | manifest 中可核对的 GUID 是 `8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c`。`powercfg` 中文名因驱动按 UTF-8 解码已被替换，不能从损坏字符串读名称。本次没有改电源方案 | 快照为 silent，GUID `64a64f24-65b9-4b56-befd-5ec1eaced9b3` |
 | 宿主 CPU | 本目录 `host-cpu.jsonl` 161 条。门槛使用 QPC `host_monotonic_seconds`，不是两台机器的 UTC | 历史快照写明宿主 CPU 未连续采样 |
 | `vmware` 字段 | 161 条都是空数组。空数组不是 0% 负载 | 旧采集器的 VMware 行留在该字段。本 study 的宿主不是那套 VMware |
 | `hyperv` 字段 | 161 条均为 null。每条 `hyperv_error` 都是“你没有完成此任务所需的权限。请与计算机“LQL”授权策略的管理员联系。”权限不足不计入宿主 CPU，也不写成 0% | 历史文档不使用这组 Hyper-V 诊断 |
-| 证据位置 | 第 4 节的 Windows study 目录 | `repro/host-snapshot.json`、`docs/reproduce-openeuler.md`、`docs/dynamic-benchmark.md`、`docs/progress-20261015.md`、`docs/wakeup-preemption.md`。旧 `state/` 与 `validation/` 保留，本阶段不覆盖 |
+| 证据位置 | 第 4 节的 Windows study 目录 | `repro/host-snapshot.json`、`docs/reproduce-openeuler.md`、`docs/archive/dynamic-benchmark.md`、`docs/archive/progress-20261015.md`、`docs/wakeup-preemption.md`。旧 `state/` 与 `validation/` 保留，本阶段不覆盖 |
 
 本目录审计限制原文有一条：`historical VMware rows stay in vmware; this study's host is not described as that VMware setup`。
 
@@ -49,9 +51,9 @@
 
 ## 3. 重做时使用的命令
 
-工作区：Windows `Z:/oe-resource-agent`、`Z:/euler-bench`、`Z:/research`；来宾 `/root/oe-resource-agent`、`/root/euler-bench`、`/root/research`。Z: 是 `\\172.26.1.3\root` 的映射，和来宾路径是同一份文件，不是另一次实验。地址以当时探测为准。S7 使用 `172.26.1.3`，OpenSSH 默认身份，没有 `--key`。
+工作区：Windows `oe-resource-agent`、`euler-bench`、`research`；来宾 `/root/oe-resource-agent`、`/root/euler-bench`、`/root/research`。网络映射盘与来宾路径是同一份文件，不是另一次实验。地址以当时探测为准。S7 使用 `172.26.1.3`，OpenSSH 默认身份，没有 `--key`。
 
-任何会 import `oeagent` 的 Windows Python 都必须先把字节码缓存指到本机临时目录，避免写共享 Z: 上的 `__pycache__`。
+任何会 import `oeagent` 的 Windows Python 都必须先把字节码缓存指到本机临时目录，避免写共享网络映射上的 `__pycache__`。
 
 ### 3.1 已执行的 Windows 命令
 
@@ -59,7 +61,7 @@ S7 实际 survey：
 
 ```powershell
 $env:PYTHONPYCACHEPREFIX = Join-Path $env:TEMP 'oe-stage1-pyc-s7b'
-python Z:/research/run_baseline.py --host 172.26.1.3 --guest-root /root/oe-resource-agent --output-root C:/oe-baseline-output --mode survey
+python research/run_baseline.py --host 172.26.1.3 --guest-root /root/oe-resource-agent --output-root C:/oe-baseline-output --mode survey
 ```
 
 该命令退出码 2，是质量不合格的正常返回，不是用法错误。它新建了 `baseline-survey-20261022T045103Z-0e9f60`，没有复用旧目录。
@@ -68,7 +70,7 @@ S7 随后分析了一次。S8 按同一目录又分析了一次：
 
 ```powershell
 $env:PYTHONPYCACHEPREFIX = Join-Path $env:TEMP 'oe-stage1-pyc-s8b'
-python Z:/research/analyze_baseline.py C:/oe-baseline-output/baseline-survey-20261022T045103Z-0e9f60
+python research/analyze_baseline.py C:/oe-baseline-output/baseline-survey-20261022T045103Z-0e9f60
 ```
 
 S8 这次的标准输出是：
@@ -88,8 +90,8 @@ S8 这次的标准输出是：
 S7 没有执行 pilot。下面这条只说明驱动接口，禁止对当前目录执行：
 
 ```powershell
-python Z:/research/run_baseline.py --host 172.26.1.3 --guest-root /root/oe-resource-agent --output-root C:/oe-baseline-output --mode pilot --calibration-dir C:/oe-baseline-output/实际已通过的survey目录
-python Z:/research/analyze_baseline.py C:/oe-baseline-output/实际pilot目录
+python research/run_baseline.py --host 172.26.1.3 --guest-root /root/oe-resource-agent --output-root C:/oe-baseline-output --mode pilot --calibration-dir C:/oe-baseline-output/实际已通过的survey目录
+python research/analyze_baseline.py C:/oe-baseline-output/实际pilot目录
 ```
 
 只有新的 survey 被分析成 `passed`，且该目录自己的 `calibration.json` 存在并且 `status=selected` 时，才允许把 `--calibration-dir` 指到那个新目录。
@@ -115,7 +117,7 @@ ssh -o BatchMode=yes -o ConnectTimeout=8 -o StrictHostKeyChecking=yes root@172.2
 宿主采集器由驱动隐藏启动，不要对同一 `host-cpu.jsonl` 再手动起一个：
 
 ```text
-pwsh -NoProfile -File Z:/research/collect_host_cpu.ps1 -OutputPath <study>\host-cpu.jsonl -DurationSeconds <驱动按等待上限计算> -IntervalSeconds 5 -StopPath <study>\collector.stop
+pwsh -NoProfile -File research/collect_host_cpu.ps1 -OutputPath <study>\host-cpu.jsonl -DurationSeconds <驱动按等待上限计算> -IntervalSeconds 5 -StopPath <study>\collector.stop
 ```
 
 间隔 5 秒来自冻结的 `host_quality.sample_seconds`。分析使用实际 QPC 间隔，不把目标间隔当成样本时间。
@@ -146,7 +148,7 @@ cat /sys/kernel/sched_ext/state
 
 ### 3.4 重做顺序
 
-以下命令接口保持。两项宿主流程修复和 17 项测试已完成；下一轮先按 stage-1-baseline-followup.md 调整两个 CPU 上限及测试，再新建结果，不用旧记录补定档。
+以下命令接口保持。两项宿主流程修复和 17 项测试已完成；下一轮先按 `docs/archive/stage-1-baseline-followup.md` 调整两个 CPU 上限及测试，再新建结果，不用旧记录补定档。
 
 1. 先按当前续跑方案将两个宿主 CPU 上限设为 100，并通过对应测试。再确认来宾是 Hyper-V、sched_ext disabled、flock 可获取且没有另一套资源实验。算法、SCX、电源与 Hyper-V 配置不改，不自行关闭用户程序。
 2. 按第 3.1 节设置 `PYTHONPYCACHEPREFIX`，再跑 `--mode survey`。驱动总会新建 `C:/oe-baseline-output/baseline-survey-<UTC>-<id>/`。不要覆盖 `0e9f60`。
@@ -182,7 +184,7 @@ cat /sys/kernel/sched_ext/state
 来宾原始树有两份视图，内容相同，都不是第二个 study：
 
 - 来宾：`/root/oe-resource-agent/results/baseline-baseline-survey-20261022T045103Z-0e9f60-a1`
-- 映射：`Z:/oe-resource-agent/results/baseline-baseline-survey-20261022T045103Z-0e9f60-a1`
+- 映射：`results/baseline-baseline-survey-20261022T045103Z-0e9f60-a1`
 - 已解包副本：`C:/oe-baseline-output/baseline-survey-20261022T045103Z-0e9f60/raw/baseline-survey-20261022T045103Z-0e9f60-a1/baseline-baseline-survey-20261022T045103Z-0e9f60-a1`
 
 来宾树包含 `request.json`、`owner.json`、`summary.json`、`source-files/`、`python-cache-audit.json` 和 `trials/<trial_id>/`。每个 trial 的 `client.log` 是窗口协议原件，`samples.jsonl`、`background-intervals.jsonl`、`events.jsonl`、`driver-events.jsonl` 保持既有格式。默认调度没有 `native-*.log` 是正常现象。Footer 的 `export_duration_ns` 在 `client.log`，不是 StudyAudit 字段；本文不另算一套导出耗时。
@@ -387,7 +389,7 @@ SSH 复核确认来宾为 openEuler 24.03 LTS-SP4、内核 `6.6.0-scx`，`sched_
 
 ## 12. 当前续跑流程
 
-两项宿主流程修复和指定测试已经完成，实际结果见第 13 节。当前执行入口为 docs/stage-1-baseline-followup.md；下一轮只调整现有两个 CPU 上限配置及受默认值影响的测试，再运行新 survey/pilot。详细配置和结果口径见第 14 节。
+两项宿主流程修复和指定测试已经完成，实际结果见第 13 节。当前执行入口为 `docs/archive/stage-1-baseline-followup.md`；下一轮只调整现有两个 CPU 上限配置及受默认值影响的测试，再运行新 survey/pilot。详细配置和结果口径见第 14 节。
 
 复用既有构建与有效 collector 短采样，运行时仍核对身份和资源占用。历史原件保留；正式窗口不并行构建、测试或大报告解析，不擅自关闭用户应用。
 
@@ -418,7 +420,7 @@ SSH 复核确认来宾为 openEuler 24.03 LTS-SP4、内核 `6.6.0-scx`，`sched_
 该轮按当时的 20%/30% 门槛未启动正式负载。下一轮执行第 14 节的默认环境方案，仍须新 survey 独立审计和定档通过后才进入 pilot；本次测量不构成正式收益。
 ## 14. 2026-10-23 默认环境续跑方案（profile 变更前记录）
 
-本节记录 profile 变更前的方案状态：当时实际值为 preflight_cpu_limit=20、during_cpu_limit=30。按用户授权的 100/100 配置及实测结果见第 15 节。续跑使用 docs/stage-1-baseline-followup.md，不新增模式、接口或 schema 版本。
+本节记录 profile 变更前的方案状态：当时实际值为 preflight_cpu_limit=20、during_cpu_limit=30。按用户授权的 100/100 配置及实测结果见第 15 节。续跑使用 `docs/archive/stage-1-baseline-followup.md`，不新增模式、接口或 schema 版本。
 
 17 项宿主测试和两项流程修复已完成，不重复实施。配置调整并通过对应测试后，使用现有 CLI 新建一个 survey、独立分析、有效定档后新建六 trial pilot，再分析并更新交接。不因当前宿主 CPU 高而等待，不自动关闭用户程序。
 

@@ -1,10 +1,10 @@
 # 阶段一开发设计：Hyper-V 性能基准与连续窗口测量
 
-适用对象：负责拆分任务和编排 workflow 的主 Agent，以及各独立上下文的 Coding Agent。
+适用对象：负责拆分任务和编排工作流的架构设计者，以及各模块的开发人员。
 
 当前执行入口为 [阶段一默认环境测量续跑](stage-1-baseline-followup.md)。下一轮只通过现有配置将宿主 CPU 上限设为 100%，不再按占用高低筛选；保留完整采样、数据和清理校验，沿用现有 CLI 与 schema_version=1。实际配置尚待执行者修改。
 
-本设计只覆盖阶段一。交付可信测量链路、默认调度负载定档和一次完整小规模对照，不修改业务决策算法，不承担最终比赛性能验收。执行前向每个子 Agent 提供本文第 1、4、7、9 节，以及其负责文件和对应 Stage；不能只转发步骤标题。
+本设计只覆盖阶段一。交付可信测量链路、默认调度负载定档和一次完整小规模对照，不修改业务决策算法，不承担最终比赛性能验收。执行前向每个模块开发者提供本文第 1、4、7、9 节，以及其负责文件和对应 Stage；不能只转发步骤标题。
 
 ## 1. 整体设计理念
 
@@ -28,7 +28,7 @@
 
 已在本次会话确认：来宾为 Hyper-V（`systemd-detect-virt` 返回 `microsoft`），openEuler 24.03 LTS-SP4、x86_64、6.6.0-scx、4 vCPU、Python 3.11.6。54 项确定性测试、原生 8 项、普通/SLO 控制会话、真实负载自动切换及唤醒抢占检查通过。已有结果可以复用，不为开始本阶段再次全量运行这些负载检查。
 
-实际工作区是三个并列目录：Windows 为 `Z:/oe-resource-agent`、`Z:/euler-bench`、`Z:/research`；来宾为 `/root/oe-resource-agent`、`/root/euler-bench`、`/root/research`。Z 盘是 `\\172.26.1.3\root` 的映射。本机可通过 SSH 默认身份连接 `root@172.26.1.3`；执行时重新探测地址，不将地址或私钥写进源码。
+实际工作区是三个并列目录：Windows 本地为 `oe-resource-agent`、`euler-bench`、`research`；来宾为 `/root/oe-resource-agent`、`/root/euler-bench`、`/root/research`。网络共享映射至来宾目录。本机可通过 SSH 默认身份连接 `root@172.26.1.3`；执行时重新探测地址，不将地址或私钥写进源码。
 
 源码核对依据：
 
@@ -69,20 +69,20 @@ Windows run_baseline.py
 
 | ID | 新增/修改及路径 | 职责与必要性 | 对外接口/关系 |
 |---|---|---|---|
-| F01 | 修改 `Z:/oe-resource-agent/tools/prepare_wrk2.py` | 保留旧构建，新增窗口导出构建；补丁仍由固定归档生成，禁止编辑 cache 作为源码 | 保持 `instrument(header, source)`；新增 `instrument_windows(header, source)` 和 `--windowed` CLI |
-| F02 | 新增 `Z:/oe-resource-agent/oeagent/measurement.py` | 统一数据契约、客户端解析、HDR 统计、试验审计、负载定档；避免两端各解释一套数据 | 第 4 节所有共享类型与纯函数 |
-| F03 | 修改 `Z:/oe-resource-agent/oeagent/quality.py` | 给既有宿主门槛增加单调时间字段支持，兼容旧 UTC 调用 | `host_gate(..., *, time_key="utc")` |
-| F04 | 新增 `Z:/oe-resource-agent/experiments/baseline-profile.json` | 冻结阶段一负载、超时、定档规则和宿主门槛 | `BaselineProfile`；唯一预声明配置 |
-| F05 | 新增 `Z:/oe-resource-agent/experiments/run_baseline.py` | 来宾环境探测、survey/pilot 执行、所属实例停止和归档 | `inspect_guest`、`execute_request`、`stop_owned`、CLI |
-| F06 | 新增 `Z:/research/run_baseline.py` | Windows 编排、采样、preflight、SSH/SCP、尝试预算与状态 | `run_study`、CLI；消费 F02/F03/F05/F07/F08 |
-| F07 | 修改 `Z:/research/collect_host_cpu.ps1` | 保留旧字段和参数，增加跨 Windows 进程可比较的单调时间；Hyper-V 诊断允许无权限 | 原参数不变；增加 HostSample 字段 |
-| F08 | 新增 `Z:/research/analyze_baseline.py` | 独立复算、完整尝试展示、CSV/HTML；不改旧分析器 | `audit_study`、`write_report`、CLI |
-| F09 | 新增 `Z:/oe-resource-agent/tests/test_measurement.py` | 流记录、HDR 秩、计数/时间不变量、定档和新宿主时间字段测试 | unittest，可在 Windows/Linux 无负载执行 |
-| F10 | 新增 `Z:/oe-resource-agent/tests/test_baseline_guest.py` | 来宾调度、状态机、假进程清理及流边界测试 | unittest；操作系统动作 mock，不实际加载 SCX |
-| F11 | 新增 `Z:/oe-resource-agent/tests/test_baseline_host.py` | 宿主重试、下载、collector 退出、独立审计和参数契约测试 | unittest；SSH/collector/文件系统按测试需要隔离 |
-| F12 | 新增 `Z:/oe-resource-agent/experiments/check_wrk2_windows.py` | 一个实际客户端最小用例验证补丁、累计与窗口分布一致 | CLI：`--duration-seconds`；默认只用默认调度、低速率 |
-| F13 | 新增 `Z:/oe-resource-agent/docs/baseline-measurement.md` | Windows/Linux 执行步骤、结果语义、失败恢复和阶段一结论入口 | 文档；不得把一次 pilot 写成正式性能收益 |
-| F14 | 新增 `Z:/oe-resource-agent/docs/stage-1-development-plan.md` | 本实施设计与 workflow 契约 | 只读输入 |
+| F01 | 修改 `tools/prepare_wrk2.py` | 保留旧构建，新增窗口导出构建；补丁仍由固定归档生成，禁止编辑 cache 作为源码 | 保持 `instrument(header, source)`；新增 `instrument_windows(header, source)` 和 `--windowed` CLI |
+| F02 | 新增 `oeagent/measurement.py` | 统一数据契约、客户端解析、HDR 统计、试验审计、负载定档；避免两端各解释一套数据 | 第 4 节所有共享类型与纯函数 |
+| F03 | 修改 `oeagent/quality.py` | 给既有宿主门槛增加单调时间字段支持，兼容旧 UTC 调用 | `host_gate(..., *, time_key="utc")` |
+| F04 | 新增 `experiments/baseline-profile.json` | 冻结阶段一负载、超时、定档规则和宿主门槛 | `BaselineProfile`；唯一预声明配置 |
+| F05 | 新增 `experiments/run_baseline.py` | 来宾环境探测、survey/pilot 执行、所属实例停止和归档 | `inspect_guest`、`execute_request`、`stop_owned`、CLI |
+| F06 | 新增 `research/run_baseline.py` | Windows 编排、采样、preflight、SSH/SCP、尝试预算与状态 | `run_study`、CLI；消费 F02/F03/F05/F07/F08 |
+| F07 | 修改 `research/collect_host_cpu.ps1` | 保留旧字段和参数，增加跨 Windows 进程可比较的单调时间；Hyper-V 诊断允许无权限 | 原参数不变；增加 HostSample 字段 |
+| F08 | 新增 `research/analyze_baseline.py` | 独立复算、完整尝试展示、CSV/HTML；不改旧分析器 | `audit_study`、`write_report`、CLI |
+| F09 | 新增 `tests/test_measurement.py` | 流记录、HDR 秩、计数/时间不变量、定档和新宿主时间字段测试 | unittest，可在 Windows/Linux 无负载执行 |
+| F10 | 新增 `tests/test_baseline_guest.py` | 来宾调度、状态机、假进程清理及流边界测试 | unittest；操作系统动作 mock，不实际加载 SCX |
+| F11 | 新增 `tests/test_baseline_host.py` | 宿主重试、下载、collector 退出、独立审计和参数契约测试 | unittest；SSH/collector/文件系统按测试需要隔离 |
+| F12 | 新增 `experiments/check_wrk2_windows.py` | 一个实际客户端最小用例验证补丁、累计与窗口分布一致 | CLI：`--duration-seconds`；默认只用默认调度、低速率 |
+| F13 | 新增 `docs/baseline-measurement.md` | Windows/Linux 执行步骤、结果语义、失败恢复和阶段一结论入口 | 文档；不得把一次 pilot 写成正式性能收益 |
+| F14 | 新增 `docs/stage-1-development-plan.md` | 本实施设计与 workflow 契约 | 只读输入 |
 
 运行数据目录 `state/`、`cache/`、`results/` 和显式传入的 Windows `--output-root` 不属于源码白名单；允许按第 6 节生成记录。禁止在未知系统目录写结果。不要新增包装框架、数据库、依赖清单或另外一套插件体系。
 
@@ -465,9 +465,9 @@ def write_report(directory: Path, audit: StudyAudit) -> None: ...  # F08
 def main(argv: Sequence[str] | None = None) -> int: ...  # 各入口独立
 ```
 
-F06 CLI：`python Z:/research/run_baseline.py --host HOST --guest-root /root/oe-resource-agent --output-root C:/指定本地目录 --mode survey [--key KEY]`。pilot 增加 `--calibration-dir 已通过审计的survey目录`。--key 省略时沿用 OpenSSH 默认身份，不注入不存在的旧私钥路径；提供时使用 -i/IdentitiesOnly。BatchMode、ConnectTimeout=8、StrictHostKeyChecking=yes；未知主机身份由用户按常规 SSH 配置处理，不自动关闭核验。
+F06 CLI：`python research/run_baseline.py --host HOST --guest-root /root/oe-resource-agent --output-root C:/指定本地目录 --mode survey [--key KEY]`。pilot 增加 `--calibration-dir 已通过审计的survey目录`。--key 省略时沿用 OpenSSH 默认身份，不注入不存在的旧私钥路径；提供时使用 -i/IdentitiesOnly。BatchMode、ConnectTimeout=8、StrictHostKeyChecking=yes；未知主机身份由用户按常规 SSH 配置处理，不自动关闭核验。
 
-F08 CLI：`python Z:/research/analyze_baseline.py STUDY_DIRECTORY`；审计 passed 返回 0，quality_incomplete 返回 2，数据/执行失败返回 1。报告始终包含全部尝试，不因单次失败删除其他原件。
+F08 CLI：`python research/analyze_baseline.py STUDY_DIRECTORY`；审计 passed 返回 0，quality_incomplete 返回 2，数据/执行失败返回 1。报告始终包含全部尝试，不因单次失败删除其他原件。
 
 宿主在网络探测前初始化合法 manifest，guest_preflight=null、attempts=[]、status=running；失败时保留 null 和明确 error。来宾实际操作的 summary 同样可先以 snapshot=null 初始化，成功探测后填充；completed 状态绝不允许空 snapshot。preflight 不满足必需检查时不得进入负载。run_study 对已创建目录的预期实验失败也返回该目录，由 CLI 根据最终审计/manifest 返回状态；无法创建结果目录等 I/O 初始化错误可以抛异常。宿主与来宾 CLI 的执行失败返回 1，宿主仅质量/定档证据不足返回 2；参数用法错误采用 argparse 的 2。
 
@@ -599,12 +599,12 @@ CSV 契约：windows.csv 每行至少包含 run_key、trial_id、condition、sce
 | S0 | 只读环境确认、检查工作树/文件差异、记录执行路径；不改源码 | 无 | 最先单独完成，避免其他 Agent 开始改文件后核对不清 | SSH 确认 systemd-detect-virt=microsoft、内核和三目录；读取已有验证；确认无活动实验，发现未知修改时保留并报告 |
 | S1 | 实现共享契约/解析/审计/选档与单调时间门槛；F02/F03/F04/F09 | S0 | 与 S2 并行；S2 直接按第 4 节契约开发，不等待函数实现 | `python -m unittest discover -s tests -p test_measurement.py -v`，包含 §4.3 精确示例、主镜像不一致、尾窗/空样本、缺 coverage、选档、UTC/QPC 门槛 |
 | S2 | 实现隔离的 wrk2 窗口构建和 live checker；F01/F12 | S0 | 与 S1/S3 并行；此时只实现和离线补丁检查，不在共享来宾编译/跑负载 | `python -m py_compile tools/prepare_wrk2.py experiments/check_wrk2_windows.py`；对锁定归档做只读解包/补丁锚点测试，旧 instrument 不变；新增模式缺参数/多线程拒绝有验证方案 |
-| S3 | 更新宿主 collector 并实现独立分析器；F07/F08 | S1 | 与 S2 或已就绪的 S4 并行；分析器 import/帮助关卡需要 F02 已落地 | pwsh Parser.ParseFile 检查 F07 语法无错误；F08 import 无副作用，`python Z:/research/analyze_baseline.py --help` 成功；真实数据留 S6/S7 |
+| S3 | 更新宿主 collector 并实现独立分析器；F07/F08 | S1 | 与 S2 或已就绪的 S4 并行；分析器 import/帮助关卡需要 F02 已落地 | pwsh Parser.ParseFile 检查 F07 语法无错误；F08 import 无副作用，`python research/analyze_baseline.py --help` 成功；真实数据留 S6/S7 |
 | S4 | 实现来宾执行器及假进程测试；F05/F10 | S1、S2 | 可与 S5 并行，不能修改其文件 | `python -m unittest discover -s tests -p test_baseline_guest.py -v`；验证 Ready 超时、单客户端动态动作、锁冲突、source/boot 变化拒绝、清理失败不报 completed、停止身份不匹配 |
 | S5 | 实现宿主编排与联合离线分析测试；F06/F11 | S1、S3 | 可与 S4 并行 | `python -m unittest discover -s tests -p test_baseline_host.py -v`；fake SSH/SCP/collector 验证首次质量通过选择、整操作重试、性能差不重试、下载/collector 失败、截断归档和审计重算；`--help` 无系统副作用 |
 | S6 | 集成回归、来宾构建、最小真实客户端检查；不再并行改源码 | S4、S5 | 共享来宾独占；需集成全部前序文件 | 来宾 `python3 -m unittest discover -s tests -v` 全量通过；构建命令及 F12 命令见下文；旧 state/wrk2-build.json 不变；默认调度恢复 |
 | S7 | 实际运行 survey、独立审计后运行 pilot；生成原始及衍生结果 | S6 | 严格串行；同机不运行其他性能/资源实验 | Windows 两条 run 命令及对应 analyze 命令；audit passed、calibration selected；全部 6 个 pilot trial 可复算、单客户端动态链路完整、退出清理确认；收益数字不作通过门槛 |
-| S8 | 整理复现步骤与阶段一交接；F13 | S7 | 独立数据复核可交给另一 Agent，但只读原件 | 按 F13 重跑 analyze 得到相同指标；报告原始路径、限制及未触发动作；列出阶段二需要解决的问题，不改算法 |
+| S8 | 整理复现步骤与阶段一交接；F13 | S7 | 独立数据复核可由其他评审者进行，但只读原件 | 按 F13 重跑 analyze 得到相同指标；报告原始路径、限制及未触发动作；列出阶段二需要解决的问题，不改算法 |
 
 S2 的 live checker 依赖 S1 的最终接口，所以开发时可以用契约联调，实际运行统一延后到 S6。S3/S5 的分析测试由 F11 汇总，S3 不另开重复测试文件。若前序离线关卡不通过，不得直接跑真实负载绕过。
 
@@ -620,10 +620,10 @@ cat /sys/kernel/sched_ext/state
 S7 Windows 命令示意，HOST 和目录必须替换成 S0 的实际值；默认 SSH 身份可用时无需 --key：
 
 ```powershell
-python Z:/research/run_baseline.py --host HOST --guest-root /root/oe-resource-agent --output-root C:/oe-baseline-output --mode survey
-python Z:/research/analyze_baseline.py C:/oe-baseline-output/实际survey目录
-python Z:/research/run_baseline.py --host HOST --guest-root /root/oe-resource-agent --output-root C:/oe-baseline-output --mode pilot --calibration-dir C:/oe-baseline-output/实际survey目录
-python Z:/research/analyze_baseline.py C:/oe-baseline-output/实际pilot目录
+python research/run_baseline.py --host HOST --guest-root /root/oe-resource-agent --output-root C:/oe-baseline-output --mode survey
+python research/analyze_baseline.py C:/oe-baseline-output/实际survey目录
+python research/run_baseline.py --host HOST --guest-root /root/oe-resource-agent --output-root C:/oe-baseline-output --mode pilot --calibration-dir C:/oe-baseline-output/实际survey目录
+python research/analyze_baseline.py C:/oe-baseline-output/实际pilot目录
 ```
 
 S7 的具体关卡：宿主 preflight/运行门槛通过；主/镜像计数与桶完全一致；常规窗口采集连续、实际持续时间为正且最长不超过 8 秒；客户端没有校准重启；mixed steady 聚合 EPS 覆盖至少 80%；动态负载的启动/退出区间和策略事件均可定位；每个 trial 的 Footer 导出耗时汇总及 client CPU 告警可见；最终 sched_ext disabled、controller/native/业务进程均已确认退出。未触发 adaptive 切换是明确的限制，不是伪造执行失败或改阈值重试的理由。
@@ -640,11 +640,11 @@ S0–S6、collector 本地副本修复、合法重试成功后的状态聚合和
 
 配置先冻结再实验，旧 study 的 profile/manifest 和当时审计状态不改。任务锁以非阻塞 flock 判定，正式窗口不并行构建、测试或分析。每种操作本轮最多一个 study，内部固定重试预算不变。新结果通过只代表默认环境测量和行为对照可用，不能称为低干扰基准或正式性能收益。
 
-## 9. 执行 Agent 约束与决策权限
+## 9. 执行约束与决策权限
 
 ### 9.1 架构决策：必须遵守
 
-- 以本文第 4 节作为跨 Agent 唯一接口契约。发现矛盾先向主 Agent 报告，由主 Agent 统一修订并广播，禁止各自改变字段。
+- 以本文第 4 节作为跨模块开发唯一接口契约。发现矛盾先向主架构设计者报告，统一修订并广播，禁止各自改变字段。
 - 只修改第 3 节白名单中的本人负责文件；共享来宾实验不得并发，代码编写按 Stage Map 并行。没有 Git 元数据时使用文件 diff 交付，不擅自初始化仓库或创建分支。
 - 依赖限于 Python 标准库、项目已有 Python 模块、OpenSSH、pwsh，以及目标机已有 nginx/sysbench/taskset/wrk2 构建依赖。不要引入 pytest、pandas、第三方 SSH SDK、Web 框架或新图表库。
 - 本阶段不修改调度算法、SLO 反馈规则、SCX 后端、cgroup/网络插件，不修改系统电源计划、关闭用户应用或修改 Hyper-V 配置。
@@ -656,10 +656,10 @@ S0–S6、collector 本地副本修复、合法重试成功后的状态聚合和
 
 私有帮助函数拆分、局部变量名、标准库序列化/原子写入方式、mock 写法、HTML 样式和补丁内部组织由执行者决定；遵循当前代码风格。无需给每个显然分支写样板测试，测试围绕契约、计数、时轴、重试和清理等真实失败模式。
 
-### 9.3 主 Agent 的集成责任
+### 9.3 主架构设计者的集成责任
 
 每个子任务提供负责文件、完整共享契约、前置产物位置、禁止修改范围与 verify 命令。前序源码变更在依赖节点开始前集成；同一文件只有一个写入 owner。阶段结果至少报告修改文件、通过关卡、原始证据路径和未解决问题，不能只回“完成”。
 
 ### 9.4 本阶段的取舍
 
-选用现有行为规则 Agent 做连续动态 pilot，避免为了测量先改造 SLO 窗口契约；SLO 连续指标适配属于阶段二。选择镜像 HDR，避免重置主 HDR 破坏独立守恒检查。选择新增专用入口，避免把旧固定窗口、旧动态和旧抢占报告强行统一成大重构。选择小规模单周期验证，正式五周期和完整策略矩阵留给后续性能评价阶段。
+选用现有行为规则控制器（Agent）做连续动态 pilot，避免为了测量先改造 SLO 窗口契约；SLO 连续指标适配属于阶段二。选择镜像 HDR，避免重置主 HDR 破坏独立守恒检查。选择新增专用入口，避免把旧固定窗口、旧动态和旧抢占报告强行统一成大重构。选择小规模单周期验证，正式五周期和完整策略矩阵留给后续性能评价阶段。

@@ -44,13 +44,13 @@ python -m unittest discover -s tests -p test_baseline_host.py -v
 5. 每种操作本轮最多一个 study，内部固定重试预算不变。数据/执行错误保存证据并停止，不为取得结果无限开新目录。
 
 ```powershell
-python Z:/research/run_baseline.py --host 172.26.1.3 --guest-root /root/oe-resource-agent --output-root C:/oe-baseline-output --mode survey
-python Z:/research/analyze_baseline.py C:/oe-baseline-output/实际新survey目录
-python Z:/research/run_baseline.py --host 172.26.1.3 --guest-root /root/oe-resource-agent --output-root C:/oe-baseline-output --mode pilot --calibration-dir C:/oe-baseline-output/实际已通过survey目录
-python Z:/research/analyze_baseline.py C:/oe-baseline-output/实际新pilot目录
+python research/run_baseline.py --host 172.26.1.3 --guest-root /root/oe-resource-agent --output-root C:/oe-baseline-output --mode survey
+python research/analyze_baseline.py C:/oe-baseline-output/实际新survey目录
+python research/run_baseline.py --host 172.26.1.3 --guest-root /root/oe-resource-agent --output-root C:/oe-baseline-output --mode pilot --calibration-dir C:/oe-baseline-output/实际已通过survey目录
+python research/analyze_baseline.py C:/oe-baseline-output/实际新pilot目录
 ```
 
-Z: 不可用时替换为 UNC 脚本路径，不改变 collector 的本地副本启动方式。
+网络映射盘不可用时替换为 UNC 脚本路径，不改变 collector 的本地副本启动方式。
 
 ## 5. 完成条件
 

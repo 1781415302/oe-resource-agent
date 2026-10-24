@@ -1,5 +1,7 @@
 # 唤醒抢占专家：0.1.3
 
+> 本文记录 0.1.x 阶段设计，当前版本 0.2.0，最新数据见课程报告。
+
 ## 目的与实现
 
 同样是1ms时间片，刚唤醒的服务任务仍可能等待正在执行的批处理任务用完预算。候选保留原有加权虚拟时间队列与实际CPU运行时间扣账，增加有条件的重新调度请求与唤醒虚拟时间信用补偿：
@@ -36,7 +38,7 @@ Windows入口为工作区 `research/run_host_controlled.py`，来宾入口为 `e
 - 开始前连续30秒宿主CPU采样不超过20%；运行中不超过30%。每5秒采样，最大间隔8秒。
 - 仅宿主负载或采样质量失败允许整周期重试，每周期最多两次，保持相同顺序，保留全部尝试。
 - 请求错误、延迟大、吞吐下降和无收益不会触发择优重试；执行失败保留并停止研究。
-- 采样门槛不能证明消除所有Windows后台、电源频率、VMware暂停、内存和I/O干扰。
+- 采样门槛不能证明消除所有 Windows 后台、电源频率、虚拟化宿主调度暂停（早期测试平台曾包含 VMware，当前环境为 Hyper-V）、内存和 I/O 干扰。
 
 ## 指标与原始证据
 
@@ -48,7 +50,7 @@ Windows入口为工作区 `research/run_host_controlled.py`，来宾入口为 `e
 
 ## 复现
 
-来宾先完成 `bash build.sh`，准备 `/root/euler-bench` 0.1.1与带对齐导出的wrk2。Windows需要Python3.9以上和OpenSSH，密钥由用户配置。
+来宾先完成 `bash build.sh`，准备带对齐导出的 wrk2（早期历史测试曾依赖 euler-bench 0.1.1）。Windows 端若使用自动化驱动脚本需要 Python 3.9 以上和 OpenSSH，密钥由用户配置。
 
 ```powershell
 python research/run_host_controlled.py --host 192.168.200.130 --key E:/ddemo/.vm-access/openeuler_ed25519 --mode smoke

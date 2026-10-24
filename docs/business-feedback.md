@@ -1,5 +1,7 @@
 # 业务窗口与SLO控制
 
+> 本文记录 0.1.x 阶段设计，当前版本 0.2.0，最新数据见课程报告。
+
 0.1.2增加业务反馈模式。旧nginx-cpu配置继续按进程行为选择策略；nginx-slo配置等待真实业务窗口，先取得默认基线，再决定是否探测1ms。
 
 ## 工具与运行
@@ -42,7 +44,7 @@ python3 experiments/run_fixed_rate.py --mode survey
 python3 experiments/run_fixed_rate.py --mode quick
 ```
 
-需要已部署/root/euler-bench 0.1.1、匹配原生后端与固定提交wrk2源码包。客户端使用独立路径，不覆盖系统wrk。准备命令的源码、基线包SHA、补丁、编译器与二进制指纹写入state/wrk2-build.json。
+需要匹配原生后端与固定提交 wrk2 源码包（早期历史测试曾依赖 `/root/euler-bench` 0.1.1）。客户端使用独立路径，不覆盖系统wrk。准备命令的源码、基线包SHA、补丁、编译器与二进制指纹写入state/wrk2-build.json。
 
 上游提交44a94c17d8e6a0bac8559b53da76848e430cb7a7在校准时清空HDR，却保留总完成数。本项目补丁在校准与事件循环结束记录单调时钟及计数快照，限定一个客户端线程；计划发送和HDR算法保持原样。结束边界响应在上游会先计完成数再跳过HDR，本项目独立计数terminal_exclusions并核对差额，不补造延迟样本。
 
