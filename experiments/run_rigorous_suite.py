@@ -1097,13 +1097,13 @@ def generate_html_report(data: dict, out_path: Path) -> None:
           </thead>
           <tbody>
             <tr>
-              <td>1. 无插件默认调度 (CFS 1024:1024)</td>
+              <td>1. 无插件默认调度 (EEVDF 1024:1024)</td>
               <td>{c_no['nginx_cpu_share_pct']['mean']}%</td>
               <td>{c_no['avg_wait_us']['mean']} µs</td>
               <td>{c_no['p99_ms']['mean']} ± {c_no['p99_ms']['sd']} ms</td>
             </tr>
             <tr>
-              <td>2. 开启 Cgroup(4096:1024) + nice=15 兜底 (CFS 宏观份额)</td>
+              <td>2. 开启 Cgroup(4096:1024) + nice=15 兜底 (EEVDF 宏观份额)</td>
               <td><strong>{c_cg['nginx_cpu_share_pct']['mean']}%</strong></td>
               <td><strong>{c_cg['avg_wait_us']['mean']} µs</strong></td>
               <td><strong style="color:#38bdf8;">{c_cg['p99_ms']['mean']} ± {c_cg['p99_ms']['sd']} ms</strong></td>
@@ -1116,7 +1116,7 @@ def generate_html_report(data: dict, out_path: Path) -> None:
             </tr>
           </tbody>
         </table>
-        <p class="sub" style="margin-top:8px;">* 说明：Cgroup 兜底有效将单次平均等待压降 26.5%（1506.7µs → 1107.0µs），但因 CFS 组调度引入分层队列遍历且无即时抢占，p99 存在偶发时延抖动；只有结合 SCX 唤醒抢占后，微观排队才被压降 97 倍并稳定 p99。</p>
+        <p class="sub" style="margin-top:8px;">* 说明：Cgroup 兜底有效将单次平均等待从 1506.7µs 压降至 1107.0µs（压降 399.7µs，独立细粒度消融实测详见报告 4.6.1 节 1556.0µs → 1026.7µs [-34.0%]），但因 EEVDF 依据虚拟截止期分时且无即时抢占，p99 存在偶发时延抖动；只有结合 SCX 唤醒抢占后，微观排队才被压降 97 倍并稳定 p99。</p>
       </div>
       <div>
         <h3>4.2 异常端口洪泛冲击：无 eBPF 熔断 vs 开启 eBPF TC_ACT_SHOT 自动熔断</h3>
@@ -1144,7 +1144,7 @@ def generate_html_report(data: dict, out_path: Path) -> None:
             </tr>
           </tbody>
         </table>
-        <p class="sub" style="margin-top:8px;">* 攻击模型说明：靶点服务为同核 CPU0 上执行 40,000 轮自旋计算的辅助进程；TC 层丢弃报文使靶点完全休眠，避免了近千次自旋计算对 CPU0 的算力抢占。</p>
+        <p class="sub" style="margin-top:8px;">* 攻击模型说明：靶点服务为同核 CPU0 上执行 40,000 轮自旋计算的辅助进程（无 sysbench 干扰）；TC 层丢弃报文使靶点完全休眠，避免了近千次自旋计算对 CPU0 的算力抢占（严谨套件实测 1541.4µs → 0.4µs，拦截 972 包；细粒度消融中亦测得 0.8µs 极低等待与 950 包拦截）。</p>
         <p class="sub" style="margin-top:6px;">
           ✓ <strong>边界与安全策略执行验证</strong>：白名单业务端口（80/18086）防误封拦截 = <code>{guards['protected_port_whitelist_rejected_drop_on_80']}</code> |
           Ingress+Egress 双向挂载 = <code>{guards['ingress_egress_dual_direction_supported']}</code> |

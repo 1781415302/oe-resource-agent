@@ -347,7 +347,7 @@
     <div class="btn-group">
       <span style="font-size:12px;color:var(--muted);font-weight:600;">手动切换内核调度 / BPF 热更新：</span>
       <button class="btn" id="btnPolDefault" onclick="sendControl({action:'set_policy',policy:'default'})">
-        🔄 默认 CFS/EEVDF
+        🔄 默认 EEVDF
       </button>
       <button class="btn" id="btnPolScx1m" onclick="sendControl({action:'set_policy',policy:'scx',slice_us:1000,wakeup_preempt:true})">
         ⚡ SCX 1ms + 唤醒抢占
@@ -388,7 +388,7 @@
       <span id="schedStateBadge" style="color:#a855f7;font-weight:700;">state: disabled</span>
     </div>
     <div class="kpi-main" id="kpiPolicy" style="font-size:20px;">kernel.default</div>
-    <div class="kpi-sub" id="kpiBpfMap">CFS/EEVDF 默认调度 &nbsp;|&nbsp; BPF Map 未挂载</div>
+    <div class="kpi-sub" id="kpiBpfMap">EEVDF 默认调度 &nbsp;|&nbsp; BPF Map 未挂载</div>
   </div>
 
   <div class="kpi-card amber">
@@ -613,8 +613,8 @@
           <td style="padding:8px 10px;"><span style="color:#34d399;">✓ 18095 端口自动恢复连通 (HTTP 200, 0.43 ms) | 零内核残留状态</span></td>
         </tr>
         <tr style="background:rgba(16,185,129,0.11);">
-          <td style="padding:8px 10px;"><strong>阶段 5：CFS 默认调度下 Cgroup 自动隔离实测</strong><br><span style="color:var(--muted);font-size:11px;"><code>mode=default</code> 同核争抢自动赋权验证</span></td>
-          <td style="padding:8px 10px;">固定 <code>kernel.default</code> (CFS)</td>
+          <td style="padding:8px 10px;"><strong>阶段 5：EEVDF 默认调度下 Cgroup 自动隔离实测</strong><br><span style="color:var(--muted);font-size:11px;"><code>mode=default</code> 同核争抢自动赋权验证</span></td>
+          <td style="padding:8px 10px;">固定 <code>kernel.default</code> (EEVDF)</td>
           <td style="padding:8px 10px;"><strong style="color:#34d399;">自动识别争抢并下发 <code>4096 : 1024</code> 权重</strong></td>
           <td style="padding:8px 10px;">自动挂载观测模式</td>
           <td style="padding:8px 10px;"><strong style="color:#34d399;">✓ 实测前台算力占比提升至 79.8% vs 20.2% (3.94 : 1，吻合理论 4 : 1)</strong></td>
@@ -846,7 +846,7 @@ function updateUI(data) {
   } else {
     document.getElementById("kpiPolicy").textContent = "kernel.default";
     document.getElementById("kpiPolicy").style.color = "#f1f5f9";
-    document.getElementById("kpiBpfMap").textContent = "CFS/EEVDF 默认调度 | BPF Map 未挂载";
+    document.getElementById("kpiBpfMap").textContent = "EEVDF 默认调度 | BPF Map 未挂载";
   }
 
   // KPI 4: Sysbench
