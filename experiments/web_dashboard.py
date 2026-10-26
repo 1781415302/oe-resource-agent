@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
+from dataclasses import replace
 from collections import deque
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
@@ -18,10 +20,16 @@ import tempfile
 import threading
 import time
 import urllib.request
+from urllib.parse import parse_qs, urlsplit
 import webbrowser
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT))
+from oeagent.demo_tuning import SCENARIOS, STRATEGIES
+from oeagent.demo_control import DemoControl
+from oeagent.weighted_agent import AgentWeights, WeightedAgent
+from oeagent.live_observe import LiveSampler
 HTML_PATH = REPO_ROOT / "docs" / "demo-dashboard.html"
 IS_LINUX = platform.system().lower() == "linux"
 
@@ -31,6 +39,7 @@ if IS_LINUX:
     from oeagent.backend import NativeBackend, sched_state
     from oeagent.observe import process_snapshot
     from oeagent.plugins import CgroupPlugin, NetworkHookPlugin, SecurityHookPlugin
+    from oeagent import demo_evidence
 
 
 def _now_hms() -> str:
@@ -53,11 +62,12 @@ def _read_proc_ticks(pid: int) -> int:
         return 0
 
 
-class LiveSandbox:
+class LiveSandbox(DemoControl):
     """Manages real Nginx, wrk2, sysbench, SCX, Cgroup, and eBPF processes in the VM."""
 
     def __init__(self) -> None:
         self.lock = threading.RLock()
+        self.repo_root = REPO_ROOT
         self.work_dir = Path(tempfile.mkdtemp(prefix="oe-live-sandbox-"))
         self.nginx_port = 18091
         self.ebpf_port = 18095
@@ -65,19 +75,65 @@ class LiveSandbox:
         self.wrk_proc: subprocess.Popen | None = None
         self.sysbench_proc: subprocess.Popen | None = None
         self.ebpf_http_proc: subprocess.Popen | None = None
+        self.compute_proc = None
+        self.burst_proc = None
+        self.auxiliary_logs = {}
+        self._idle_flags = None
+        self.scenario_id = "service"
+        self.scenario = deepcopy(SCENARIOS[self.scenario_id])
+        self.offered_rps = self.scenario["rps"]
+        self.batch_threads = self.scenario["threads"]
+        self.batch_kind = "sysbench"
+        self.request_path = "/index.html"
+        self.workload_revision = 0
+        self.policy_revision = 0
+        self.policy_since = time.monotonic()
+        self.scenario_since = time.monotonic()
+        self.control_mode = "autonomous"
+        self.experiment_sampling = False
+        self.live_agent = WeightedAgent()
+        self.live_sampler = LiveSampler()
+        self.network_auto_requested = False
+        self.background_points = deque(maxlen=2400)
+        self.front_windows = deque(maxlen=240)
+        self.tuning = None
+        self.tuning_running = False
+        self.tuning_run_id = None
+        self.tuning_started_utc = None
+        self.tuning_seen = set()
+        self.tuning_last_batch_end = None
+        self.last_decision = None
+        self.monitor_since = None
+        self.monitor_bad_streak = 0
+        self.next_search_after = None
+        self.auto_search_options = {"repeats": 1, "windows": 3}
+        self.suite = {"running": False, "results": [], "remaining": [], "reason": "尚未运行本机典型场景测试"}
+        self.saved_suite = None
+        suite_path = REPO_ROOT / "state/demo-suite-latest.json"
+        if suite_path.is_file():
+            try:
+                self.saved_suite = json.loads(suite_path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                pass
 
         self.traffic_enabled = True
         self._auto_idled = False
         self.sysbench_enabled = False
-        self.auto_agent = False
+        self.auto_agent = True
         self.choreography_running = False
         self.choreography_stage = "就绪：可随时点击下方开关或启动实况剧本"
 
-        self.sysbench_latest_eps = 0.0
+        self.sysbench_latest_eps = None
+        self.sysbench_last_report = None
         self.last_client_poll = time.monotonic()
         self.seq = 0
-        self.history: deque[dict] = deque(maxlen=45)
+        self.history: deque[dict] = deque(maxlen=180)
+        self.scene_events: deque[dict] = deque(maxlen=32)
         self.logs: deque[dict] = deque(maxlen=50)
+        self.machine = demo_evidence.identity(REPO_ROOT, self.work_dir)
+        self.wrk_window = None
+        self.wrk_phase = "calibrating"
+        self._evidence_cache = {}
 
         self.backend = NativeBackend(self._on_backend_event, self.work_dir)
         self.cgroup_plugin = CgroupPlugin()
@@ -106,16 +162,16 @@ class LiveSandbox:
             "running": False,
             "low_shares": 1024,
             "high_shares": 4096,
-            "low_ticks": 40,
-            "high_ticks": 159,
-            "low_pct": 20.1,
-            "high_pct": 79.9,
-            "ratio": 3.98,
+            "measured": False,
+            "measured_utc": None,
+            "low_ticks": None,
+            "high_ticks": None,
+            "low_pct": None,
+            "high_pct": None,
+            "ratio": None,
             "expected_ratio": 4.0,
         }
 
-        self._high_wait_streak = 0
-        self._no_batch_streak = 0
         self._auto_cgroup_pids: dict[str, list[int]] = {"latency": [], "batch": []}
         self._prev_ebpf_target_pkts: int | None = None
         self._ebpf_auto_cooldown = 0
@@ -132,7 +188,9 @@ class LiveSandbox:
         self._thread.start()
 
     def _on_backend_event(self, ev: dict) -> None:
-        pass
+        with (self.work_dir / "native-events.jsonl").open("a", encoding="utf-8") as stream:
+            stream.write(json.dumps({"utc": demo_evidence.utc_now(), **ev}, ensure_ascii=False) + "\n")
+        self._log("[原生后端回读] " + json.dumps(ev, ensure_ascii=False), "info")
 
     def _log(self, msg: str, level: str = "info") -> None:
         self.logs.append({"ts": _now_hms(), "level": level, "msg": msg})
@@ -169,6 +227,17 @@ class LiveSandbox:
                 self._stop_traffic_locked()
                 return
             if self.nginx_proc is None or self.nginx_proc.poll() is not None:
+                if self.scenario.get("compute"):
+                    self.compute_proc = self._start_auxiliary("compute", "0")
+                    deadline = time.monotonic() + 5
+                    while time.monotonic() < deadline:
+                        try:
+                            with socket.create_connection(("127.0.0.1", 18093), timeout=.2):
+                                break
+                        except OSError:
+                            time.sleep(.05)
+                    else:
+                        raise RuntimeError("请求内计算服务未就绪")
                 d = self.work_dir / f"nginx-{int(time.time()*1000)}"
                 d.mkdir(parents=True, exist_ok=True)
                 cfg, page = _prepare_nginx(d, {"port": self.nginx_port, "page_bytes": 4096, "service_cpus": [0]})
@@ -179,6 +248,11 @@ class LiveSandbox:
                     ),
                     encoding="utf-8",
                 )
+                if self.scenario.get("compute"):
+                    cfg.write_text(cfg.read_text(encoding="utf-8").replace(
+                        "location = /index.html { }", "location = /index.html { }\n"
+                        "    location = /compute { proxy_pass http://127.0.0.1:18093; "
+                        "proxy_http_version 1.1; proxy_set_header Connection \"\"; }"), encoding="utf-8")
                 self.nginx_proc = subprocess.Popen(
                     ["taskset", "-c", "0", shutil.which("nginx"), "-p", str(d) + "/", "-c", str(cfg)],
                     stdout=subprocess.DEVNULL,
@@ -187,6 +261,9 @@ class LiveSandbox:
                 _wait_ready(self.nginx_proc, f"http://127.0.0.1:{self.nginx_port}/index.html", page)
 
             if self.wrk_proc is None or self.wrk_proc.poll() is not None:
+                self.wrk_window = None
+                self.wrk_phase = "calibrating"
+                environment = {**os.environ, "OE_WRK2_WINDOW_MS": "5000"}
                 self.wrk_proc = subprocess.Popen(
                     [
                         "taskset",
@@ -197,14 +274,66 @@ class LiveSandbox:
                         "-c32",
                         "-d600s",
                         "-T3s",
-                        "-R25600",
-                        f"http://127.0.0.1:{self.nginx_port}/index.html",
+                        f"-R{self.offered_rps}",
+                        f"http://127.0.0.1:{self.nginx_port}{self.request_path}",
                     ],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    errors="replace",
+                    bufsize=1,
+                    env=environment,
                 )
+                threading.Thread(target=self._read_wrk_stdout, args=(self.wrk_proc,), daemon=True).start()
+            if self.scenario.get("burst") and (self.burst_proc is None or self.burst_proc.poll() is not None):
+                self.burst_proc = self._start_auxiliary("burst", "3")
+
+    def _start_auxiliary(self, mode, cpu):
+        path = self.work_dir / f"{mode}-{time.time_ns()}.log"
+        self.auxiliary_logs[mode] = str(path)
+        with path.open("w", encoding="utf-8") as stream:
+            return subprocess.Popen(["taskset", "-c", cpu, sys.executable,
+                                     str(REPO_ROOT / "experiments/demo_load_worker.py"), mode],
+                                    stdout=stream, stderr=subprocess.STDOUT)
+
+    @staticmethod
+    def _terminate(proc):
+        if proc is not None and proc.poll() is None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.wait(timeout=2)
+
+    def _read_wrk_stdout(self, proc) -> None:
+        with (self.work_dir / f"wrk2-{proc.pid}.log").open("a", encoding="utf-8") as stream:
+            for line in proc.stdout:
+                stream.write(line)
+                stream.flush()
+                if self.wrk_proc is not proc or not line.startswith("OE_WRK2_STREAM "):
+                    continue
+                try:
+                    raw = line.split(" ", 1)[1].strip()
+                    record = json.loads(raw)
+                    with self.lock:
+                        if self.wrk_proc is not proc:
+                            continue
+                        if record.get("kind") == "ready":
+                            self.wrk_phase = "awaiting_window"
+                        summary = demo_evidence.wrk_window(record, raw.encode("utf-8"), self.offered_rps)
+                        if summary is not None and summary["start_monotonic"] >= self.scenario_since:
+                            self.wrk_window = {**summary, "pid": proc.pid, "raw_log": str(stream.name)}
+                            self.front_windows.append(self.wrk_window)
+                            self.wrk_phase = "measuring"
+                except (ValueError, KeyError, TypeError) as exc:
+                    self._log(f"wrk2 窗口无效: {exc}", "err")
 
     def _stop_traffic_locked(self) -> None:
+        self.wrk_phase = "stopped"
+        for attribute in ("burst_proc", "compute_proc"):
+            self._terminate(getattr(self, attribute, None))
+            setattr(self, attribute, None)
         if self.wrk_proc is not None:
             self.wrk_proc.terminate()
             try:
@@ -223,11 +352,20 @@ class LiveSandbox:
     def _read_sysbench_stdout(self, proc: subprocess.Popen) -> None:
         if proc.stdout is None:
             return
-        pattern = re.compile(r"eps:\s*([0-9.]+)")
-        for line in proc.stdout:
-            m = pattern.search(line)
-            if m:
-                self.sysbench_latest_eps = float(m.group(1))
+        pattern = re.compile(r"\[\s*([0-9.]+)s\s*\].*eps:\s*([0-9.]+)")
+        with (self.work_dir / f"sysbench-{proc.pid}.log").open("a", encoding="utf-8") as stream:
+            for line in proc.stdout:
+                stream.write(line)
+                stream.flush()
+                m = pattern.search(line)
+                with self.lock:
+                    if m and self.sysbench_proc is proc:
+                        self.sysbench_latest_eps = float(m.group(2))
+                        self.sysbench_last_report = time.monotonic()
+                        self.background_points.append({"elapsed_seconds": float(m.group(1)),
+                            "events_per_sec": self.sysbench_latest_eps, "raw_line": line.rstrip("\n"),
+                            "raw_log": str(stream.name),
+                            "received_monotonic": self.sysbench_last_report, "pid": proc.pid})
 
     def _ensure_sysbench(self) -> None:
         with self.lock:
@@ -240,23 +378,19 @@ class LiveSandbox:
                         self.sysbench_proc.kill()
                     self.sysbench_proc = None
                 self.sysbench_latest_eps = 0.0
+                self.sysbench_last_report = None
                 return
             if self.sysbench_proc is None or self.sysbench_proc.poll() is not None:
+                self.sysbench_latest_eps = None
+                self.sysbench_last_report = None
+                self.background_points.clear()
+                argv = [shutil.which("sysbench"), "cpu", f"--threads={self.batch_threads}",
+                        "--cpu-max-prime=10000", "--time=3600", "--report-interval=1", "run"]
+                if self.batch_kind != "sysbench":
+                    argv = [sys.executable, "-u", str(REPO_ROOT / "experiments/demo_load_worker.py"),
+                            self.batch_kind, "--threads", str(self.batch_threads)]
                 self.sysbench_proc = subprocess.Popen(
-                    [
-                        "stdbuf",
-                        "-oL",
-                        "taskset",
-                        "-c",
-                        "0",
-                        shutil.which("sysbench"),
-                        "cpu",
-                        "--threads=1",
-                        "--cpu-max-prime=10000",
-                        "--time=3600",
-                        "--report-interval=1",
-                        "run",
-                    ],
+                    ["stdbuf", "-oL", "taskset", "-c", "0", *argv],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     text=True,
@@ -265,7 +399,7 @@ class LiveSandbox:
                 t = threading.Thread(target=self._read_sysbench_stdout, args=(self.sysbench_proc,), daemon=True)
                 t.start()
 
-    def _probe_http_and_sched(self, duration: float = 0.55) -> dict:
+    def _probe_http_and_sched(self, duration: float = 0.55, http_enabled=True, max_requests=None) -> dict:
         nginx_pid = self.nginx_proc.pid if (self.nginx_proc and self.nginx_proc.poll() is None) else None
         sysb_pid = self.sysbench_proc.pid if (self.sysbench_proc and self.sysbench_proc.poll() is None) else None
 
@@ -274,13 +408,15 @@ class LiveSandbox:
         t0_wall = time.monotonic()
 
         latencies: list[float] = []
-        if nginx_pid is not None:
-            req = b"GET /index.html HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: keep-alive\r\n\r\n"
+        probe_errors = probe_attempts = 0
+        if nginx_pid is not None and http_enabled:
+            req = f"GET {getattr(self, 'request_path', '/index.html')} HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: keep-alive\r\n\r\n".encode()
             buf = bytearray(8192)
             sock: socket.socket | None = None
             deadline = t0_wall + duration
             while time.monotonic() < deadline:
                 try:
+                    probe_attempts += 1
                     if sock is None:
                         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                         sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
@@ -295,8 +431,11 @@ class LiveSandbox:
                             raise ConnectionError("EOF")
                         got += n
                     latencies.append((time.perf_counter_ns() - req_t0) / 1e6)
+                    if max_requests is not None and len(latencies) >= max_requests:
+                        break
                     time.sleep(0.002)
                 except Exception:
+                    probe_errors += 1
                     if sock is not None:
                         try:
                             sock.close()
@@ -308,6 +447,8 @@ class LiveSandbox:
                     sock.close()
                 except Exception:
                     pass
+            if max_requests is not None:
+                time.sleep(max(0, duration - (time.monotonic() - t0_wall)))
         else:
             time.sleep(duration)
 
@@ -315,11 +456,12 @@ class LiveSandbox:
         s1 = _read_schedstat(nginx_pid) if nginx_pid else None
         b1 = _read_proc_ticks(sysb_pid) if sysb_pid else None
 
-        wait_pct = 0.0
-        avg_wait_us = 0.0
-        slices_per_s = 0.0
-        nginx_cpu_pct = 0.0
-        if s0 and s1:
+        wait_pct = None
+        avg_wait_us = None
+        slices_per_s = None
+        nginx_cpu_pct = None
+        sched_valid = bool(s0 and s1 and all(after >= before for before, after in zip(s0, s1)))
+        if sched_valid:
             dr = max(0, s1[0] - s0[0])
             dw = max(0, s1[1] - s0[1])
             ds = max(0, s1[2] - s0[2])
@@ -330,7 +472,7 @@ class LiveSandbox:
             slices_per_s = round(ds / dt, 1)
             nginx_cpu_pct = round((dr / 1e9) / dt * 100.0, 1)
 
-        sysb_cpu_pct = 0.0
+        sysb_cpu_pct = 0.0 if sysb_pid is None else None
         if b0 is not None and b1 is not None:
             clk_tck = os.sysconf("SC_CLK_TCK")
             b_dticks = max(0, b1 - b0)
@@ -338,9 +480,13 @@ class LiveSandbox:
 
         latencies.sort()
         n_lat = len(latencies)
-        p50 = round(latencies[int(n_lat * 0.50)], 3) if n_lat else 0.0
-        p95 = round(latencies[int(n_lat * 0.95)], 3) if n_lat else 0.0
-        p99 = round(latencies[int(n_lat * 0.99)], 3) if n_lat else 0.0
+        p50 = round(latencies[int(n_lat * 0.50)], 3) if n_lat else None
+        p95 = round(latencies[int(n_lat * 0.95)], 3) if n_lat else None
+        p99 = round(latencies[int(n_lat * 0.99)], 3) if n_lat else None
+        last_report = getattr(self, "sysbench_last_report", None)
+        report_age = time.monotonic() - last_report if last_report is not None else None
+        eps = (round(self.sysbench_latest_eps, 1) if self.sysbench_latest_eps is not None
+               and report_age is not None and report_age <= 3 else None) if self.sysbench_enabled else 0.0
 
         return {
             "http_p50_ms": p50,
@@ -351,167 +497,112 @@ class LiveSandbox:
             "nginx_slices_per_s": slices_per_s,
             "nginx_cpu_pct": nginx_cpu_pct,
             "sysbench_cpu_pct": sysb_cpu_pct,
-            "sysbench_eps": round(self.sysbench_latest_eps, 1) if self.sysbench_enabled else 0.0,
+            "sysbench_eps": eps,
+            "sysbench_report_age_seconds": round(report_age, 3) if report_age is not None else None,
+            "probe_samples": n_lat,
+            "probe_errors": probe_errors,
+            "probe_attempts": probe_attempts,
+            "sample_seconds": round(dt, 4),
+            "sample_ended_monotonic": time.monotonic(),
+            "sample_utc": demo_evidence.utc_now(),
+            "nginx_pid": nginx_pid,
+            "sysbench_pid": sysb_pid,
+            "raw_schedstat": {"before": s0, "after": s1},
+            "schedstat_valid": sched_valid,
         }
 
-    def _run_auto_agent_step(self, metrics: dict) -> None:
-        if not self.auto_agent:
-            self._high_wait_streak = 0
-            self._no_batch_streak = 0
-            return
+    def process_ids(self) -> dict:
+        owned = {"agent": os.getpid(), "nginx": None, "wrk2": None, "sysbench": None, "scx": None,
+                 "compute": None, "burst": None}
+        for role, proc in (("nginx", self.nginx_proc), ("wrk2", self.wrk_proc),
+                           ("sysbench", self.sysbench_proc), ("scx", self.backend.process)):
+            if proc is not None and proc.poll() is None:
+                owned[role] = proc.pid
+        for role in ("compute", "burst"):
+            proc = getattr(self, role + "_proc", None)
+            if proc is not None and proc.poll() is None:
+                owned[role] = proc.pid
+        return owned
 
-        # 1. Auto-attach & auto-monitor eBPF TC hook on port 18095
-        if not self.ebpf_state["attached"]:
-            try:
-                res = self.net_plugin.attach({"interface": "lo", "target_port": self.ebpf_port, "drop_target": False})
-                self.ebpf_state["attached"] = True
-                self.ebpf_state["drop_target"] = False
-                if res.get("stats"):
-                    self.ebpf_state["stats"] = res["stats"]
-                    self._prev_ebpf_target_pkts = int(res["stats"].get("target_packets", 0))
-                self._log(
-                    f"🛡️ [Agent 自动闭环 · eBPF] 已自动在 lo 挂载 TC 流量监测探针 (port={self.ebpf_port}, drop_target=0)",
-                    "ok",
-                )
-            except Exception as exc:
-                self._log(f"Agent 自动挂载 eBPF 失败: {exc}", "err")
-        else:
-            try:
-                st = self.net_plugin.status()
-                stats = st.get("stats") or {}
-                if stats:
-                    self.ebpf_state["stats"] = stats
-                cur_pkts = int(stats.get("target_packets", 0))
-                delta_pkts = max(0, cur_pkts - (self._prev_ebpf_target_pkts if self._prev_ebpf_target_pkts is not None else cur_pkts))
-                self._prev_ebpf_target_pkts = cur_pkts
-                if not self.ebpf_state["drop_target"] and delta_pkts >= 15:
-                    res = self.net_plugin.attach({"interface": "lo", "target_port": self.ebpf_port, "drop_target": True})
-                    self.ebpf_state["drop_target"] = True
-                    self._ebpf_auto_cooldown = 4
-                    if res.get("stats"):
-                        self.ebpf_state["stats"] = res["stats"]
-                    self._log(
-                        f"🔴 [Agent 自动闭环 · eBPF 熔断] 检测到端口 {self.ebpf_port} 突发高频流量 "
-                        f"(Δpackets={delta_pkts}/窗) → 自动下发 drop_target=1 (TC_ACT_SHOT 零拷贝阻断)！",
-                        "warn",
-                    )
-                elif self.ebpf_state["drop_target"] and self._ebpf_auto_cooldown > 0:
-                    self._ebpf_auto_cooldown -= 1
-                    if self._ebpf_auto_cooldown == 0 and delta_pkts < 15:
-                        res = self.net_plugin.attach({"interface": "lo", "target_port": self.ebpf_port, "drop_target": False})
-                        self.ebpf_state["drop_target"] = False
-                        if res.get("stats"):
-                            self.ebpf_state["stats"] = res["stats"]
-                        self._log(
-                            f"🟢 [Agent 自动闭环 · eBPF 恢复] 端口 {self.ebpf_port} 流量恢复正常 → 自动解除阻断 (TC_ACT_OK)",
-                            "ok",
-                        )
-            except Exception:
-                pass
+    def evidence(self, view="system") -> dict:
+        if view not in demo_evidence.VIEWS:
+            raise ValueError("Unknown evidence view")
+        with self.lock:
+            pids = self.process_ids()
+            pin = self.backend.pin_dir / "control" if self.backend.process is not None and self.backend.pin_dir else None
+            key = (view, tuple(pids.items()), str(pin))
+            cached = self._evidence_cache.get(key)
+            if cached is None or time.monotonic() - cached[0] >= 1:
+                cached = (time.monotonic(), demo_evidence.readbacks(view, pids, pin))
+                self._evidence_cache = {key: cached}
+        return {**cached[1], "machine": self.machine,
+                "age_seconds": round(time.monotonic() - cached[1]["captured_monotonic"], 3)}
 
-        snap = self.backend.snapshot()
-        scx_active = snap.get("policy_id") == "scx.slice"
+    def export_evidence(self) -> dict:
+        state = self.get_state()
+        return {"schema_version": 1, "exported_utc": demo_evidence.utc_now(), "state": state,
+                "readbacks": {view: self.evidence(view) for view in demo_evidence.VIEWS},
+                "measurement_notes": {
+                    "http_probe": "short HTTP probe window, separate from wrk2 HDR",
+                    "nginx_wait_pct": "delta wait_ns / (delta runtime_ns + delta wait_ns)",
+                    "nginx_avg_wait_us": "delta wait_ns / delta schedule_count / 1000; not wakeup-only",
+                    "wrk2": "actual completions and HDR statistics from continuous 5s windows",
+                    "cgroup": "last completed experiment; null until measured",
+                }}
 
-        if self.sysbench_enabled and metrics["nginx_wait_pct"] >= 30.0:
-            self._high_wait_streak += 1
-        else:
-            self._high_wait_streak = 0
+    def export_tuning(self) -> dict:
+        with self.lock:
+            return {"schema_version": 1, "exported_utc": demo_evidence.utc_now(), "machine": self.machine,
+                    "current_scenario": self._effective_scenario(), "running": self.tuning_running,
+                    "current_search": self.tuning.status(raw=True) if self.tuning else None,
+                    "suite": deepcopy(self.suite), "saved_suite": deepcopy(self.saved_suite)}
 
-        if not self.sysbench_enabled:
-            self._no_batch_streak += 1
-        else:
-            self._no_batch_streak = 0
+    def experiment_snapshot(self) -> dict:
+        """Read-only raw observations for reproducible external experiments."""
+        with self.lock:
+            return {"state": self._get_state(), "captured_monotonic": time.monotonic(),
+                    "policy_since": self.policy_since, "policy_revision": self.policy_revision,
+                    "scenario_since": self.scenario_since, "uniform_probes": self.experiment_sampling,
+                    "frontend_windows": list(self.front_windows), "background_points": list(self.background_points),
+                    "kernel_snapshot": self.backend.snapshot()}
 
-        if not scx_active and self._high_wait_streak >= 2:
-            self._high_wait_streak = 0
-            try:
-                # Step A: Automatic LSM security audit on nginx & sysbench
-                ng_pids = self._get_nginx_worker_pids()
-                sb_pid = self.sysbench_proc.pid if (self.sysbench_proc and self.sysbench_proc.poll() is None) else None
-                for pid in (ng_pids[:1] + ([sb_pid] if sb_pid else [])):
-                    try:
-                        audit = self.sec_plugin.audit({"pid": pid})
-                        self._log(
-                            f"🔒 [Agent 自动闭环 · LSM 审计] 核验 PID={pid} ({audit.get('comm')}): "
-                            f"label={audit.get('lsm_label')}, cap_eff={audit.get('cap_eff_hex')}",
-                            "info",
-                        )
-                    except Exception:
-                        pass
-
-                # Step B: Automatic Cgroup isolation (4096 vs 1024) before activating SCX
-                try:
-                    g_lat = self.cgroup_plugin.create({"group": "auto_latency"})
-                    g_bat = self.cgroup_plugin.create({"group": "auto_batch"})
-                    if g_lat["value"] != 4096:
-                        self.cgroup_plugin.apply({"group": "auto_latency", "expected_value": g_lat["value"], "value": 4096})
-                    if g_bat["value"] != 1024:
-                        self.cgroup_plugin.apply({"group": "auto_batch", "expected_value": g_bat["value"], "value": 1024})
-                    self._auto_cgroup_pids = {"latency": [], "batch": []}
-                    for pid in ng_pids:
-                        ps = process_snapshot(pid)
-                        if ps:
-                            self.cgroup_plugin.attach({"group": "auto_latency", "pid": pid, "expected_start_ticks": ps["start_ticks"]})
-                            self._auto_cgroup_pids["latency"].append(pid)
-                    if sb_pid:
-                        ps = process_snapshot(sb_pid)
-                        if ps:
-                            self.cgroup_plugin.attach({"group": "auto_batch", "pid": sb_pid, "expected_start_ticks": ps["start_ticks"]})
-                            self._auto_cgroup_pids["batch"].append(sb_pid)
-                    self._log(
-                        f"📦 [Agent 自动闭环 · Cgroup 隔离] 自动迁移 Nginx({self._auto_cgroup_pids['latency']}) → auto_latency(4096), "
-                        f"sysbench({self._auto_cgroup_pids['batch']}) → auto_batch(1024)",
-                        "ok",
-                    )
-                except Exception as exc:
-                    self._log(f"Agent 自动 Cgroup 隔离跳过: {exc}", "info")
-
-                # Step C: Activate SCX scheduler (1000us + wakeup_preempt)
-                res = self.backend.start(1000, wakeup_preempt=True)
-                self._log(
-                    f"⚡ [Agent 自动闭环 · SCX 调度] 连续 2 窗检测到 CPU0 排队激增 "
-                    f"(排队占比={metrics['nginx_wait_pct']}%, 唤醒等待={metrics['nginx_avg_wait_us']}µs) "
-                    f"→ 自动激活 scx.slice (1000µs + 唤醒抢占, map_id={res.get('map_id')})",
-                    "warn",
-                )
-            except Exception as exc:
-                self._log(f"Agent 激活 SCX 失败: {exc}", "err")
-
-        elif scx_active and self._no_batch_streak >= 2:
-            self._no_batch_streak = 0
-            try:
-                self.backend.stop()
-                self._log(
-                    "✓ [Agent 自动闭环 · SCX 回退] 连续 2 窗确认后台批处理争用消除 → 自动卸载 SCX 恢复 kernel.default",
-                    "ok",
-                )
-                for role, grp in (("latency", "auto_latency"), ("batch", "auto_batch")):
-                    for pid in list(self._auto_cgroup_pids.get(role, [])):
-                        try:
-                            self.cgroup_plugin.detach({"group": grp, "pid": pid})
-                        except Exception:
-                            pass
-                if any(self._auto_cgroup_pids.values()):
-                    self._log("📦 [Agent 自动闭环 · Cgroup 释放] 已自动将业务进程从受管 Cgroup 迁回根组", "ok")
-                self._auto_cgroup_pids = {"latency": [], "batch": []}
-            except Exception as exc:
-                self._log(f"Agent 卸载 SCX 失败: {exc}", "err")
+    def _get_nginx_worker_pids(self) -> list[int]:
+        """Find workers belonging to this sandbox's Nginx instance only."""
+        if self.nginx_proc is None or self.nginx_proc.poll() is not None:
+            return []
+        parent_pid = self.nginx_proc.pid
+        parent = process_snapshot(parent_pid)
+        if parent is None or parent["comm"] != "nginx":
+            return []
+        try:
+            children = Path(f"/proc/{parent_pid}/task/{parent_pid}/children").read_text().split()
+        except OSError:
+            children = []
+        workers = []
+        for value in children:
+            if value.isdigit():
+                child_pid = int(value)
+                child = process_snapshot(child_pid)
+                if child and child["comm"] == "nginx":
+                    workers.append(child_pid)
+        # The benchmark config uses master_process off, so its own PID is the worker.
+        return workers or [parent_pid]
 
     def _loop(self) -> None:
         while True:
             try:
                 # Auto-idle if no browser has polled for > 90 seconds
                 idle_sec = time.monotonic() - self.last_client_poll
-                if idle_sec > 90.0 and not self.choreography_running:
+                if idle_sec > 90.0 and not self.choreography_running and not self.tuning_running:
                     if self.traffic_enabled or self.sysbench_enabled:
                         with self.lock:
+                            self._idle_flags = (self.traffic_enabled, self.sysbench_enabled)
                             self.traffic_enabled = False
                             self._auto_idled = True
                             self.sysbench_enabled = False
                             self._stop_traffic_locked()
                             self._ensure_sysbench()
-                            if self.backend.process is not None:
-                                self.backend.stop()
+                            self._cancel_search("长时间没有页面访问，已停止负载并恢复默认")
                     time.sleep(1.0)
                     continue
 
@@ -523,21 +614,39 @@ class LiveSandbox:
                     except Exception:
                         pass
 
-                metrics = self._probe_http_and_sched(duration=0.55)
+                # Extra probes would change the fixed-rate comparison workload.
+                probe_revision = self.workload_revision
+                probe_policy_revision = self.policy_revision
+                observed_policy = self.backend.snapshot()
+                autonomous = self.control_mode == "autonomous"
+                use_hdr = (self.tuning_running or (self.auto_agent and not autonomous) or (self.scenario.get("compute", False) and not autonomous)) and not self.experiment_sampling
+                metrics = self._probe_http_and_sched(duration=0.55, http_enabled=not use_hdr,
+                                                     max_requests=5 if autonomous or self.experiment_sampling else None)
+                if probe_revision != self.workload_revision or probe_policy_revision != self.policy_revision:
+                    continue
                 self._run_auto_agent_step(metrics)
 
                 snap = self.backend.snapshot()
                 self.seq += 1
                 point = {
                     "seq": self.seq,
+                    "workload_revision": probe_revision,
+                    "scenario_id": self.scenario_id,
+                    "scenario_label": self.scenario["label"],
+                    "eps_unit": {"sysbench": "计算事件/s", "wakeup": "周期/s", "cache": "散列/s"}.get(self.batch_kind, "EPS"),
                     "ts": _now_hms(),
-                    "sched_ext": snap.get("sched_ext", sched_state()),
-                    "policy_id": snap.get("policy_id", "kernel.default"),
-                    "slice_us": snap.get("slice_us"),
-                    "wakeup_preempt": snap.get("wakeup_preempt", False),
+                    "sched_ext": observed_policy.get("sched_ext", sched_state()),
+                    "policy_id": observed_policy.get("policy_id", "kernel.default"),
+                    "slice_us": observed_policy.get("slice_us"),
+                    "wakeup_preempt": observed_policy.get("wakeup_preempt", False),
                     "sysbench_on": self.sysbench_enabled,
                     **metrics,
                 }
+                hdr = self.wrk_window
+                point["latency_source"] = "wrk2.hdr.window" if use_hdr else "short_http_probe"
+                hdr_fresh = hdr and 0 <= time.monotonic() - hdr["end_monotonic"] <= 12
+                point["chart_p50_ms"] = hdr.get("p50_ms") if use_hdr and hdr_fresh else (None if use_hdr else metrics["http_p50_ms"])
+                point["chart_p95_ms"] = hdr.get("p95_ms") if use_hdr and hdr_fresh else (None if use_hdr else metrics["http_p95_ms"])
                 self.history.append(point)
 
                 if self.ebpf_state["attached"]:
@@ -551,32 +660,69 @@ class LiveSandbox:
                 self._log(f"采样循环异常: {exc}", "err")
             time.sleep(0.35)
 
+    def _current_scene_sample(self):
+        if self.history and self.history[-1].get("workload_revision") == self.workload_revision:
+            return self.history[-1]
+        return None
+
     def get_state(self) -> dict:
+        with self.lock:
+            return self._get_state()
+
+    def _get_state(self) -> dict:
         self.last_client_poll = time.monotonic()
         # If traffic was auto-idled and browser reconnects, wake it back up
         if self._auto_idled:
             self._auto_idled = False
-            self.traffic_enabled = True
+            self.traffic_enabled, self.sysbench_enabled = self._idle_flags or (True, False)
+            self.control_mode = "autonomous"
+            self.auto_agent = True
+            self.live_agent.reset("页面恢复访问，重新观察实际进程和运行数据")
+            self.live_sampler = LiveSampler()
         snap = self.backend.snapshot()
-        latest = self.history[-1] if self.history else {
+        current_sample = self._current_scene_sample()
+        latest = current_sample or {
             "seq": 0,
             "ts": _now_hms(),
-            "http_p50_ms": 0.0,
-            "http_p95_ms": 0.0,
-            "http_p99_ms": 0.0,
-            "nginx_wait_pct": 0.0,
-            "nginx_avg_wait_us": 0.0,
-            "nginx_slices_per_s": 0.0,
-            "nginx_cpu_pct": 0.0,
-            "sysbench_cpu_pct": 0.0,
-            "sysbench_eps": 0.0,
+            "http_p50_ms": None,
+            "http_p95_ms": None,
+            "http_p99_ms": None,
+            "nginx_wait_pct": None,
+            "nginx_avg_wait_us": None,
+            "nginx_slices_per_s": None,
+            "nginx_cpu_pct": None,
+            "sysbench_cpu_pct": None,
+            "sysbench_eps": None,
+            "probe_samples": 0,
+            "schedstat_valid": False,
         }
+        workload = {"phase": self.wrk_phase, "offered_rps": self.offered_rps, "window": self.wrk_window,
+                    "age_seconds": round(time.monotonic() - self.wrk_window["end_monotonic"], 3) if self.wrk_window else None,
+                    "running": bool(self.wrk_proc and self.wrk_proc.poll() is None)}
+        workload["fresh"] = bool(workload["running"] and workload["age_seconds"] is not None
+                                 and 0 <= workload["age_seconds"] <= 12)
         return {
             "ok": True,
             "timestamp": _now_hms(),
+            "machine": self.machine,
+            "process_ids": self.process_ids(),
+            "sample_age_seconds": round(time.monotonic() - latest["sample_ended_monotonic"], 3)
+                                  if "sample_ended_monotonic" in latest else None,
+            "workload": workload,
             "traffic_running": self.traffic_enabled,
             "sysbench_running": self.sysbench_enabled,
             "auto_agent": self.auto_agent,
+            "control_mode": self.control_mode,
+            "agent": {**self.live_agent.status(), "enabled": self.auto_agent and self.control_mode == "autonomous",
+                      "current_strategy": self._strategy_id(snap)},
+            "scenario_id": self.scenario_id,
+            "sample_pending": current_sample is None,
+            "scene_events": list(self.scene_events),
+            "workload_revision": self.workload_revision,
+            "scenario": self._effective_scenario(),
+            "scenarios": deepcopy(SCENARIOS),
+            "strategies": deepcopy(STRATEGIES),
+            "tuning": self.tuning_state(),
             "choreography_running": self.choreography_running,
             "choreography_stage": self.choreography_stage,
             "scheduler": {
@@ -595,6 +741,97 @@ class LiveSandbox:
         }
 
     def handle_control(self, payload: dict) -> dict:
+        with self.lock:
+            try:
+                if not isinstance(payload, dict):
+                    raise ValueError("请求必须为 JSON 对象")
+                action = payload.get("action", "")
+                if self.cgroup_state["running"]:
+                    raise ValueError("Cgroup 独立实验进行中，请等待结束")
+                if self.tuning_running and action not in ("stop_tuning", "set_policy", "set_scenario", "toggle_auto_agent"):
+                    raise ValueError("四策略测试进行中；请先停止测试，再改变负载或扩展配置")
+                if action == "set_scenario":
+                    sid = payload.get("scenario")
+                    if sid not in SCENARIOS:
+                        raise ValueError("未知测试场景")
+                    if set(payload) - {"action", "scenario"}:
+                        raise ValueError("场景接口只改变负载；Agent 权重需要单独设置")
+                    if self.tuning_running:
+                        self._cancel_search("负载变化，可选对照已停止", restore=False)
+                    self._apply_scenario(sid)
+                    return {"ok": True}
+                if action == "set_agent_goals":
+                    raise ValueError("性能达标门槛已停用，请使用 set_agent_weights 设置相对权重")
+                if action == "set_agent_weights":
+                    if set(payload) - {"action", "latency", "throughput"}:
+                        raise ValueError("未知 Agent 权重字段")
+                    changes = {key: payload[key] for key in ("latency", "throughput") if key in payload}
+                    weights = replace(self.live_agent.weights, **changes)
+                    self.live_agent.configure(weights)
+                    self._log("[Agent 权重] 已更新相对评分权重，不设置 p99 或 EPS 达标线。", "info")
+                    return {"ok": True}
+                if action == "set_experiment_sampling":
+                    if type(payload.get("enable")) is not bool:
+                        raise ValueError("enable 必须是布尔值")
+                    self.experiment_sampling = payload["enable"]
+                    self._log("[实验采样] " + ("所有配置统一每轮最多 5 次 HTTP 探测" if self.experiment_sampling else "恢复日常采样方式"), "info")
+                    return {"ok": True}
+                if action in ("start_tuning", "start_choreography"):
+                    if self.tuning_running:
+                        raise ValueError("已有测试正在运行")
+                    self._start_search(repeats=payload.get("repeats", 1), windows=payload.get("windows", 3),
+                                       automatic=bool(payload.get("automatic", False)))
+                    return {"ok": True}
+                if action == "start_suite":
+                    self._start_suite(payload.get("repeats", 2), payload.get("windows", 3), payload.get("scenarios"))
+                    return {"ok": True}
+                if action == "stop_tuning":
+                    self._cancel_search("用户停止测试，已恢复默认调度")
+                    return {"ok": True}
+                if action == "toggle_auto_agent":
+                    enable = bool(payload.get("enable", not self.auto_agent))
+                    if enable:
+                        if self.tuning_running:
+                            raise ValueError("请先停止当前测试")
+                        self._enable_autonomous()
+                    else:
+                        self._cancel_search("实时 Agent 已暂停，已恢复默认调度")
+                    return {"ok": True}
+                if action == "set_policy":
+                    if payload.get("policy", "default") == "default":
+                        strategy_id = "default"
+                    else:
+                        strategy_id = next((key for key, spec in STRATEGIES.items()
+                            if spec["slice_us"] == payload.get("slice_us", 1000)
+                            and spec["wakeup_preempt"] == payload.get("wakeup_preempt", True)), None)
+                        if strategy_id is None:
+                            raise ValueError("只允许四组已声明的调度配置")
+                    self._cancel_search("手动接管，旧测试已停止", restore=False)
+                    snapshot = self._apply_strategy(strategy_id)
+                    self._log(f"[手动配置] {STRATEGIES[strategy_id]['label']}，map_id={snapshot.get('map_id')}，generation={snapshot.get('generation')}", "info")
+                    return {"ok": True}
+                if action in ("toggle_traffic", "toggle_sysbench"):
+                    result = self._handle_control(payload)
+                    self.workload_revision += 1
+                    self.scenario_since = time.monotonic()
+                    self.front_windows.clear()
+                    return result
+                if action == "run_cgroup":
+                    low, high = payload.get("low_shares", 1024), payload.get("high_shares", 4096)
+                    if any(type(v) is not int or not 2 <= v <= 262144 for v in (low, high)):
+                        raise ValueError("CPU shares 需要是 2–262144 的整数")
+                    self._cancel_search("Cgroup 独立实验使用默认调度；自动寻优已关闭")
+                    self.cgroup_state["running"] = True
+                    threading.Thread(target=self._run_cgroup_experiment, args=(low, high), daemon=True).start()
+                    return {"ok": True}
+                return self._handle_control(payload)
+            except (ValueError, TypeError) as exc:
+                return {"ok": False, "error": str(exc)}
+            except Exception as exc:
+                self._log(f"控制请求失败：{exc}", "err")
+                return {"ok": False, "error": str(exc)}
+
+    def _handle_control(self, payload: dict) -> dict:
         self.last_client_poll = time.monotonic()
         action = payload.get("action", "")
 
@@ -603,7 +840,7 @@ class LiveSandbox:
             with self.lock:
                 self.traffic_enabled = enable
                 self._ensure_traffic()
-            self._log(f"{'🟢 已启动' if enable else '⏸ 已暂停'} 前台 Nginx + wrk2 (25,600 RPS) 实时压测流")
+            self._log(f"{'🟢 已启动' if enable else '⏸ 已暂停'} 前台 Nginx + wrk2 ({self.offered_rps} RPS) 实时压测流")
             return {"ok": True}
 
         if action == "toggle_sysbench":
@@ -617,54 +854,8 @@ class LiveSandbox:
                 self._log("🟢 已停止 CPU0 后台 sysbench 干扰进程", "ok")
             return {"ok": True}
 
-        if action == "toggle_auto_agent":
-            enable = bool(payload.get("enable", not self.auto_agent))
-            self.auto_agent = enable
-            self._log(
-                f"🤖 Agent 自动闭环管控已{'开启 (自动协同控制 SCX 调度 + Cgroup 权重隔离 + eBPF 流量熔断 + LSM 审计)' if enable else '关闭 (切换为手动模式)'}",
-                "ok",
-            )
-            return {"ok": True}
-
-        if action == "set_policy":
-            pol = payload.get("policy", "default")
-            slice_us = int(payload.get("slice_us", 1000))
-            wakeup = bool(payload.get("wakeup_preempt", True))
-            with self.lock:
-                if pol == "default":
-                    self.auto_agent = False
-                    if self.backend.process is not None:
-                        self.backend.stop()
-                    self._log("🔄 已手动切回内核默认调度器 kernel.default (sched_ext=disabled)")
-                else:
-                    if self.backend.process is None or self.backend.process.poll() is not None:
-                        res = self.backend.start(slice_us, wakeup_preempt=wakeup)
-                        self._log(
-                            f"⚡ 已手动加载 eBPF SCX 调度器 (slice_us={slice_us}µs, wakeup_preempt={wakeup}, map_id={res.get('map_id')})",
-                            "warn",
-                        )
-                    else:
-                        res = self.backend.update(slice_us, wakeup_preempt=wakeup)
-                        self._log(
-                            f"🎛️ 已通过 BPF Map 零重启热更新参数: slice_us={slice_us}µs, wakeup_preempt={wakeup} "
-                            f"(map_id={res.get('map_id')} 不变, generation={res.get('generation')})",
-                            "ok",
-                        )
-            return {"ok": True}
-
-        if action == "start_choreography":
-            if not self.choreography_running:
-                t = threading.Thread(target=self._run_choreography, daemon=True)
-                t.start()
-            return {"ok": True}
-
-        if action == "run_cgroup":
-            low_shares = int(payload.get("low_shares", 1024))
-            high_shares = int(payload.get("high_shares", 4096))
-            threading.Thread(target=self._run_cgroup_experiment, args=(low_shares, high_shares), daemon=True).start()
-            return {"ok": True}
-
         if action == "ebpf_mode":
+            self.network_auto_requested = False
             mode = payload.get("mode", "observe")
             with self.lock:
                 if mode == "detach":
@@ -689,6 +880,7 @@ class LiveSandbox:
             return self._do_ebpf_probe()
 
         if action == "ebpf_flood":
+            self.network_auto_requested = True
             threading.Thread(target=self._do_ebpf_flood, daemon=True).start()
             return {"ok": True}
 
@@ -723,10 +915,10 @@ class LiveSandbox:
             probe_res = {
                 "ts": _now_hms(),
                 "ok": False,
-                "status": f"连接被内核 eBPF TC_ACT_SHOT 阻断! ({type(exc).__name__}, {lat_ms} ms)",
+                "status": f"HTTP 探测失败 ({type(exc).__name__}, {lat_ms} ms)，请结合 TC 丢包计数核验原因",
                 "latency_ms": lat_ms,
             }
-            self._log(f"🛡️ [eBPF 实时拦截] 访问 127.0.0.1:{self.ebpf_port} 被内核丢包阻断 (TC_ACT_SHOT)!", "warn")
+            self._log(f"[HTTP 探测失败] port={self.ebpf_port}, error={type(exc).__name__}，请核对 TC 原始计数", "warn")
 
         if self.ebpf_state["attached"]:
             try:
@@ -739,9 +931,9 @@ class LiveSandbox:
         return {"ok": True, "probe": probe_res, "ebpf": self.ebpf_state}
 
     def _run_cgroup_experiment(self, low_shares: int, high_shares: int) -> None:
-        if self.cgroup_state["running"]:
-            return
         self.cgroup_state["running"] = True
+        self.cgroup_state.update(measured=False, measured_utc=None,
+                                 low_shares=low_shares, high_shares=high_shares)
         self._log(f"📦 [Cgroup 实时实验] 启动同核 CPU3 权重争用 ({low_shares} vs {high_shares} shares, 持续 1.8s)...")
         # Note: Cgroup cpu.shares is a CFS controller; if SCX is active, pause it briefly or run on CFS
         was_scx = False
@@ -774,12 +966,16 @@ class LiveSandbox:
             t0_low = _read_proc_ticks(p_low.pid)
             t0_high = _read_proc_ticks(p_high.pid)
             time.sleep(1.8)
-            d_low = max(1, _read_proc_ticks(p_low.pid) - t0_low)
-            d_high = max(1, _read_proc_ticks(p_high.pid) - t0_high)
+            d_low = _read_proc_ticks(p_low.pid) - t0_low
+            d_high = _read_proc_ticks(p_high.pid) - t0_high
+            if d_low <= 0 or d_high <= 0 or p_low.poll() is not None or p_high.poll() is not None:
+                raise RuntimeError("Cgroup 进程未产生有效 CPU 时间，拒绝输出伪造比例")
             total = d_low + d_high
             ratio = round(d_high / d_low, 2)
             expected = round(high_shares / low_shares, 2)
             self.cgroup_state.update({
+                "measured": True,
+                "measured_utc": demo_evidence.utc_now(),
                 "low_shares": low_shares,
                 "high_shares": high_shares,
                 "low_ticks": d_low,
@@ -822,58 +1018,6 @@ class LiveSandbox:
                         pass
             self.cgroup_state["running"] = False
 
-    def _run_choreography(self) -> None:
-        self.choreography_running = True
-        try:
-            # Stage 1: Clean baseline (6s)
-            self.choreography_stage = "阶段 1/4 [无干扰基线]：仅前台 Nginx + wrk2 (25,600 RPS) 运行于 CPU0，排队占比 < 1%"
-            self._log("🎬 [实况剧本 1/4] 启动基线阶段：仅前台 Nginx + wrk2 运行于 CPU0，观察低延迟基线...", "ok")
-            with self.lock:
-                self.auto_agent = False
-                self.traffic_enabled = True
-                self.sysbench_enabled = False
-                if self.backend.process is not None:
-                    self.backend.stop()
-                self._ensure_traffic()
-                self._ensure_sysbench()
-            time.sleep(5.5)
-
-            # Stage 2: Inject sysbench under kernel.default (7s)
-            self.choreography_stage = "阶段 2/4 [注入后台干扰]：CPU0 启动 sysbench 争用 (kernel.default)，排队占比飙升至 ~78%，延迟暴涨！"
-            self._log("🔥 [实况剧本 2/4] 注入后台 sysbench 干扰！默认 CFS/EEVDF 下 Nginx 排队等待飙升...", "warn")
-            with self.lock:
-                self.sysbench_enabled = True
-                self._ensure_sysbench()
-            time.sleep(6.5)
-
-            # Stage 3: Enable Auto-Agent -> activates SCX 1000us + wakeup_preempt (7s)
-            self.choreography_stage = "阶段 3/4 [Agent 闭环介入]：自动加载 SCX (1ms + 唤醒抢占)，排队骤降至 ~19%，延迟断崖式回落！"
-            self._log("🤖 [实况剧本 3/4] 开启 Agent 自动闭环管控 → 连续检测到高排队，自动激活 SCX 1ms + 唤醒抢占！", "ok")
-            self.auto_agent = True
-            time.sleep(6.5)
-
-            # Stage 3.5: Live BPF Map hot-update (4s)
-            self.choreography_stage = "阶段 3.5/4 [BPF Map 热更新]：零重启在线调整 slice_us=500µs，排队进一步压至 < 10% (map_id 不变，generation 递增)"
-            with self.lock:
-                if self.backend.process is not None and self.backend.process.poll() is None:
-                    res = self.backend.update(500, wakeup_preempt=True)
-                    self._log(
-                        f"🎛️ [实况剧本 3.5/4] BPF Map 零重启热更新: slice_us=500µs "
-                        f"(map_id={res.get('map_id')} 不变, generation={res.get('generation')})",
-                        "ok",
-                    )
-            time.sleep(4.0)
-
-            # Stage 4: Stop sysbench -> Agent automatically rolls back SCX to kernel.default (4s)
-            self.choreography_stage = "阶段 4/4 [负载退出与自动回退]：停止 sysbench，Agent 检测到争用消失并自动卸载 SCX 恢复默认调度！"
-            self._log("🟢 [实况剧本 4/4] 停止后台 sysbench 干扰 → 观察 Agent 自动卸载 SCX 恢复 kernel.default...", "ok")
-            with self.lock:
-                self.sysbench_enabled = False
-                self._ensure_sysbench()
-            time.sleep(4.5)
-            self.choreography_stage = "🎉 实况剧本演示完成！你也可以随时手动点击下方按钮自由测试"
-        finally:
-            self.choreography_running = False
 
 
 SANDBOX: LiveSandbox | None = None
@@ -924,7 +1068,39 @@ class LiveDashboardHandler(BaseHTTPRequestHandler):
     def do_HEAD(self) -> None:
         self.do_GET()
 
+    def _json_response(self, value, status=200, filename=None) -> None:
+        body = json.dumps(value, ensure_ascii=False, allow_nan=False).encode("utf-8")
+        self.send_response(status)
+        self._send_cors()
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        if filename:
+            self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
+        self.end_headers()
+        if self.command != "HEAD":
+            self.wfile.write(body)
+
     def do_GET(self) -> None:
+        parsed = urlsplit(self.path)
+        if parsed.path in ("/api/evidence", "/api/evidence/export", "/api/tuning/export", "/api/experiment/snapshot"):
+            if not IS_LINUX or SANDBOX is None:
+                self._proxy_to_guest("GET")
+                return
+            if parsed.path == "/api/tuning/export":
+                self._json_response(SANDBOX.export_tuning(), filename="oe-four-strategy-results.json")
+                return
+            if parsed.path == "/api/experiment/snapshot":
+                self._json_response(SANDBOX.experiment_snapshot())
+                return
+            if parsed.path.endswith("/export"):
+                self._json_response(SANDBOX.export_evidence(), filename="oe-demo-evidence.json")
+                return
+            view = parse_qs(parsed.query).get("view", ["system"])[0]
+            try:
+                self._json_response(SANDBOX.evidence(view))
+            except ValueError as exc:
+                self._json_response({"ok": False, "error": str(exc)}, status=400)
+            return
         if self.path in ("/", "/index.html", "/demo-dashboard.html"):
             content = HTML_PATH.read_bytes()
             self.send_response(200)
@@ -1047,8 +1223,11 @@ def main() -> int:
                 SANDBOX.sysbench_enabled = False
                 SANDBOX._stop_traffic_locked()
                 SANDBOX._ensure_sysbench()
-                if SANDBOX.backend.process is not None:
-                    SANDBOX.backend.stop()
+                SANDBOX._cancel_search("演示服务停止，已恢复默认调度")
+                try:
+                    SANDBOX.net_plugin.detach()
+                except Exception as exc:
+                    SANDBOX._log(f"网络钩子清理失败：{exc}", "err")
     return 0
 
 

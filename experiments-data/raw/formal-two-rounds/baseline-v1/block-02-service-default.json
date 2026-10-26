@@ -1,0 +1,3608 @@
+{
+  "scenario_id": "service",
+  "scenario": {
+    "label": "纯网页服务",
+    "description": "Nginx 小静态页面；无后台争抢，验证专用策略是否有必要。",
+    "traffic": true,
+    "batch": false,
+    "rps": 25600,
+    "threads": 1,
+    "objective": "latency",
+    "p99_limit_ms": 3.0,
+    "id": "service"
+  },
+  "condition": "default",
+  "block": 2,
+  "position": 3,
+  "started_utc": "2026-10-26T09:55:36.982402+00:00",
+  "started_monotonic": 13384.273119007,
+  "accept_after": 13389.273119007,
+  "workload_revision": 18,
+  "process_ids": {
+    "nginx": 257914,
+    "wrk2": 257915,
+    "sysbench": null,
+    "compute": null,
+    "burst": null
+  },
+  "goals": {
+    "latency_ms": 5.0,
+    "background_floor": 0.8,
+    "completion_floor": 0.97,
+    "confirmations": 3,
+    "min_residence": 6.0,
+    "settle_seconds": 1.5,
+    "trial_seconds": 8.0,
+    "max_trial_seconds": 24.0,
+    "retry_seconds": 30.0
+  },
+  "samples": [
+    {
+      "monotonic": 13384.278598796,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1780,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:36",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.184,
+        "http_p95_ms": 0.488,
+        "http_p99_ms": 0.488,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.6,
+        "nginx_slices_per_s": 727.6,
+        "nginx_cpu_pct": 18.5,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5511,
+        "sample_ended_monotonic": 13384.266708358,
+        "sample_utc": "2026-10-26T09:55:36.971051+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            8967699446,
+            198500126,
+            29431
+          ],
+          "after": [
+            9069867335,
+            198737277,
+            29832
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.184,
+        "chart_p95_ms": 0.488
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13384.734758145,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1780,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:36",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.184,
+        "http_p95_ms": 0.488,
+        "http_p99_ms": 0.488,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.6,
+        "nginx_slices_per_s": 727.6,
+        "nginx_cpu_pct": 18.5,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5511,
+        "sample_ended_monotonic": 13384.266708358,
+        "sample_utc": "2026-10-26T09:55:36.971051+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            8967699446,
+            198500126,
+            29431
+          ],
+          "after": [
+            9069867335,
+            198737277,
+            29832
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.184,
+        "chart_p95_ms": 0.488
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13385.192541815,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1781,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:37",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.29,
+        "http_p95_ms": 0.43,
+        "http_p99_ms": 0.43,
+        "nginx_wait_pct": 0.1,
+        "nginx_avg_wait_us": 0.2,
+        "nginx_slices_per_s": 715.6,
+        "nginx_cpu_pct": 18.5,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 13385.169139225,
+        "sample_utc": "2026-10-26T09:55:37.873485+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            9134268461,
+            198960090,
+            30096
+          ],
+          "after": [
+            9236090319,
+            199042510,
+            30490
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.29,
+        "chart_p95_ms": 0.43
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13385.656713463,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1781,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:37",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.29,
+        "http_p95_ms": 0.43,
+        "http_p99_ms": 0.43,
+        "nginx_wait_pct": 0.1,
+        "nginx_avg_wait_us": 0.2,
+        "nginx_slices_per_s": 715.6,
+        "nginx_cpu_pct": 18.5,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 13385.169139225,
+        "sample_utc": "2026-10-26T09:55:37.873485+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            9134268461,
+            198960090,
+            30096
+          ],
+          "after": [
+            9236090319,
+            199042510,
+            30490
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.29,
+        "chart_p95_ms": 0.43
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13386.113663022,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1782,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:38",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.285,
+        "http_p95_ms": 0.543,
+        "http_p99_ms": 0.543,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.0,
+        "nginx_slices_per_s": 775.9,
+        "nginx_cpu_pct": 18.7,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13386.071605531,
+        "sample_utc": "2026-10-26T09:55:38.775952+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            9304366353,
+            199108346,
+            30745
+          ],
+          "after": [
+            9407307491,
+            199537126,
+            31172
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.285,
+        "chart_p95_ms": 0.543
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13386.570773583,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1782,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:38",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.285,
+        "http_p95_ms": 0.543,
+        "http_p99_ms": 0.543,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.0,
+        "nginx_slices_per_s": 775.9,
+        "nginx_cpu_pct": 18.7,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13386.071605531,
+        "sample_utc": "2026-10-26T09:55:38.775952+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            9304366353,
+            199108346,
+            30745
+          ],
+          "after": [
+            9407307491,
+            199537126,
+            31172
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.285,
+        "chart_p95_ms": 0.543
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13387.028271039,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1783,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:39",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.161,
+        "http_p95_ms": 0.412,
+        "http_p99_ms": 0.412,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.0,
+        "nginx_slices_per_s": 763.1,
+        "nginx_cpu_pct": 18.2,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 13386.97267241,
+        "sample_utc": "2026-10-26T09:55:39.677018+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            9471905546,
+            199606653,
+            31455
+          ],
+          "after": [
+            9571968559,
+            200014329,
+            31875
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.161,
+        "chart_p95_ms": 0.412
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13387.486210498,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1783,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:39",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.161,
+        "http_p95_ms": 0.412,
+        "http_p99_ms": 0.412,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.0,
+        "nginx_slices_per_s": 763.1,
+        "nginx_cpu_pct": 18.2,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 13386.97267241,
+        "sample_utc": "2026-10-26T09:55:39.677018+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            9471905546,
+            199606653,
+            31455
+          ],
+          "after": [
+            9571968559,
+            200014329,
+            31875
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.161,
+        "chart_p95_ms": 0.412
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13387.943727256,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1784,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:40",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.358,
+        "http_p95_ms": 0.569,
+        "http_p99_ms": 0.569,
+        "nginx_wait_pct": 0.3,
+        "nginx_avg_wait_us": 0.8,
+        "nginx_slices_per_s": 706.9,
+        "nginx_cpu_pct": 18.9,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13387.873738047,
+        "sample_utc": "2026-10-26T09:55:40.578084+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            9639312085,
+            200130491,
+            32148
+          ],
+          "after": [
+            9743180946,
+            200457599,
+            32537
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.358,
+        "chart_p95_ms": 0.569
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13388.401086024,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1784,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:40",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.358,
+        "http_p95_ms": 0.569,
+        "http_p99_ms": 0.569,
+        "nginx_wait_pct": 0.3,
+        "nginx_avg_wait_us": 0.8,
+        "nginx_slices_per_s": 706.9,
+        "nginx_cpu_pct": 18.9,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13387.873738047,
+        "sample_utc": "2026-10-26T09:55:40.578084+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            9639312085,
+            200130491,
+            32148
+          ],
+          "after": [
+            9743180946,
+            200457599,
+            32537
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.358,
+        "chart_p95_ms": 0.569
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13388.858642816,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1785,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:41",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.212,
+        "http_p95_ms": 0.562,
+        "http_p99_ms": 0.562,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.4,
+        "nginx_slices_per_s": 797.1,
+        "nginx_cpu_pct": 18.5,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 13388.775365942,
+        "sample_utc": "2026-10-26T09:55:41.479711+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            9808468378,
+            200844224,
+            32789
+          ],
+          "after": [
+            9910444352,
+            201020213,
+            33228
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.212,
+        "chart_p95_ms": 0.562
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13389.316984282,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1785,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:41",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.212,
+        "http_p95_ms": 0.562,
+        "http_p99_ms": 0.562,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.4,
+        "nginx_slices_per_s": 797.1,
+        "nginx_cpu_pct": 18.5,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 13388.775365942,
+        "sample_utc": "2026-10-26T09:55:41.479711+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            9808468378,
+            200844224,
+            32789
+          ],
+          "after": [
+            9910444352,
+            201020213,
+            33228
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.212,
+        "chart_p95_ms": 0.562
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13389.774791402,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1786,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:42",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.191,
+        "http_p95_ms": 0.859,
+        "http_p99_ms": 0.859,
+        "nginx_wait_pct": 0.1,
+        "nginx_avg_wait_us": 0.3,
+        "nginx_slices_per_s": 754.0,
+        "nginx_cpu_pct": 18.9,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 13389.676671841,
+        "sample_utc": "2026-10-26T09:55:42.381017+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            9979712451,
+            201080549,
+            33487
+          ],
+          "after": [
+            10083948645,
+            201217370,
+            33902
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.191,
+        "chart_p95_ms": 0.859
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13390.232685757,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1786,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:42",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.191,
+        "http_p95_ms": 0.859,
+        "http_p99_ms": 0.859,
+        "nginx_wait_pct": 0.1,
+        "nginx_avg_wait_us": 0.3,
+        "nginx_slices_per_s": 754.0,
+        "nginx_cpu_pct": 18.9,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 13389.676671841,
+        "sample_utc": "2026-10-26T09:55:42.381017+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            9979712451,
+            201080549,
+            33487
+          ],
+          "after": [
+            10083948645,
+            201217370,
+            33902
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.191,
+        "chart_p95_ms": 0.859
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13390.69028346,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1787,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:43",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.272,
+        "http_p95_ms": 0.844,
+        "http_p99_ms": 0.844,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.1,
+        "nginx_slices_per_s": 729.8,
+        "nginx_cpu_pct": 18.8,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5508,
+        "sample_ended_monotonic": 13390.578595644,
+        "sample_utc": "2026-10-26T09:55:43.282943+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            10148014442,
+            201388873,
+            34177
+          ],
+          "after": [
+            10251520370,
+            201822896,
+            34579
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.272,
+        "chart_p95_ms": 0.844
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13391.147918366,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1787,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:43",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.272,
+        "http_p95_ms": 0.844,
+        "http_p99_ms": 0.844,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.1,
+        "nginx_slices_per_s": 729.8,
+        "nginx_cpu_pct": 18.8,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5508,
+        "sample_ended_monotonic": 13390.578595644,
+        "sample_utc": "2026-10-26T09:55:43.282943+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            10148014442,
+            201388873,
+            34177
+          ],
+          "after": [
+            10251520370,
+            201822896,
+            34579
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.272,
+        "chart_p95_ms": 0.844
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13391.606736968,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1788,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:44",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.475,
+        "http_p95_ms": 0.537,
+        "http_p99_ms": 0.537,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.7,
+        "nginx_slices_per_s": 688.6,
+        "nginx_cpu_pct": 18.8,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 13391.480515256,
+        "sample_utc": "2026-10-26T09:55:44.184860+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            10316050393,
+            202145104,
+            34847
+          ],
+          "after": [
+            10419677784,
+            202400871,
+            35226
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.475,
+        "chart_p95_ms": 0.537
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13392.063920324,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1788,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:44",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.475,
+        "http_p95_ms": 0.537,
+        "http_p99_ms": 0.537,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.7,
+        "nginx_slices_per_s": 688.6,
+        "nginx_cpu_pct": 18.8,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 13391.480515256,
+        "sample_utc": "2026-10-26T09:55:44.184860+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            10316050393,
+            202145104,
+            34847
+          ],
+          "after": [
+            10419677784,
+            202400871,
+            35226
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.475,
+        "chart_p95_ms": 0.537
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13392.52134894,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1789,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:45",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.356,
+        "http_p95_ms": 0.401,
+        "http_p99_ms": 0.401,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.6,
+        "nginx_slices_per_s": 752.3,
+        "nginx_cpu_pct": 19.2,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13392.381761997,
+        "sample_utc": "2026-10-26T09:55:45.086109+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            10485934911,
+            202657410,
+            35472
+          ],
+          "after": [
+            10591596915,
+            202885323,
+            35886
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.356,
+        "chart_p95_ms": 0.401
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13392.979779914,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1789,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:45",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.356,
+        "http_p95_ms": 0.401,
+        "http_p99_ms": 0.401,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.6,
+        "nginx_slices_per_s": 752.3,
+        "nginx_cpu_pct": 19.2,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13392.381761997,
+        "sample_utc": "2026-10-26T09:55:45.086109+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            10485934911,
+            202657410,
+            35472
+          ],
+          "after": [
+            10591596915,
+            202885323,
+            35886
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.356,
+        "chart_p95_ms": 0.401
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13393.437410374,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1790,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:45",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.313,
+        "http_p95_ms": 0.366,
+        "http_p99_ms": 0.366,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.5,
+        "nginx_slices_per_s": 766.4,
+        "nginx_cpu_pct": 18.7,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 13393.283533093,
+        "sample_utc": "2026-10-26T09:55:45.987882+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            10657891166,
+            203039977,
+            36149
+          ],
+          "after": [
+            10760902368,
+            203265063,
+            36571
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.313,
+        "chart_p95_ms": 0.366
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13393.894294529,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1790,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:45",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.313,
+        "http_p95_ms": 0.366,
+        "http_p99_ms": 0.366,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.5,
+        "nginx_slices_per_s": 766.4,
+        "nginx_cpu_pct": 18.7,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 13393.283533093,
+        "sample_utc": "2026-10-26T09:55:45.987882+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            10657891166,
+            203039977,
+            36149
+          ],
+          "after": [
+            10760902368,
+            203265063,
+            36571
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.313,
+        "chart_p95_ms": 0.366
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13394.351585664,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1791,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:46",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.206,
+        "http_p95_ms": 0.344,
+        "http_p99_ms": 0.344,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.1,
+        "nginx_slices_per_s": 706.9,
+        "nginx_cpu_pct": 19.6,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13394.184409362,
+        "sample_utc": "2026-10-26T09:55:46.888754+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            10828339732,
+            203515052,
+            36827
+          ],
+          "after": [
+            10936125273,
+            203936369,
+            37216
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.206,
+        "chart_p95_ms": 0.344
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13394.809917118,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1791,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:46",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.206,
+        "http_p95_ms": 0.344,
+        "http_p99_ms": 0.344,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.1,
+        "nginx_slices_per_s": 706.9,
+        "nginx_cpu_pct": 19.6,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13394.184409362,
+        "sample_utc": "2026-10-26T09:55:46.888754+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            10828339732,
+            203515052,
+            36827
+          ],
+          "after": [
+            10936125273,
+            203936369,
+            37216
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.206,
+        "chart_p95_ms": 0.344
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13395.267458052,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1792,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:47",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.205,
+        "http_p95_ms": 0.878,
+        "http_p99_ms": 0.878,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.1,
+        "nginx_slices_per_s": 723.3,
+        "nginx_cpu_pct": 18.9,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5502,
+        "sample_ended_monotonic": 13395.0853699,
+        "sample_utc": "2026-10-26T09:55:47.789716+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            11002070985,
+            204159274,
+            37464
+          ],
+          "after": [
+            11105969889,
+            204611677,
+            37862
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.205,
+        "chart_p95_ms": 0.878
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13395.725449737,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1792,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:47",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.205,
+        "http_p95_ms": 0.878,
+        "http_p99_ms": 0.878,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.1,
+        "nginx_slices_per_s": 723.3,
+        "nginx_cpu_pct": 18.9,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5502,
+        "sample_ended_monotonic": 13395.0853699,
+        "sample_utc": "2026-10-26T09:55:47.789716+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            11002070985,
+            204159274,
+            37464
+          ],
+          "after": [
+            11105969889,
+            204611677,
+            37862
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.205,
+        "chart_p95_ms": 0.878
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13396.183830086,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1793,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:48",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.453,
+        "http_p95_ms": 1.218,
+        "http_p99_ms": 1.218,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.0,
+        "nginx_slices_per_s": 752.2,
+        "nginx_cpu_pct": 18.4,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 13395.986553702,
+        "sample_utc": "2026-10-26T09:55:48.690901+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            11173928798,
+            204746531,
+            38131
+          ],
+          "after": [
+            11275092197,
+            205156222,
+            38545
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.453,
+        "chart_p95_ms": 1.218
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13396.641535337,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1793,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:48",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.453,
+        "http_p95_ms": 1.218,
+        "http_p99_ms": 1.218,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.0,
+        "nginx_slices_per_s": 752.2,
+        "nginx_cpu_pct": 18.4,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 13395.986553702,
+        "sample_utc": "2026-10-26T09:55:48.690901+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            11173928798,
+            204746531,
+            38131
+          ],
+          "after": [
+            11275092197,
+            205156222,
+            38545
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.453,
+        "chart_p95_ms": 1.218
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13397.099740086,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1794,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:49",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.178,
+        "http_p95_ms": 0.41,
+        "http_p99_ms": 0.41,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.0,
+        "nginx_slices_per_s": 768.2,
+        "nginx_cpu_pct": 18.1,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 13396.888126689,
+        "sample_utc": "2026-10-26T09:55:49.592474+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            11343424950,
+            205245992,
+            38790
+          ],
+          "after": [
+            11443313959,
+            205667453,
+            39213
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.178,
+        "chart_p95_ms": 0.41
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13397.557625691,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1794,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:49",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.178,
+        "http_p95_ms": 0.41,
+        "http_p99_ms": 0.41,
+        "nginx_wait_pct": 0.4,
+        "nginx_avg_wait_us": 1.0,
+        "nginx_slices_per_s": 768.2,
+        "nginx_cpu_pct": 18.1,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 13396.888126689,
+        "sample_utc": "2026-10-26T09:55:49.592474+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            11343424950,
+            205245992,
+            38790
+          ],
+          "after": [
+            11443313959,
+            205667453,
+            39213
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.178,
+        "chart_p95_ms": 0.41
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13398.01514406,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1795,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:50",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.453,
+        "http_p95_ms": 0.683,
+        "http_p99_ms": 0.683,
+        "nginx_wait_pct": 0.3,
+        "nginx_avg_wait_us": 0.7,
+        "nginx_slices_per_s": 752.3,
+        "nginx_cpu_pct": 18.8,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13397.789269112,
+        "sample_utc": "2026-10-26T09:55:50.493615+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            11507283667,
+            205836019,
+            39452
+          ],
+          "after": [
+            11610576567,
+            206146450,
+            39866
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.453,
+        "chart_p95_ms": 0.683
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13398.473043744,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1795,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:50",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.453,
+        "http_p95_ms": 0.683,
+        "http_p99_ms": 0.683,
+        "nginx_wait_pct": 0.3,
+        "nginx_avg_wait_us": 0.7,
+        "nginx_slices_per_s": 752.3,
+        "nginx_cpu_pct": 18.8,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13397.789269112,
+        "sample_utc": "2026-10-26T09:55:50.493615+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            11507283667,
+            205836019,
+            39452
+          ],
+          "after": [
+            11610576567,
+            206146450,
+            39866
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.453,
+        "chart_p95_ms": 0.683
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13398.930213017,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1796,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:51",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.27,
+        "http_p95_ms": 0.44,
+        "http_p99_ms": 0.44,
+        "nginx_wait_pct": 0.3,
+        "nginx_avg_wait_us": 0.8,
+        "nginx_slices_per_s": 736.0,
+        "nginx_cpu_pct": 18.5,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13398.690267092,
+        "sample_utc": "2026-10-26T09:55:51.394611+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            11677769999,
+            206361795,
+            40113
+          ],
+          "after": [
+            11779710750,
+            206688313,
+            40518
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.27,
+        "chart_p95_ms": 0.44
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13399.388675703,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1796,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:51",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.27,
+        "http_p95_ms": 0.44,
+        "http_p99_ms": 0.44,
+        "nginx_wait_pct": 0.3,
+        "nginx_avg_wait_us": 0.8,
+        "nginx_slices_per_s": 736.0,
+        "nginx_cpu_pct": 18.5,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13398.690267092,
+        "sample_utc": "2026-10-26T09:55:51.394611+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            11677769999,
+            206361795,
+            40113
+          ],
+          "after": [
+            11779710750,
+            206688313,
+            40518
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.27,
+        "chart_p95_ms": 0.44
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13399.847600831,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1797,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:52",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.189,
+        "http_p95_ms": 0.388,
+        "http_p99_ms": 0.388,
+        "nginx_wait_pct": 0.1,
+        "nginx_avg_wait_us": 0.3,
+        "nginx_slices_per_s": 757.4,
+        "nginx_cpu_pct": 18.9,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 13399.591632896,
+        "sample_utc": "2026-10-26T09:55:52.295978+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            11843367565,
+            206866330,
+            40782
+          ],
+          "after": [
+            11947314933,
+            207000081,
+            41199
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.189,
+        "chart_p95_ms": 0.388
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13400.305940422,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1797,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:52",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.189,
+        "http_p95_ms": 0.388,
+        "http_p99_ms": 0.388,
+        "nginx_wait_pct": 0.1,
+        "nginx_avg_wait_us": 0.3,
+        "nginx_slices_per_s": 757.4,
+        "nginx_cpu_pct": 18.9,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 13399.591632896,
+        "sample_utc": "2026-10-26T09:55:52.295978+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            11843367565,
+            206866330,
+            40782
+          ],
+          "after": [
+            11947314933,
+            207000081,
+            41199
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.189,
+        "chart_p95_ms": 0.388
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13400.763948427,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1798,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:53",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.357,
+        "http_p95_ms": 0.639,
+        "http_p99_ms": 0.639,
+        "nginx_wait_pct": 0.3,
+        "nginx_avg_wait_us": 0.8,
+        "nginx_slices_per_s": 772.3,
+        "nginx_cpu_pct": 18.8,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13400.492992628,
+        "sample_utc": "2026-10-26T09:55:53.197346+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            12015177904,
+            207167250,
+            41455
+          ],
+          "after": [
+            12118430365,
+            207508590,
+            41880
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.357,
+        "chart_p95_ms": 0.639
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13401.222950334,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1798,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:53",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.357,
+        "http_p95_ms": 0.639,
+        "http_p99_ms": 0.639,
+        "nginx_wait_pct": 0.3,
+        "nginx_avg_wait_us": 0.8,
+        "nginx_slices_per_s": 772.3,
+        "nginx_cpu_pct": 18.8,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 13400.492992628,
+        "sample_utc": "2026-10-26T09:55:53.197346+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            12015177904,
+            207167250,
+            41455
+          ],
+          "after": [
+            12118430365,
+            207508590,
+            41880
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.357,
+        "chart_p95_ms": 0.639
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13401.682167152,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1799,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:54",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.236,
+        "http_p95_ms": 0.711,
+        "http_p99_ms": 0.711,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.6,
+        "nginx_slices_per_s": 771.8,
+        "nginx_cpu_pct": 18.5,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 13401.394757539,
+        "sample_utc": "2026-10-26T09:55:54.099102+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            12182921670,
+            207673753,
+            42143
+          ],
+          "after": [
+            12284627370,
+            207909726,
+            42568
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.236,
+        "chart_p95_ms": 0.711
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13402.140766033,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1799,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:54",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.236,
+        "http_p95_ms": 0.711,
+        "http_p99_ms": 0.711,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.6,
+        "nginx_slices_per_s": 771.8,
+        "nginx_cpu_pct": 18.5,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 13401.394757539,
+        "sample_utc": "2026-10-26T09:55:54.099102+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            12182921670,
+            207673753,
+            42143
+          ],
+          "after": [
+            12284627370,
+            207909726,
+            42568
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.236,
+        "chart_p95_ms": 0.711
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13402.59967968,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1800,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:54",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.292,
+        "http_p95_ms": 1.288,
+        "http_p99_ms": 1.288,
+        "nginx_wait_pct": 0.1,
+        "nginx_avg_wait_us": 0.3,
+        "nginx_slices_per_s": 728.2,
+        "nginx_cpu_pct": 18.8,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 13402.296309254,
+        "sample_utc": "2026-10-26T09:55:55.000655+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            12348151968,
+            208470702,
+            42847
+          ],
+          "after": [
+            12451714455,
+            208607913,
+            43248
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.292,
+        "chart_p95_ms": 1.288
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13403.058653241,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1800,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:54",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.292,
+        "http_p95_ms": 1.288,
+        "http_p99_ms": 1.288,
+        "nginx_wait_pct": 0.1,
+        "nginx_avg_wait_us": 0.3,
+        "nginx_slices_per_s": 728.2,
+        "nginx_cpu_pct": 18.8,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 13402.296309254,
+        "sample_utc": "2026-10-26T09:55:55.000655+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            12348151968,
+            208470702,
+            42847
+          ],
+          "after": [
+            12451714455,
+            208607913,
+            43248
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.292,
+        "chart_p95_ms": 1.288
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13403.51767534,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1801,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:55",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.309,
+        "http_p95_ms": 3.041,
+        "http_p99_ms": 3.041,
+        "nginx_wait_pct": 0.5,
+        "nginx_avg_wait_us": 1.4,
+        "nginx_slices_per_s": 692.1,
+        "nginx_cpu_pct": 19.4,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5505,
+        "sample_ended_monotonic": 13403.197626778,
+        "sample_utc": "2026-10-26T09:55:55.901972+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            12517632166,
+            208811797,
+            43487
+          ],
+          "after": [
+            12624383435,
+            209329524,
+            43868
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.309,
+        "chart_p95_ms": 3.041
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13403.97628843,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1801,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:55",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.309,
+        "http_p95_ms": 3.041,
+        "http_p99_ms": 3.041,
+        "nginx_wait_pct": 0.5,
+        "nginx_avg_wait_us": 1.4,
+        "nginx_slices_per_s": 692.1,
+        "nginx_cpu_pct": 19.4,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5505,
+        "sample_ended_monotonic": 13403.197626778,
+        "sample_utc": "2026-10-26T09:55:55.901972+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            12517632166,
+            208811797,
+            43487
+          ],
+          "after": [
+            12624383435,
+            209329524,
+            43868
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.309,
+        "chart_p95_ms": 3.041
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 13404.43745476,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 162,
+      "latest": {
+        "seq": 1802,
+        "workload_revision": 18,
+        "scenario_id": "service",
+        "scenario_label": "纯网页服务",
+        "eps_unit": "计算事件/s",
+        "ts": "17:55:56",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": false,
+        "http_p50_ms": 0.188,
+        "http_p95_ms": 0.512,
+        "http_p99_ms": 0.512,
+        "nginx_wait_pct": 0.2,
+        "nginx_avg_wait_us": 0.5,
+        "nginx_slices_per_s": 715.4,
+        "nginx_cpu_pct": 19.1,
+        "sysbench_cpu_pct": 0.0,
+        "sysbench_eps": 0.0,
+        "sysbench_report_age_seconds": null,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5508,
+        "sample_ended_monotonic": 13404.099338786,
+        "sample_utc": "2026-10-26T09:55:56.803686+00:00",
+        "nginx_pid": 257914,
+        "sysbench_pid": null,
+        "raw_schedstat": {
+          "before": [
+            12691812537,
+            209505709,
+            44137
+          ],
+          "after": [
+            12797204765,
+            209708406,
+            44531
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.188,
+        "chart_p95_ms": 0.512
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    }
+  ],
+  "windows": [
+    {
+      "start_monotonic": 13393.424748453,
+      "end_monotonic": 13398.425902137,
+      "duration_seconds": 5.001153683999291,
+      "frontend": {
+        "source": "wrk2.hdr.window",
+        "source_sha256": "eb05a7483135d090adbbee6bb875b9e2d8b9d930842ea0f7a92f969c73edac97",
+        "start_monotonic": 13393.424748453,
+        "end_monotonic": 13398.425902137,
+        "duration_seconds": 5.001153684,
+        "requests": 128015,
+        "terminal_latency_exclusions": 0,
+        "rps": 25597.09380848533,
+        "offered_rps": 25600,
+        "completion_fraction": 0.9998864768939582,
+        "p50_ms": 1.536,
+        "p95_ms": 3.041,
+        "p99_ms": 3.615,
+        "errors": {
+          "connect": 0,
+          "read": 0,
+          "write": 0,
+          "status": 0,
+          "timeout": 0
+        },
+        "raw_record": "{\"schema_version\":1,\"kind\":\"window\",\"seq\":9,\"start_ns\":13393424748453,\"end_ns\":13398425902137,\"final\":false,\"requests\":128015,\"bytes\":555073040,\"errors\":{\"connect\":0,\"read\":0,\"write\":0,\"status\":0,\"timeout\":0},\"terminal_exclusions\":0,\"histogram_overflows\":0,\"bins_us\":[[13,1],[17,1],[18,1],[19,2],[20,1],[26,5],[29,1],[30,2],[31,2],[32,1],[33,2],[34,2],[35,1],[36,3],[37,4],[38,7],[41,3],[42,4],[43,6],[44,2],[45,4],[46,6],[47,2],[48,4],[49,7],[50,1],[51,3],[52,8],[53,2],[54,5],[55,3],[56,1],[57,1],[58,6],[59,6],[60,4],[61,6],[62,4],[63,2],[64,2],[65,7],[66,3],[67,5],[68,6],[69,4],[70,5],[71,5],[72,8],[73,3],[74,5],[75,6],[76,6],[77,1],[78,5],[79,6],[80,4],[81,9],[82,7],[83,2],[84,3],[85,8],[86,5],[87,4],[88,9],[89,8],[90,6],[91,8],[92,8],[93,14],[94,4],[95,7],[96,11],[97,11],[98,7],[99,6],[100,2],[101,8],[102,10],[103,5],[104,11],[105,12],[106,6],[107,7],[108,4],[109,6],[110,14],[111,10],[112,12],[113,9],[114,9],[115,10],[116,8],[117,10],[118,13],[119,7],[120,10],[121,13],[122,8],[123,15],[124,7],[125,9],[126,8],[127,6],[128,7],[129,18],[130,11],[131,12],[132,12],[133,12],[134,7],[135,15],[136,12],[137,10],[138,14],[139,18],[140,12],[141,18],[142,10],[143,24],[144,12],[145,16],[146,20],[147,15],[148,6],[149,11],[150,16],[151,8],[152,24],[153,18],[154,10],[155,18],[156,12],[157,15],[158,14],[159,13],[160,21],[161,15],[162,19],[163,25],[164,18],[165,20],[166,24],[167,22],[168,20],[169,13],[170,12],[171,18],[172,19],[173,23],[174,17],[175,21],[176,21],[177,20],[178,23],[179,16],[180,20],[181,33],[182,23],[183,30],[184,18],[185,16],[186,22],[187,18],[188,15],[189,24],[190,28],[191,19],[192,24],[193,23],[194,24],[195,25],[196,24],[197,37],[198,22],[199,22],[200,26],[201,18],[202,24],[203,23],[204,32],[205,20],[206,24],[207,22],[208,30],[209,26],[210,35],[211,17],[212,34],[213,32],[214,31],[215,25],[216,17],[217,21],[218,24],[219,21],[220,30],[221,31],[222,20],[223,35],[224,23],[225,24],[226,22],[227,19],[228,27],[229,21],[230,29],[231,24],[232,32],[233,25],[234,21],[235,15],[236,23],[237,25],[238,27],[239,28],[240,21],[241,29],[242,32],[243,17],[244,34],[245,26],[246,32],[247,23],[248,22],[249,26],[250,30],[251,27],[252,25],[253,26],[254,25],[255,30],[256,27],[257,41],[258,32],[259,32],[260,37],[261,22],[262,18],[263,26],[264,25],[265,23],[266,21],[267,29],[268,27],[269,29],[270,23],[271,25],[272,34],[273,27],[274,36],[275,20],[276,35],[277,28],[278,27],[279,21],[280,27],[281,28],[282,25],[283,25],[284,30],[285,36],[286,33],[287,24],[288,36],[289,39],[290,40],[291,31],[292,23],[293,31],[294,42],[295,30],[296,35],[297,38],[298,24],[299,27],[300,25],[301,30],[302,28],[303,31],[304,25],[305,26],[306,31],[307,42],[308,34],[309,38],[310,34],[311,39],[312,22],[313,24],[314,26],[315,31],[316,39],[317,31],[318,44],[319,31],[320,30],[321,24],[322,36],[323,27],[324,30],[325,37],[326,27],[327,36],[328,23],[329,24],[330,36],[331,40],[332,31],[333,43],[334,25],[335,26],[336,27],[337,30],[338,39],[339,32],[340,40],[341,32],[342,40],[343,44],[344,31],[345,29],[346,36],[347,27],[348,36],[349,41],[350,33],[351,35],[352,24],[353,33],[354,35],[355,53],[356,41],[357,43],[358,27],[359,31],[360,22],[361,34],[362,33],[363,34],[364,20],[365,40],[366,29],[367,43],[368,30],[369,36],[370,38],[371,28],[372,34],[373,33],[374,30],[375,29],[376,36],[377,36],[378,38],[379,24],[380,27],[381,24],[382,36],[383,34],[384,23],[385,36],[386,30],[387,31],[388,29],[389,27],[390,44],[391,39],[392,36],[393,34],[394,45],[395,22],[396,26],[397,39],[398,35],[399,34],[400,40],[401,36],[402,30],[403,40],[404,35],[405,29],[406,23],[407,39],[408,21],[409,30],[410,32],[411,36],[412,35],[413,45],[414,26],[415,39],[416,35],[417,45],[418,37],[419,38],[420,28],[421,30],[422,25],[423,34],[424,36],[425,35],[426,29],[427,36],[428,40],[429,28],[430,23],[431,22],[432,30],[433,34],[434,37],[435,27],[436,31],[437,30],[438,30],[439,26],[440,32],[441,40],[442,23],[443,25],[444,48],[445,30],[446,37],[447,25],[448,28],[449,38],[450,22],[451,26],[452,29],[453,37],[454,33],[455,31],[456,35],[457,41],[458,29],[459,38],[460,22],[461,35],[462,42],[463,30],[464,43],[465,46],[466,31],[467,23],[468,35],[469,47],[470,39],[471,36],[472,39],[473,40],[474,43],[475,31],[476,35],[477,33],[478,33],[479,38],[480,35],[481,46],[482,43],[483,28],[484,38],[485,23],[486,31],[487,33],[488,28],[489,44],[490,40],[491,41],[492,28],[493,33],[494,47],[495,42],[496,41],[497,30],[498,38],[499,46],[500,40],[501,46],[502,40],[503,30],[504,37],[505,36],[506,44],[507,41],[508,41],[509,39],[510,38],[511,38],[512,30],[513,51],[514,37],[515,44],[516,46],[517,37],[518,41],[519,33],[520,39],[521,40],[522,33],[523,26],[524,29],[525,36],[526,31],[527,30],[528,42],[529,48],[530,48],[531,47],[532,33],[533,33],[534,34],[535,47],[536,47],[537,34],[538,35],[539,31],[540,35],[541,40],[542,40],[543,47],[544,39],[545,52],[546,34],[547,48],[548,41],[549,38],[550,35],[551,33],[552,37],[553,36],[554,44],[555,33],[556,36],[557,40],[558,49],[559,39],[560,35],[561,30],[562,43],[563,39],[564,41],[565,47],[566,36],[567,32],[568,40],[569,41],[570,40],[571,45],[572,55],[573,39],[574,32],[575,39],[576,33],[577,40],[578,25],[579,36],[580,39],[581,35],[582,39],[583,34],[584,42],[585,44],[586,39],[587,32],[588,40],[589,41],[590,34],[591,42],[592,36],[593,42],[594,42],[595,36],[596,28],[597,37],[598,37],[599,42],[600,35],[601,45],[602,40],[603,30],[604,36],[605,43],[606,30],[607,41],[608,28],[609,36],[610,32],[611,39],[612,38],[613,39],[614,31],[615,35],[616,33],[617,39],[618,35],[619,41],[620,33],[621,33],[622,46],[623,39],[624,46],[625,43],[626,39],[627,40],[628,37],[629,39],[630,45],[631,29],[632,45],[633,44],[634,44],[635,51],[636,60],[637,36],[638,45],[639,35],[640,42],[641,44],[642,34],[643,37],[644,55],[645,38],[646,28],[647,44],[648,43],[649,50],[650,39],[651,41],[652,39],[653,48],[654,42],[655,43],[656,36],[657,44],[658,30],[659,48],[660,42],[661,56],[662,45],[663,50],[664,41],[665,38],[666,44],[667,46],[668,37],[669,41],[670,38],[671,40],[672,49],[673,33],[674,41],[675,45],[676,41],[677,34],[678,39],[679,35],[680,39],[681,42],[682,37],[683,46],[684,44],[685,41],[686,36],[687,54],[688,41],[689,40],[690,37],[691,36],[692,42],[693,56],[694,37],[695,44],[696,46],[697,43],[698,51],[699,39],[700,38],[701,35],[702,42],[703,56],[704,41],[705,54],[706,46],[707,50],[708,42],[709,57],[710,65],[711,40],[712,44],[713,42],[714,43],[715,38],[716,48],[717,57],[718,41],[719,51],[720,52],[721,62],[722,50],[723,42],[724,33],[725,44],[726,38],[727,42],[728,37],[729,39],[730,51],[731,51],[732,46],[733,49],[734,44],[735,42],[736,38],[737,42],[738,51],[739,59],[740,45],[741,39],[742,36],[743,38],[744,48],[745,46],[746,48],[747,60],[748,38],[749,38],[750,39],[751,35],[752,36],[753,39],[754,50],[755,55],[756,45],[757,30],[758,41],[759,41],[760,55],[761,37],[762,39],[763,44],[764,30],[765,55],[766,38],[767,41],[768,37],[769,50],[770,52],[771,48],[772,52],[773,51],[774,50],[775,46],[776,48],[777,40],[778,43],[779,42],[780,43],[781,47],[782,47],[783,43],[784,46],[785,39],[786,46],[787,46],[788,36],[789,41],[790,47],[791,40],[792,44],[793,42],[794,56],[795,50],[796,62],[797,48],[798,43],[799,54],[800,58],[801,48],[802,52],[803,49],[804,46],[805,48],[806,44],[807,49],[808,52],[809,49],[810,58],[811,61],[812,52],[813,51],[814,56],[815,46],[816,40],[817,40],[818,53],[819,50],[820,47],[821,45],[822,40],[823,51],[824,51],[825,52],[826,56],[827,45],[828,52],[829,43],[830,49],[831,65],[832,43],[833,48],[834,39],[835,39],[836,47],[837,43],[838,46],[839,49],[840,44],[841,74],[842,47],[843,65],[844,47],[845,48],[846,42],[847,55],[848,38],[849,50],[850,39],[851,46],[852,43],[853,47],[854,43],[855,41],[856,45],[857,30],[858,41],[859,52],[860,39],[861,58],[862,38],[863,43],[864,46],[865,51],[866,42],[867,50],[868,60],[869,44],[870,28],[871,50],[872,39],[873,47],[874,46],[875,44],[876,50],[877,57],[878,36],[879,47],[880,40],[881,55],[882,50],[883,61],[884,49],[885,43],[886,53],[887,45],[888,57],[889,48],[890,52],[891,34],[892,45],[893,40],[894,48],[895,46],[896,39],[897,42],[898,39],[899,42],[900,41],[901,47],[902,50],[903,41],[904,59],[905,43],[906,42],[907,40],[908,40],[909,60],[910,41],[911,52],[912,52],[913,42],[914,46],[915,41],[916,42],[917,47],[918,51],[919,46],[920,34],[921,53],[922,54],[923,37],[924,41],[925,38],[926,52],[927,46],[928,44],[929,40],[930,37],[931,48],[932,53],[933,48],[934,57],[935,41],[936,30],[937,55],[938,48],[939,61],[940,45],[941,48],[942,46],[943,57],[944,39],[945,43],[946,56],[947,57],[948,50],[949,37],[950,43],[951,49],[952,50],[953,54],[954,52],[955,51],[956,42],[957,59],[958,55],[959,45],[960,53],[961,49],[962,48],[963,47],[964,33],[965,52],[966,48],[967,44],[968,51],[969,52],[970,59],[971,52],[972,42],[973,46],[974,35],[975,56],[976,50],[977,51],[978,55],[979,46],[980,38],[981,45],[982,57],[983,59],[984,34],[985,38],[986,51],[987,57],[988,49],[989,46],[990,60],[991,34],[992,46],[993,38],[994,64],[995,42],[996,44],[997,51],[998,43],[999,50],[1000,37],[1001,56],[1002,63],[1003,59],[1004,59],[1005,60],[1006,40],[1007,59],[1008,61],[1009,42],[1010,49],[1011,48],[1012,57],[1013,46],[1014,66],[1015,52],[1016,49],[1017,46],[1018,60],[1019,59],[1020,56],[1021,63],[1022,51],[1023,67],[1024,49],[1025,59],[1026,53],[1027,65],[1028,62],[1029,55],[1030,50],[1031,52],[1032,58],[1033,64],[1034,56],[1035,58],[1036,53],[1037,58],[1038,60],[1039,64],[1040,65],[1041,53],[1042,52],[1043,49],[1044,49],[1045,58],[1046,55],[1047,50],[1048,61],[1049,47],[1050,56],[1051,62],[1052,51],[1053,71],[1054,48],[1055,49],[1056,43],[1057,59],[1058,53],[1059,39],[1060,55],[1061,58],[1062,75],[1063,43],[1064,48],[1065,65],[1066,50],[1067,57],[1068,57],[1069,58],[1070,64],[1071,54],[1072,54],[1073,65],[1074,66],[1075,49],[1076,60],[1077,65],[1078,58],[1079,55],[1080,52],[1081,49],[1082,67],[1083,58],[1084,59],[1085,67],[1086,53],[1087,57],[1088,42],[1089,57],[1090,69],[1091,60],[1092,39],[1093,57],[1094,63],[1095,62],[1096,47],[1097,56],[1098,63],[1099,59],[1100,51],[1101,48],[1102,60],[1103,54],[1104,46],[1105,59],[1106,52],[1107,58],[1108,52],[1109,55],[1110,52],[1111,57],[1112,60],[1113,49],[1114,42],[1115,48],[1116,42],[1117,66],[1118,40],[1119,50],[1120,63],[1121,58],[1122,54],[1123,56],[1124,46],[1125,51],[1126,40],[1127,56],[1128,46],[1129,58],[1130,62],[1131,49],[1132,61],[1133,70],[1134,56],[1135,60],[1136,50],[1137,44],[1138,56],[1139,49],[1140,53],[1141,55],[1142,50],[1143,58],[1144,61],[1145,58],[1146,58],[1147,56],[1148,68],[1149,58],[1150,57],[1151,68],[1152,45],[1153,41],[1154,52],[1155,51],[1156,62],[1157,52],[1158,55],[1159,47],[1160,60],[1161,57],[1162,61],[1163,36],[1164,59],[1165,66],[1166,68],[1167,65],[1168,53],[1169,63],[1170,53],[1171,47],[1172,61],[1173,58],[1174,54],[1175,52],[1176,71],[1177,37],[1178,50],[1179,57],[1180,55],[1181,62],[1182,55],[1183,56],[1184,56],[1185,76],[1186,58],[1187,51],[1188,57],[1189,57],[1190,54],[1191,54],[1192,57],[1193,56],[1194,65],[1195,43],[1196,60],[1197,61],[1198,60],[1199,55],[1200,56],[1201,51],[1202,49],[1203,43],[1204,59],[1205,48],[1206,50],[1207,71],[1208,61],[1209,63],[1210,54],[1211,60],[1212,42],[1213,61],[1214,62],[1215,69],[1216,68],[1217,63],[1218,53],[1219,56],[1220,54],[1221,62],[1222,55],[1223,63],[1224,48],[1225,53],[1226,70],[1227,45],[1228,52],[1229,55],[1230,69],[1231,68],[1232,51],[1233,64],[1234,58],[1235,52],[1236,53],[1237,53],[1238,58],[1239,77],[1240,64],[1241,51],[1242,54],[1243,49],[1244,58],[1245,56],[1246,65],[1247,57],[1248,55],[1249,54],[1250,54],[1251,54],[1252,51],[1253,54],[1254,59],[1255,73],[1256,74],[1257,58],[1258,52],[1259,71],[1260,66],[1261,61],[1262,59],[1263,51],[1264,57],[1265,64],[1266,56],[1267,57],[1268,70],[1269,62],[1270,59],[1271,77],[1272,56],[1273,55],[1274,60],[1275,67],[1276,51],[1277,64],[1278,60],[1279,45],[1280,57],[1281,56],[1282,64],[1283,63],[1284,59],[1285,54],[1286,63],[1287,46],[1288,37],[1289,52],[1290,54],[1291,60],[1292,53],[1293,67],[1294,42],[1295,54],[1296,53],[1297,61],[1298,62],[1299,50],[1300,65],[1301,68],[1302,55],[1303,60],[1304,49],[1305,64],[1306,57],[1307,55],[1308,47],[1309,73],[1310,57],[1311,53],[1312,62],[1313,56],[1314,66],[1315,52],[1316,60],[1317,75],[1318,64],[1319,66],[1320,55],[1321,60],[1322,76],[1323,62],[1324,65],[1325,52],[1326,52],[1327,47],[1328,50],[1329,63],[1330,53],[1331,53],[1332,61],[1333,60],[1334,50],[1335,72],[1336,54],[1337,61],[1338,70],[1339,73],[1340,60],[1341,70],[1342,71],[1343,70],[1344,69],[1345,64],[1346,54],[1347,55],[1348,43],[1349,56],[1350,58],[1351,58],[1352,63],[1353,59],[1354,48],[1355,69],[1356,80],[1357,59],[1358,55],[1359,48],[1360,51],[1361,62],[1362,69],[1363,56],[1364,53],[1365,67],[1366,52],[1367,49],[1368,50],[1369,43],[1370,76],[1371,58],[1372,65],[1373,59],[1374,45],[1375,58],[1376,59],[1377,56],[1378,68],[1379,49],[1380,68],[1381,57],[1382,68],[1383,55],[1384,54],[1385,55],[1386,53],[1387,40],[1388,56],[1389,65],[1390,51],[1391,51],[1392,64],[1393,57],[1394,58],[1395,72],[1396,54],[1397,74],[1398,70],[1399,75],[1400,46],[1401,45],[1402,44],[1403,55],[1404,50],[1405,46],[1406,60],[1407,68],[1408,57],[1409,53],[1410,69],[1411,62],[1412,62],[1413,82],[1414,63],[1415,69],[1416,52],[1417,47],[1418,49],[1419,68],[1420,59],[1421,45],[1422,56],[1423,54],[1424,52],[1425,44],[1426,61],[1427,61],[1428,67],[1429,63],[1430,47],[1431,53],[1432,53],[1433,44],[1434,57],[1435,72],[1436,66],[1437,60],[1438,52],[1439,71],[1440,61],[1441,63],[1442,63],[1443,56],[1444,46],[1445,54],[1446,53],[1447,74],[1448,53],[1449,57],[1450,60],[1451,49],[1452,69],[1453,56],[1454,68],[1455,60],[1456,49],[1457,60],[1458,56],[1459,47],[1460,60],[1461,55],[1462,47],[1463,58],[1464,62],[1465,62],[1466,57],[1467,65],[1468,53],[1469,59],[1470,50],[1471,76],[1472,49],[1473,57],[1474,61],[1475,66],[1476,67],[1477,76],[1478,61],[1479,51],[1480,68],[1481,74],[1482,70],[1483,59],[1484,60],[1485,63],[1486,50],[1487,60],[1488,64],[1489,59],[1490,59],[1491,58],[1492,68],[1493,63],[1494,56],[1495,57],[1496,57],[1497,53],[1498,55],[1499,58],[1500,54],[1501,52],[1502,62],[1503,57],[1504,66],[1505,57],[1506,61],[1507,77],[1508,54],[1509,59],[1510,68],[1511,54],[1512,65],[1513,53],[1514,56],[1515,58],[1516,66],[1517,63],[1518,71],[1519,63],[1520,67],[1521,57],[1522,56],[1523,50],[1524,68],[1525,55],[1526,53],[1527,67],[1528,54],[1529,54],[1530,61],[1531,70],[1532,66],[1533,63],[1534,42],[1535,54],[1536,56],[1537,61],[1538,68],[1539,54],[1540,62],[1541,58],[1542,62],[1543,64],[1544,49],[1545,48],[1546,65],[1547,61],[1548,55],[1549,48],[1550,63],[1551,68],[1552,59],[1553,53],[1554,62],[1555,64],[1556,61],[1557,61],[1558,48],[1559,56],[1560,61],[1561,62],[1562,57],[1563,60],[1564,55],[1565,57],[1566,59],[1567,68],[1568,48],[1569,65],[1570,38],[1571,66],[1572,45],[1573,52],[1574,59],[1575,61],[1576,60],[1577,64],[1578,56],[1579,50],[1580,55],[1581,60],[1582,54],[1583,68],[1584,62],[1585,59],[1586,70],[1587,62],[1588,66],[1589,71],[1590,60],[1591,62],[1592,69],[1593,63],[1594,60],[1595,59],[1596,60],[1597,50],[1598,57],[1599,63],[1600,61],[1601,58],[1602,49],[1603,64],[1604,56],[1605,65],[1606,68],[1607,71],[1608,58],[1609,71],[1610,65],[1611,49],[1612,64],[1613,58],[1614,72],[1615,56],[1616,52],[1617,71],[1618,53],[1619,53],[1620,73],[1621,72],[1622,46],[1623,53],[1624,60],[1625,55],[1626,49],[1627,62],[1628,53],[1629,57],[1630,48],[1631,62],[1632,44],[1633,64],[1634,62],[1635,62],[1636,62],[1637,61],[1638,62],[1639,53],[1640,65],[1641,57],[1642,59],[1643,59],[1644,69],[1645,56],[1646,61],[1647,54],[1648,43],[1649,43],[1650,50],[1651,51],[1652,68],[1653,52],[1654,59],[1655,60],[1656,65],[1657,47],[1658,52],[1659,49],[1660,50],[1661,57],[1662,55],[1663,55],[1664,50],[1665,50],[1666,79],[1667,55],[1668,61],[1669,71],[1670,57],[1671,48],[1672,48],[1673,70],[1674,59],[1675,77],[1676,46],[1677,50],[1678,51],[1679,51],[1680,61],[1681,62],[1682,50],[1683,48],[1684,54],[1685,55],[1686,59],[1687,54],[1688,67],[1689,63],[1690,61],[1691,49],[1692,56],[1693,59],[1694,65],[1695,53],[1696,54],[1697,59],[1698,57],[1699,60],[1700,65],[1701,67],[1702,50],[1703,53],[1704,54],[1705,48],[1706,54],[1707,52],[1708,56],[1709,57],[1710,59],[1711,41],[1712,54],[1713,55],[1714,54],[1715,63],[1716,46],[1717,52],[1718,55],[1719,37],[1720,65],[1721,50],[1722,67],[1723,45],[1724,58],[1725,55],[1726,50],[1727,65],[1728,55],[1729,57],[1730,61],[1731,51],[1732,55],[1733,54],[1734,49],[1735,64],[1736,57],[1737,46],[1738,47],[1739,53],[1740,55],[1741,57],[1742,66],[1743,50],[1744,52],[1745,60],[1746,55],[1747,46],[1748,75],[1749,40],[1750,61],[1751,54],[1752,55],[1753,61],[1754,53],[1755,52],[1756,46],[1757,54],[1758,60],[1759,47],[1760,67],[1761,61],[1762,57],[1763,61],[1764,48],[1765,59],[1766,71],[1767,58],[1768,56],[1769,69],[1770,59],[1771,58],[1772,54],[1773,56],[1774,58],[1775,54],[1776,65],[1777,57],[1778,49],[1779,65],[1780,61],[1781,51],[1782,60],[1783,54],[1784,64],[1785,57],[1786,44],[1787,61],[1788,50],[1789,56],[1790,59],[1791,58],[1792,58],[1793,54],[1794,56],[1795,57],[1796,57],[1797,53],[1798,63],[1799,66],[1800,59],[1801,49],[1802,57],[1803,50],[1804,55],[1805,58],[1806,52],[1807,58],[1808,53],[1809,58],[1810,48],[1811,57],[1812,55],[1813,60],[1814,40],[1815,49],[1816,51],[1817,58],[1818,63],[1819,52],[1820,53],[1821,50],[1822,43],[1823,47],[1824,44],[1825,69],[1826,64],[1827,58],[1828,58],[1829,59],[1830,60],[1831,56],[1832,53],[1833,61],[1834,50],[1835,55],[1836,61],[1837,54],[1838,61],[1839,55],[1840,46],[1841,49],[1842,48],[1843,61],[1844,49],[1845,61],[1846,58],[1847,59],[1848,59],[1849,56],[1850,60],[1851,65],[1852,64],[1853,72],[1854,63],[1855,57],[1856,45],[1857,56],[1858,56],[1859,69],[1860,45],[1861,55],[1862,74],[1863,50],[1864,54],[1865,49],[1866,55],[1867,52],[1868,56],[1869,44],[1870,55],[1871,42],[1872,42],[1873,48],[1874,47],[1875,57],[1876,62],[1877,56],[1878,64],[1879,51],[1880,38],[1881,54],[1882,57],[1883,45],[1884,41],[1885,49],[1886,44],[1887,45],[1888,42],[1889,53],[1890,46],[1891,48],[1892,50],[1893,52],[1894,48],[1895,39],[1896,51],[1897,56],[1898,40],[1899,52],[1900,48],[1901,51],[1902,44],[1903,44],[1904,53],[1905,45],[1906,44],[1907,40],[1908,53],[1909,61],[1910,35],[1911,43],[1912,56],[1913,44],[1914,50],[1915,61],[1916,41],[1917,40],[1918,52],[1919,49],[1920,54],[1921,47],[1922,50],[1923,48],[1924,44],[1925,54],[1926,44],[1927,46],[1928,51],[1929,39],[1930,44],[1931,55],[1932,55],[1933,63],[1934,54],[1935,42],[1936,55],[1937,41],[1938,42],[1939,44],[1940,53],[1941,54],[1942,45],[1943,38],[1944,34],[1945,51],[1946,47],[1947,49],[1948,48],[1949,43],[1950,52],[1951,48],[1952,41],[1953,43],[1954,58],[1955,55],[1956,47],[1957,42],[1958,45],[1959,58],[1960,38],[1961,57],[1962,51],[1963,42],[1964,53],[1965,58],[1966,41],[1967,46],[1968,47],[1969,58],[1970,45],[1971,52],[1972,41],[1973,42],[1974,62],[1975,47],[1976,48],[1977,41],[1978,44],[1979,53],[1980,36],[1981,40],[1982,41],[1983,38],[1984,46],[1985,42],[1986,43],[1987,45],[1988,55],[1989,52],[1990,60],[1991,39],[1992,41],[1993,36],[1994,40],[1995,53],[1996,42],[1997,60],[1998,56],[1999,55],[2000,43],[2001,46],[2002,48],[2003,36],[2004,42],[2005,47],[2006,43],[2007,41],[2008,40],[2009,58],[2010,50],[2011,67],[2012,45],[2013,38],[2014,44],[2015,48],[2016,59],[2017,46],[2018,55],[2019,54],[2020,53],[2021,54],[2022,55],[2023,55],[2024,55],[2025,64],[2026,49],[2027,45],[2028,48],[2029,54],[2030,39],[2031,46],[2032,44],[2033,40],[2034,37],[2035,58],[2036,47],[2037,46],[2038,48],[2039,56],[2040,64],[2041,43],[2042,56],[2043,42],[2044,40],[2045,40],[2046,51],[2047,47],[2049,105],[2051,82],[2053,82],[2055,102],[2057,103],[2059,109],[2061,91],[2063,84],[2065,90],[2067,122],[2069,93],[2071,97],[2073,85],[2075,97],[2077,88],[2079,96],[2081,102],[2083,110],[2085,95],[2087,92],[2089,101],[2091,81],[2093,105],[2095,104],[2097,87],[2099,96],[2101,80],[2103,74],[2105,107],[2107,77],[2109,88],[2111,80],[2113,106],[2115,84],[2117,87],[2119,75],[2121,87],[2123,93],[2125,93],[2127,84],[2129,71],[2131,90],[2133,89],[2135,90],[2137,89],[2139,100],[2141,85],[2143,83],[2145,79],[2147,72],[2149,81],[2151,91],[2153,83],[2155,80],[2157,80],[2159,82],[2161,84],[2163,66],[2165,72],[2167,91],[2169,87],[2171,75],[2173,84],[2175,63],[2177,78],[2179,78],[2181,83],[2183,75],[2185,72],[2187,68],[2189,84],[2191,86],[2193,67],[2195,57],[2197,79],[2199,75],[2201,67],[2203,95],[2205,64],[2207,74],[2209,72],[2211,90],[2213,70],[2215,68],[2217,70],[2219,90],[2221,85],[2223,80],[2225,75],[2227,90],[2229,83],[2231,74],[2233,84],[2235,84],[2237,96],[2239,74],[2241,81],[2243,88],[2245,65],[2247,92],[2249,68],[2251,81],[2253,81],[2255,82],[2257,79],[2259,89],[2261,76],[2263,73],[2265,87],[2267,83],[2269,82],[2271,78],[2273,86],[2275,102],[2277,79],[2279,69],[2281,63],[2283,82],[2285,78],[2287,92],[2289,84],[2291,90],[2293,85],[2295,85],[2297,70],[2299,72],[2301,77],[2303,85],[2305,76],[2307,101],[2309,73],[2311,72],[2313,79],[2315,84],[2317,79],[2319,65],[2321,75],[2323,72],[2325,66],[2327,84],[2329,81],[2331,75],[2333,73],[2335,64],[2337,75],[2339,73],[2341,77],[2343,62],[2345,72],[2347,73],[2349,78],[2351,61],[2353,71],[2355,74],[2357,69],[2359,72],[2361,62],[2363,57],[2365,76],[2367,78],[2369,78],[2371,69],[2373,75],[2375,87],[2377,80],[2379,53],[2381,67],[2383,67],[2385,59],[2387,71],[2389,88],[2391,80],[2393,71],[2395,68],[2397,62],[2399,68],[2401,63],[2403,49],[2405,76],[2407,69],[2409,74],[2411,57],[2413,62],[2415,75],[2417,55],[2419,77],[2421,51],[2423,65],[2425,59],[2427,57],[2429,64],[2431,57],[2433,52],[2435,64],[2437,52],[2439,64],[2441,63],[2443,72],[2445,72],[2447,60],[2449,66],[2451,55],[2453,48],[2455,62],[2457,52],[2459,47],[2461,64],[2463,73],[2465,84],[2467,59],[2469,61],[2471,66],[2473,64],[2475,59],[2477,62],[2479,71],[2481,63],[2483,59],[2485,64],[2487,56],[2489,64],[2491,72],[2493,53],[2495,61],[2497,65],[2499,57],[2501,56],[2503,58],[2505,69],[2507,39],[2509,49],[2511,53],[2513,71],[2515,52],[2517,57],[2519,58],[2521,64],[2523,47],[2525,65],[2527,53],[2529,71],[2531,68],[2533,60],[2535,56],[2537,52],[2539,52],[2541,51],[2543,59],[2545,55],[2547,59],[2549,62],[2551,60],[2553,41],[2555,64],[2557,64],[2559,61],[2561,52],[2563,53],[2565,61],[2567,58],[2569,58],[2571,54],[2573,54],[2575,58],[2577,64],[2579,57],[2581,57],[2583,66],[2585,64],[2587,59],[2589,54],[2591,57],[2593,53],[2595,56],[2597,62],[2599,65],[2601,46],[2603,61],[2605,41],[2607,56],[2609,55],[2611,46],[2613,56],[2615,50],[2617,60],[2619,49],[2621,60],[2623,60],[2625,63],[2627,58],[2629,65],[2631,45],[2633,59],[2635,60],[2637,56],[2639,57],[2641,72],[2643,54],[2645,54],[2647,60],[2649,68],[2651,57],[2653,61],[2655,61],[2657,58],[2659,54],[2661,47],[2663,50],[2665,68],[2667,43],[2669,54],[2671,48],[2673,51],[2675,52],[2677,53],[2679,48],[2681,51],[2683,54],[2685,51],[2687,58],[2689,59],[2691,50],[2693,61],[2695,51],[2697,58],[2699,51],[2701,46],[2703,58],[2705,49],[2707,47],[2709,59],[2711,56],[2713,53],[2715,55],[2717,50],[2719,62],[2721,53],[2723,51],[2725,46],[2727,51],[2729,48],[2731,48],[2733,47],[2735,52],[2737,51],[2739,41],[2741,38],[2743,51],[2745,64],[2747,50],[2749,69],[2751,38],[2753,56],[2755,38],[2757,40],[2759,54],[2761,40],[2763,51],[2765,47],[2767,56],[2769,40],[2771,42],[2773,48],[2775,44],[2777,45],[2779,57],[2781,48],[2783,72],[2785,50],[2787,54],[2789,51],[2791,47],[2793,55],[2795,51],[2797,47],[2799,52],[2801,46],[2803,49],[2805,49],[2807,56],[2809,46],[2811,58],[2813,43],[2815,59],[2817,42],[2819,48],[2821,40],[2823,46],[2825,40],[2827,42],[2829,38],[2831,61],[2833,42],[2835,44],[2837,46],[2839,43],[2841,41],[2843,49],[2845,50],[2847,43],[2849,44],[2851,39],[2853,40],[2855,37],[2857,36],[2859,34],[2861,37],[2863,51],[2865,41],[2867,41],[2869,42],[2871,41],[2873,29],[2875,49],[2877,39],[2879,46],[2881,37],[2883,27],[2885,44],[2887,33],[2889,44],[2891,37],[2893,38],[2895,31],[2897,28],[2899,34],[2901,48],[2903,53],[2905,39],[2907,37],[2909,40],[2911,29],[2913,35],[2915,34],[2917,36],[2919,41],[2921,32],[2923,38],[2925,32],[2927,50],[2929,39],[2931,35],[2933,37],[2935,23],[2937,32],[2939,33],[2941,39],[2943,24],[2945,18],[2947,38],[2949,41],[2951,33],[2953,29],[2955,36],[2957,34],[2959,27],[2961,42],[2963,25],[2965,24],[2967,45],[2969,35],[2971,34],[2973,38],[2975,37],[2977,25],[2979,32],[2981,30],[2983,35],[2985,28],[2987,41],[2989,30],[2991,40],[2993,40],[2995,36],[2997,30],[2999,28],[3001,30],[3003,36],[3005,37],[3007,29],[3009,29],[3011,42],[3013,32],[3015,26],[3017,38],[3019,34],[3021,25],[3023,21],[3025,25],[3027,26],[3029,32],[3031,44],[3033,31],[3035,30],[3037,34],[3039,43],[3041,30],[3043,31],[3045,26],[3047,38],[3049,24],[3051,31],[3053,37],[3055,24],[3057,32],[3059,32],[3061,30],[3063,31],[3065,22],[3067,32],[3069,31],[3071,25],[3073,23],[3075,25],[3077,28],[3079,39],[3081,33],[3083,29],[3085,36],[3087,29],[3089,23],[3091,22],[3093,27],[3095,28],[3097,24],[3099,29],[3101,27],[3103,24],[3105,28],[3107,25],[3109,34],[3111,32],[3113,35],[3115,27],[3117,28],[3119,37],[3121,23],[3123,30],[3125,31],[3127,39],[3129,30],[3131,27],[3133,26],[3135,18],[3137,25],[3139,29],[3141,26],[3143,28],[3145,18],[3147,37],[3149,24],[3151,31],[3153,29],[3155,32],[3157,18],[3159,21],[3161,20],[3163,34],[3165,29],[3167,25],[3169,30],[3171,21],[3173,31],[3175,26],[3177,21],[3179,24],[3181,24],[3183,27],[3185,21],[3187,20],[3189,21],[3191,25],[3193,31],[3195,20],[3197,22],[3199,17],[3201,25],[3203,17],[3205,26],[3207,24],[3209,29],[3211,27],[3213,19],[3215,25],[3217,23],[3219,25],[3221,26],[3223,25],[3225,22],[3227,14],[3229,21],[3231,16],[3233,15],[3235,9],[3237,21],[3239,16],[3241,14],[3243,27],[3245,23],[3247,21],[3249,23],[3251,23],[3253,18],[3255,13],[3257,17],[3259,17],[3261,32],[3263,16],[3265,21],[3267,27],[3269,16],[3271,20],[3273,18],[3275,18],[3277,19],[3279,19],[3281,28],[3283,17],[3285,14],[3287,21],[3289,11],[3291,17],[3293,18],[3295,19],[3297,16],[3299,11],[3301,21],[3303,22],[3305,21],[3307,14],[3309,27],[3311,20],[3313,23],[3315,21],[3317,12],[3319,18],[3321,22],[3323,12],[3325,10],[3327,19],[3329,18],[3331,12],[3333,18],[3335,17],[3337,15],[3339,13],[3341,15],[3343,15],[3345,20],[3347,16],[3349,13],[3351,11],[3353,24],[3355,15],[3357,17],[3359,18],[3361,14],[3363,14],[3365,13],[3367,12],[3369,17],[3371,11],[3373,17],[3375,15],[3377,22],[3379,5],[3381,13],[3383,10],[3385,13],[3387,12],[3389,16],[3391,24],[3393,12],[3395,8],[3397,13],[3399,12],[3401,12],[3403,19],[3405,9],[3407,16],[3409,13],[3411,11],[3413,7],[3415,11],[3417,15],[3419,9],[3421,11],[3423,9],[3425,12],[3427,12],[3429,11],[3431,9],[3433,12],[3435,12],[3437,16],[3439,12],[3441,10],[3443,17],[3445,19],[3447,11],[3449,13],[3451,5],[3453,17],[3455,11],[3457,17],[3459,15],[3461,12],[3463,11],[3465,10],[3467,15],[3469,18],[3471,14],[3473,9],[3475,11],[3477,9],[3479,8],[3481,18],[3483,10],[3485,12],[3487,15],[3489,15],[3491,14],[3493,12],[3495,9],[3497,10],[3499,6],[3501,17],[3503,10],[3505,17],[3507,8],[3509,7],[3511,10],[3513,10],[3515,6],[3517,14],[3519,8],[3521,9],[3523,6],[3525,11],[3527,8],[3529,16],[3531,7],[3533,7],[3535,12],[3537,15],[3539,8],[3541,9],[3543,5],[3545,8],[3547,11],[3549,11],[3551,12],[3553,16],[3555,5],[3557,9],[3559,6],[3561,9],[3563,11],[3565,3],[3567,8],[3569,10],[3571,14],[3573,9],[3575,11],[3577,15],[3579,8],[3581,7],[3583,5],[3585,6],[3587,8],[3589,11],[3591,9],[3593,8],[3595,8],[3597,7],[3599,10],[3601,11],[3603,13],[3605,10],[3607,9],[3609,8],[3611,11],[3613,8],[3615,5],[3617,9],[3619,6],[3621,10],[3623,6],[3625,12],[3627,8],[3629,14],[3631,12],[3633,8],[3635,7],[3637,10],[3639,7],[3641,5],[3643,11],[3645,8],[3647,5],[3649,5],[3651,6],[3653,9],[3655,6],[3657,4],[3659,6],[3661,5],[3663,2],[3665,8],[3667,5],[3669,7],[3671,10],[3673,6],[3675,9],[3677,12],[3679,3],[3681,9],[3683,6],[3685,8],[3687,7],[3689,5],[3691,7],[3693,7],[3695,3],[3697,10],[3699,5],[3701,6],[3703,6],[3705,12],[3707,8],[3709,7],[3711,5],[3713,4],[3715,5],[3717,7],[3719,6],[3721,1],[3723,7],[3725,5],[3727,6],[3729,10],[3731,11],[3733,8],[3735,3],[3737,10],[3739,8],[3741,10],[3743,8],[3745,8],[3747,8],[3749,9],[3751,4],[3753,4],[3755,5],[3757,6],[3759,4],[3761,9],[3763,6],[3765,9],[3767,1],[3769,8],[3771,5],[3773,9],[3775,6],[3777,6],[3779,3],[3781,4],[3783,6],[3785,2],[3787,7],[3789,5],[3791,1],[3793,3],[3795,4],[3797,3],[3799,4],[3801,5],[3803,7],[3805,6],[3807,4],[3809,6],[3811,3],[3813,7],[3815,5],[3817,2],[3819,3],[3821,4],[3823,2],[3825,2],[3827,4],[3829,4],[3831,5],[3833,5],[3835,7],[3837,2],[3839,5],[3841,3],[3843,5],[3845,6],[3847,5],[3849,4],[3851,3],[3853,8],[3855,2],[3857,4],[3859,4],[3861,6],[3863,3],[3865,2],[3867,2],[3869,1],[3871,2],[3873,3],[3875,2],[3877,2],[3879,4],[3881,6],[3883,2],[3885,3],[3887,5],[3889,1],[3891,1],[3893,2],[3895,2],[3897,3],[3899,3],[3901,2],[3903,5],[3905,2],[3907,3],[3909,1],[3911,2],[3913,3],[3915,3],[3919,2],[3921,7],[3923,2],[3925,1],[3927,2],[3929,2],[3931,2],[3933,1],[3935,2],[3937,4],[3939,2],[3941,9],[3943,3],[3945,2],[3947,3],[3949,4],[3951,3],[3953,1],[3955,3],[3957,3],[3959,3],[3961,2],[3963,7],[3965,1],[3967,2],[3969,3],[3971,3],[3973,1],[3975,3],[3977,2],[3979,5],[3981,5],[3983,5],[3985,2],[3987,3],[3989,4],[3991,3],[3993,1],[3995,3],[3997,3],[4001,4],[4003,3],[4005,1],[4007,4],[4009,5],[4011,1],[4013,3],[4015,2],[4017,3],[4019,2],[4021,2],[4027,1],[4031,2],[4033,3],[4037,2],[4039,1],[4041,3],[4043,1],[4045,2],[4047,1],[4051,2],[4053,3],[4055,2],[4059,1],[4061,3],[4063,2],[4065,1],[4067,1],[4069,1],[4073,1],[4075,4],[4079,3],[4081,2],[4083,3],[4085,1],[4087,2],[4095,3],[4099,3],[4103,8],[4107,4],[4111,3],[4115,2],[4119,2],[4123,1],[4127,2],[4131,4],[4135,2],[4139,4],[4143,4],[4147,2],[4155,1],[4159,3],[4163,4],[4171,6],[4175,2],[4179,3],[4183,3],[4187,5],[4191,2],[4195,2],[4199,3],[4203,2],[4207,3],[4211,2],[4215,1],[4219,4],[4223,3],[4227,3],[4235,3],[4239,3],[4243,1],[4247,3],[4251,1],[4263,3],[4267,2],[4271,1],[4275,1],[4283,2],[4287,1],[4291,1],[4295,4],[4299,3],[4303,2],[4307,4],[4311,1],[4315,3],[4319,2],[4323,2],[4331,2],[4335,3],[4339,1],[4343,2],[4347,1],[4351,1],[4359,4],[4371,2],[4379,1],[4387,3],[4391,3],[4399,2],[4407,2],[4411,3],[4415,1],[4419,1],[4423,3],[4431,3],[4435,1],[4439,3],[4443,2],[4447,2],[4455,3],[4467,3],[4475,1],[4479,1],[4487,1],[4495,2],[4507,1],[4527,3],[4567,1],[4571,1],[4575,1],[4579,1],[4583,1],[4591,1],[4599,1],[4603,2],[4607,1],[4611,2],[4619,3],[4623,1],[4631,1],[4655,1],[4667,1],[4679,1],[4711,1],[4719,2],[4723,1],[4727,1],[4731,1],[4735,1],[4739,1],[4743,1],[4747,1],[4751,1],[4755,1],[4763,1],[4783,1],[4807,1],[4811,2],[4819,1],[4823,1],[4839,1],[4851,1],[4859,1],[4871,2],[4899,1],[4923,1],[4999,1],[5091,1],[5099,1],[5119,1],[5123,1],[5127,1],[5159,1],[5207,1],[5235,1],[5351,1],[5463,1],[5475,1],[5483,1],[5543,1],[5547,1],[5559,1],[5611,1],[5855,1]]}",
+        "seq": 9,
+        "received_utc": "2026-10-26T09:55:51.133655+00:00",
+        "received_monotonic": 13398.429330197,
+        "valid": true,
+        "pid": 257915,
+        "raw_log": "/tmp/oe-live-sandbox-pefgil6o/wrk2-257915.log"
+      },
+      "background": null,
+      "p99_ms": 3.615,
+      "p95_ms": 3.041,
+      "rps": 25597.09380848533,
+      "completion_fraction": 0.9998864768939582,
+      "errors": 0,
+      "eps": null
+    },
+    {
+      "start_monotonic": 13398.425902137,
+      "end_monotonic": 13403.426438075,
+      "duration_seconds": 5.000535937999302,
+      "frontend": {
+        "source": "wrk2.hdr.window",
+        "source_sha256": "690ab1b3fed8a3449f588713f807a7d0b4b3ca02eb64d05d9b1cabc8b212069c",
+        "start_monotonic": 13398.425902137,
+        "end_monotonic": 13403.426438075,
+        "duration_seconds": 5.000535938,
+        "requests": 128016,
+        "terminal_latency_exclusions": 0,
+        "rps": 25600.455948567967,
+        "offered_rps": 25600,
+        "completion_fraction": 1.0000178104909363,
+        "p50_ms": 1.535,
+        "p95_ms": 3.043,
+        "p99_ms": 3.615,
+        "errors": {
+          "connect": 0,
+          "read": 0,
+          "write": 0,
+          "status": 0,
+          "timeout": 0
+        },
+        "raw_record": "{\"schema_version\":1,\"kind\":\"window\",\"seq\":10,\"start_ns\":13398425902137,\"end_ns\":13403426438075,\"final\":false,\"requests\":128016,\"bytes\":555077376,\"errors\":{\"connect\":0,\"read\":0,\"write\":0,\"status\":0,\"timeout\":0},\"terminal_exclusions\":0,\"histogram_overflows\":0,\"bins_us\":[[13,2],[24,2],[26,2],[27,1],[28,1],[29,2],[30,3],[33,3],[34,1],[35,2],[37,2],[38,2],[39,4],[40,4],[42,3],[43,4],[44,4],[45,4],[46,2],[47,4],[48,4],[49,5],[50,6],[51,3],[52,3],[53,5],[54,5],[55,4],[56,4],[57,6],[58,4],[59,6],[60,5],[61,11],[62,5],[63,5],[64,3],[65,3],[66,11],[67,3],[68,3],[69,4],[70,6],[71,5],[72,9],[73,7],[74,7],[75,9],[76,8],[77,8],[78,8],[79,10],[80,9],[81,10],[82,5],[83,7],[84,8],[85,6],[86,8],[87,2],[88,11],[89,9],[90,4],[91,6],[92,11],[93,8],[94,10],[95,11],[96,6],[97,14],[98,12],[99,6],[100,4],[101,7],[102,11],[103,13],[104,10],[105,6],[106,4],[107,7],[108,7],[109,14],[110,8],[111,10],[112,4],[113,10],[114,9],[115,13],[116,9],[117,8],[118,10],[119,9],[120,11],[121,17],[122,15],[123,12],[124,13],[125,4],[126,6],[127,16],[128,11],[129,9],[130,11],[131,11],[132,12],[133,13],[134,11],[135,12],[136,11],[137,9],[138,15],[139,16],[140,14],[141,10],[142,14],[143,12],[144,14],[145,12],[146,8],[147,16],[148,19],[149,19],[150,11],[151,10],[152,10],[153,15],[154,14],[155,17],[156,17],[157,23],[158,16],[159,14],[160,18],[161,19],[162,13],[163,17],[164,17],[165,19],[166,15],[167,16],[168,22],[169,24],[170,16],[171,22],[172,20],[173,19],[174,21],[175,16],[176,19],[177,11],[178,19],[179,21],[180,23],[181,26],[182,24],[183,19],[184,20],[185,22],[186,20],[187,18],[188,21],[189,19],[190,19],[191,28],[192,22],[193,20],[194,26],[195,12],[196,22],[197,28],[198,21],[199,24],[200,23],[201,20],[202,25],[203,21],[204,24],[205,25],[206,34],[207,20],[208,31],[209,22],[210,30],[211,18],[212,21],[213,32],[214,33],[215,26],[216,18],[217,25],[218,28],[219,21],[220,21],[221,18],[222,21],[223,35],[224,22],[225,27],[226,23],[227,19],[228,21],[229,29],[230,30],[231,24],[232,16],[233,27],[234,25],[235,31],[236,24],[237,24],[238,19],[239,26],[240,34],[241,29],[242,22],[243,27],[244,18],[245,31],[246,27],[247,27],[248,21],[249,37],[250,22],[251,30],[252,30],[253,30],[254,35],[255,26],[256,29],[257,23],[258,26],[259,36],[260,20],[261,30],[262,36],[263,24],[264,30],[265,33],[266,37],[267,26],[268,28],[269,29],[270,21],[271,29],[272,36],[273,20],[274,28],[275,32],[276,26],[277,26],[278,27],[279,37],[280,31],[281,34],[282,27],[283,31],[284,49],[285,32],[286,26],[287,32],[288,44],[289,29],[290,35],[291,35],[292,27],[293,21],[294,30],[295,29],[296,22],[297,36],[298,30],[299,35],[300,29],[301,33],[302,37],[303,29],[304,45],[305,29],[306,37],[307,41],[308,28],[309,34],[310,38],[311,22],[312,30],[313,19],[314,26],[315,32],[316,25],[317,26],[318,29],[319,27],[320,34],[321,38],[322,29],[323,25],[324,37],[325,35],[326,33],[327,34],[328,32],[329,22],[330,30],[331,43],[332,31],[333,35],[334,35],[335,33],[336,29],[337,33],[338,35],[339,30],[340,34],[341,37],[342,26],[343,30],[344,37],[345,28],[346,26],[347,27],[348,34],[349,24],[350,30],[351,31],[352,20],[353,34],[354,23],[355,35],[356,25],[357,28],[358,39],[359,42],[360,45],[361,30],[362,31],[363,40],[364,23],[365,26],[366,23],[367,26],[368,31],[369,28],[370,42],[371,28],[372,34],[373,34],[374,31],[375,27],[376,31],[377,28],[378,26],[379,34],[380,40],[381,30],[382,43],[383,29],[384,28],[385,30],[386,33],[387,35],[388,30],[389,42],[390,33],[391,29],[392,28],[393,31],[394,33],[395,27],[396,31],[397,38],[398,38],[399,34],[400,25],[401,39],[402,46],[403,37],[404,32],[405,28],[406,28],[407,37],[408,41],[409,28],[410,25],[411,35],[412,30],[413,30],[414,29],[415,39],[416,29],[417,34],[418,38],[419,32],[420,31],[421,34],[422,34],[423,39],[424,39],[425,33],[426,23],[427,23],[428,23],[429,33],[430,34],[431,41],[432,38],[433,27],[434,35],[435,37],[436,39],[437,36],[438,39],[439,43],[440,25],[441,36],[442,28],[443,33],[444,52],[445,25],[446,28],[447,46],[448,35],[449,33],[450,33],[451,36],[452,34],[453,27],[454,38],[455,45],[456,41],[457,43],[458,35],[459,34],[460,42],[461,33],[462,38],[463,36],[464,47],[465,33],[466,41],[467,34],[468,41],[469,32],[470,44],[471,36],[472,32],[473,46],[474,40],[475,23],[476,40],[477,45],[478,47],[479,36],[480,51],[481,29],[482,42],[483,40],[484,35],[485,26],[486,44],[487,32],[488,52],[489,47],[490,31],[491,30],[492,42],[493,40],[494,40],[495,36],[496,38],[497,35],[498,47],[499,28],[500,41],[501,31],[502,30],[503,37],[504,37],[505,38],[506,50],[507,51],[508,34],[509,35],[510,35],[511,28],[512,35],[513,28],[514,36],[515,30],[516,47],[517,32],[518,53],[519,37],[520,43],[521,41],[522,36],[523,40],[524,36],[525,41],[526,37],[527,45],[528,39],[529,36],[530,41],[531,38],[532,45],[533,44],[534,47],[535,41],[536,50],[537,33],[538,42],[539,41],[540,51],[541,35],[542,36],[543,41],[544,29],[545,39],[546,41],[547,37],[548,50],[549,28],[550,35],[551,39],[552,34],[553,44],[554,45],[555,32],[556,35],[557,42],[558,50],[559,30],[560,45],[561,36],[562,35],[563,42],[564,30],[565,37],[566,41],[567,40],[568,42],[569,39],[570,39],[571,36],[572,43],[573,39],[574,32],[575,36],[576,35],[577,28],[578,42],[579,21],[580,45],[581,33],[582,45],[583,25],[584,34],[585,34],[586,44],[587,40],[588,44],[589,35],[590,38],[591,31],[592,30],[593,48],[594,42],[595,45],[596,38],[597,37],[598,31],[599,44],[600,44],[601,34],[602,27],[603,39],[604,41],[605,44],[606,40],[607,33],[608,44],[609,37],[610,35],[611,29],[612,42],[613,47],[614,36],[615,40],[616,31],[617,41],[618,51],[619,41],[620,46],[621,44],[622,29],[623,38],[624,43],[625,49],[626,31],[627,36],[628,34],[629,40],[630,33],[631,32],[632,41],[633,34],[634,41],[635,44],[636,46],[637,30],[638,20],[639,30],[640,34],[641,38],[642,40],[643,42],[644,32],[645,44],[646,52],[647,31],[648,41],[649,51],[650,35],[651,41],[652,42],[653,41],[654,51],[655,35],[656,42],[657,35],[658,40],[659,41],[660,40],[661,41],[662,51],[663,33],[664,38],[665,42],[666,40],[667,49],[668,38],[669,30],[670,40],[671,40],[672,49],[673,30],[674,35],[675,39],[676,42],[677,41],[678,34],[679,51],[680,48],[681,35],[682,37],[683,43],[684,45],[685,38],[686,47],[687,38],[688,33],[689,37],[690,47],[691,44],[692,33],[693,33],[694,55],[695,37],[696,48],[697,51],[698,44],[699,42],[700,52],[701,39],[702,33],[703,39],[704,43],[705,44],[706,44],[707,42],[708,41],[709,39],[710,51],[711,30],[712,54],[713,40],[714,49],[715,41],[716,42],[717,33],[718,43],[719,48],[720,41],[721,40],[722,37],[723,38],[724,46],[725,30],[726,45],[727,46],[728,43],[729,36],[730,45],[731,35],[732,32],[733,38],[734,34],[735,41],[736,48],[737,46],[738,42],[739,39],[740,47],[741,50],[742,38],[743,44],[744,36],[745,43],[746,42],[747,47],[748,38],[749,45],[750,42],[751,48],[752,39],[753,52],[754,42],[755,53],[756,46],[757,41],[758,45],[759,53],[760,37],[761,45],[762,47],[763,43],[764,56],[765,51],[766,48],[767,45],[768,47],[769,53],[770,49],[771,50],[772,46],[773,40],[774,35],[775,47],[776,41],[777,47],[778,47],[779,67],[780,35],[781,43],[782,44],[783,42],[784,50],[785,49],[786,45],[787,52],[788,56],[789,51],[790,60],[791,42],[792,47],[793,51],[794,45],[795,49],[796,57],[797,44],[798,46],[799,35],[800,42],[801,49],[802,37],[803,47],[804,44],[805,35],[806,40],[807,53],[808,56],[809,46],[810,44],[811,59],[812,35],[813,54],[814,43],[815,47],[816,49],[817,44],[818,55],[819,41],[820,48],[821,38],[822,53],[823,36],[824,45],[825,47],[826,55],[827,54],[828,46],[829,43],[830,50],[831,63],[832,51],[833,53],[834,67],[835,34],[836,46],[837,60],[838,34],[839,39],[840,54],[841,54],[842,67],[843,48],[844,49],[845,47],[846,41],[847,57],[848,51],[849,46],[850,50],[851,43],[852,41],[853,52],[854,44],[855,62],[856,49],[857,47],[858,49],[859,50],[860,41],[861,46],[862,41],[863,51],[864,48],[865,49],[866,58],[867,57],[868,56],[869,40],[870,52],[871,55],[872,41],[873,41],[874,42],[875,40],[876,57],[877,49],[878,59],[879,44],[880,43],[881,41],[882,43],[883,57],[884,53],[885,41],[886,52],[887,36],[888,45],[889,53],[890,44],[891,47],[892,44],[893,54],[894,46],[895,54],[896,56],[897,37],[898,55],[899,38],[900,43],[901,47],[902,57],[903,58],[904,56],[905,36],[906,69],[907,42],[908,42],[909,59],[910,49],[911,64],[912,53],[913,40],[914,47],[915,52],[916,51],[917,44],[918,44],[919,45],[920,58],[921,45],[922,56],[923,47],[924,58],[925,62],[926,57],[927,44],[928,43],[929,43],[930,58],[931,52],[932,57],[933,63],[934,43],[935,40],[936,47],[937,52],[938,50],[939,57],[940,53],[941,50],[942,55],[943,53],[944,44],[945,49],[946,47],[947,54],[948,48],[949,56],[950,52],[951,28],[952,55],[953,53],[954,47],[955,45],[956,42],[957,57],[958,38],[959,60],[960,44],[961,59],[962,51],[963,45],[964,47],[965,59],[966,61],[967,56],[968,52],[969,45],[970,40],[971,58],[972,45],[973,61],[974,55],[975,41],[976,45],[977,54],[978,54],[979,58],[980,70],[981,63],[982,68],[983,44],[984,48],[985,54],[986,51],[987,47],[988,56],[989,58],[990,52],[991,50],[992,52],[993,59],[994,41],[995,53],[996,50],[997,47],[998,56],[999,40],[1000,38],[1001,54],[1002,49],[1003,54],[1004,53],[1005,59],[1006,53],[1007,58],[1008,53],[1009,45],[1010,63],[1011,68],[1012,60],[1013,47],[1014,50],[1015,38],[1016,62],[1017,52],[1018,34],[1019,66],[1020,56],[1021,48],[1022,56],[1023,45],[1024,56],[1025,52],[1026,60],[1027,47],[1028,49],[1029,53],[1030,48],[1031,59],[1032,58],[1033,61],[1034,50],[1035,40],[1036,57],[1037,57],[1038,51],[1039,63],[1040,62],[1041,45],[1042,57],[1043,45],[1044,38],[1045,43],[1046,63],[1047,55],[1048,55],[1049,46],[1050,53],[1051,59],[1052,56],[1053,57],[1054,45],[1055,43],[1056,58],[1057,39],[1058,53],[1059,44],[1060,72],[1061,57],[1062,59],[1063,45],[1064,68],[1065,66],[1066,44],[1067,63],[1068,43],[1069,65],[1070,67],[1071,55],[1072,61],[1073,68],[1074,59],[1075,57],[1076,57],[1077,53],[1078,54],[1079,62],[1080,50],[1081,51],[1082,50],[1083,53],[1084,48],[1085,40],[1086,61],[1087,71],[1088,58],[1089,72],[1090,47],[1091,56],[1092,43],[1093,53],[1094,59],[1095,60],[1096,49],[1097,41],[1098,61],[1099,50],[1100,49],[1101,42],[1102,55],[1103,59],[1104,52],[1105,59],[1106,65],[1107,59],[1108,51],[1109,57],[1110,58],[1111,49],[1112,64],[1113,52],[1114,57],[1115,66],[1116,52],[1117,48],[1118,69],[1119,56],[1120,49],[1121,65],[1122,58],[1123,53],[1124,44],[1125,39],[1126,55],[1127,56],[1128,56],[1129,61],[1130,55],[1131,54],[1132,51],[1133,55],[1134,65],[1135,49],[1136,49],[1137,45],[1138,56],[1139,45],[1140,48],[1141,54],[1142,68],[1143,53],[1144,58],[1145,43],[1146,62],[1147,48],[1148,64],[1149,41],[1150,52],[1151,56],[1152,53],[1153,56],[1154,53],[1155,57],[1156,60],[1157,54],[1158,56],[1159,62],[1160,57],[1161,41],[1162,57],[1163,63],[1164,33],[1165,65],[1166,52],[1167,63],[1168,51],[1169,44],[1170,61],[1171,52],[1172,59],[1173,49],[1174,46],[1175,53],[1176,63],[1177,58],[1178,47],[1179,56],[1180,57],[1181,54],[1182,45],[1183,64],[1184,59],[1185,68],[1186,46],[1187,61],[1188,56],[1189,48],[1190,47],[1191,60],[1192,51],[1193,50],[1194,52],[1195,68],[1196,51],[1197,68],[1198,62],[1199,66],[1200,42],[1201,58],[1202,53],[1203,51],[1204,55],[1205,48],[1206,55],[1207,57],[1208,61],[1209,55],[1210,52],[1211,42],[1212,75],[1213,52],[1214,53],[1215,53],[1216,49],[1217,76],[1218,57],[1219,54],[1220,51],[1221,56],[1222,61],[1223,49],[1224,59],[1225,68],[1226,52],[1227,55],[1228,47],[1229,40],[1230,49],[1231,49],[1232,75],[1233,65],[1234,59],[1235,40],[1236,60],[1237,60],[1238,65],[1239,52],[1240,75],[1241,66],[1242,57],[1243,62],[1244,62],[1245,62],[1246,58],[1247,62],[1248,47],[1249,52],[1250,70],[1251,48],[1252,61],[1253,57],[1254,48],[1255,56],[1256,61],[1257,63],[1258,69],[1259,70],[1260,49],[1261,54],[1262,66],[1263,58],[1264,54],[1265,54],[1266,56],[1267,67],[1268,68],[1269,66],[1270,63],[1271,56],[1272,59],[1273,55],[1274,59],[1275,63],[1276,55],[1277,52],[1278,74],[1279,69],[1280,60],[1281,56],[1282,51],[1283,68],[1284,51],[1285,57],[1286,49],[1287,60],[1288,54],[1289,60],[1290,65],[1291,59],[1292,45],[1293,73],[1294,51],[1295,73],[1296,70],[1297,62],[1298,59],[1299,48],[1300,75],[1301,85],[1302,52],[1303,68],[1304,62],[1305,55],[1306,52],[1307,65],[1308,65],[1309,73],[1310,57],[1311,58],[1312,64],[1313,54],[1314,59],[1315,62],[1316,55],[1317,56],[1318,58],[1319,56],[1320,75],[1321,59],[1322,57],[1323,66],[1324,66],[1325,62],[1326,66],[1327,71],[1328,64],[1329,63],[1330,62],[1331,57],[1332,58],[1333,66],[1334,55],[1335,56],[1336,69],[1337,50],[1338,60],[1339,64],[1340,45],[1341,53],[1342,49],[1343,61],[1344,56],[1345,48],[1346,50],[1347,51],[1348,48],[1349,63],[1350,56],[1351,61],[1352,66],[1353,55],[1354,55],[1355,47],[1356,56],[1357,46],[1358,51],[1359,61],[1360,58],[1361,69],[1362,69],[1363,64],[1364,69],[1365,59],[1366,52],[1367,56],[1368,62],[1369,60],[1370,56],[1371,60],[1372,56],[1373,55],[1374,49],[1375,54],[1376,57],[1377,66],[1378,56],[1379,62],[1380,55],[1381,54],[1382,47],[1383,52],[1384,62],[1385,59],[1386,56],[1387,69],[1388,47],[1389,69],[1390,67],[1391,55],[1392,54],[1393,70],[1394,67],[1395,66],[1396,61],[1397,48],[1398,53],[1399,52],[1400,43],[1401,56],[1402,69],[1403,51],[1404,57],[1405,48],[1406,62],[1407,60],[1408,57],[1409,69],[1410,52],[1411,55],[1412,48],[1413,64],[1414,56],[1415,63],[1416,58],[1417,54],[1418,61],[1419,60],[1420,58],[1421,55],[1422,78],[1423,55],[1424,47],[1425,68],[1426,62],[1427,52],[1428,56],[1429,60],[1430,65],[1431,58],[1432,61],[1433,55],[1434,67],[1435,65],[1436,43],[1437,49],[1438,50],[1439,66],[1440,68],[1441,52],[1442,55],[1443,55],[1444,46],[1445,59],[1446,65],[1447,58],[1448,53],[1449,65],[1450,58],[1451,70],[1452,69],[1453,60],[1454,52],[1455,54],[1456,46],[1457,59],[1458,59],[1459,60],[1460,73],[1461,60],[1462,55],[1463,49],[1464,59],[1465,56],[1466,56],[1467,52],[1468,60],[1469,47],[1470,62],[1471,72],[1472,61],[1473,50],[1474,65],[1475,53],[1476,84],[1477,53],[1478,57],[1479,70],[1480,59],[1481,68],[1482,58],[1483,52],[1484,49],[1485,59],[1486,49],[1487,64],[1488,66],[1489,45],[1490,57],[1491,52],[1492,58],[1493,67],[1494,63],[1495,52],[1496,47],[1497,67],[1498,64],[1499,60],[1500,61],[1501,64],[1502,56],[1503,61],[1504,61],[1505,54],[1506,55],[1507,63],[1508,63],[1509,61],[1510,69],[1511,49],[1512,39],[1513,52],[1514,55],[1515,66],[1516,70],[1517,59],[1518,72],[1519,68],[1520,68],[1521,56],[1522,54],[1523,67],[1524,58],[1525,55],[1526,66],[1527,64],[1528,60],[1529,67],[1530,51],[1531,62],[1532,64],[1533,48],[1534,52],[1535,58],[1536,56],[1537,58],[1538,61],[1539,53],[1540,61],[1541,58],[1542,51],[1543,74],[1544,63],[1545,72],[1546,64],[1547,53],[1548,67],[1549,61],[1550,79],[1551,52],[1552,47],[1553,59],[1554,58],[1555,67],[1556,62],[1557,74],[1558,67],[1559,62],[1560,66],[1561,61],[1562,80],[1563,53],[1564,61],[1565,56],[1566,71],[1567,53],[1568,57],[1569,66],[1570,51],[1571,65],[1572,65],[1573,67],[1574,50],[1575,55],[1576,60],[1577,48],[1578,60],[1579,50],[1580,62],[1581,60],[1582,60],[1583,57],[1584,69],[1585,62],[1586,66],[1587,68],[1588,61],[1589,55],[1590,57],[1591,48],[1592,56],[1593,57],[1594,73],[1595,61],[1596,49],[1597,64],[1598,54],[1599,55],[1600,69],[1601,65],[1602,60],[1603,55],[1604,58],[1605,64],[1606,46],[1607,59],[1608,54],[1609,52],[1610,54],[1611,64],[1612,56],[1613,53],[1614,56],[1615,59],[1616,75],[1617,57],[1618,52],[1619,57],[1620,48],[1621,49],[1622,63],[1623,54],[1624,66],[1625,50],[1626,55],[1627,62],[1628,59],[1629,62],[1630,59],[1631,57],[1632,66],[1633,48],[1634,59],[1635,51],[1636,67],[1637,48],[1638,65],[1639,66],[1640,58],[1641,42],[1642,50],[1643,47],[1644,46],[1645,60],[1646,50],[1647,45],[1648,47],[1649,54],[1650,57],[1651,40],[1652,52],[1653,56],[1654,57],[1655,47],[1656,49],[1657,60],[1658,47],[1659,57],[1660,38],[1661,63],[1662,57],[1663,53],[1664,40],[1665,54],[1666,58],[1667,49],[1668,55],[1669,60],[1670,43],[1671,58],[1672,54],[1673,53],[1674,44],[1675,51],[1676,50],[1677,63],[1678,66],[1679,61],[1680,58],[1681,60],[1682,55],[1683,63],[1684,56],[1685,59],[1686,50],[1687,45],[1688,62],[1689,58],[1690,59],[1691,62],[1692,55],[1693,58],[1694,57],[1695,43],[1696,59],[1697,63],[1698,53],[1699,57],[1700,57],[1701,41],[1702,60],[1703,52],[1704,48],[1705,40],[1706,65],[1707,53],[1708,53],[1709,53],[1710,53],[1711,49],[1712,51],[1713,45],[1714,56],[1715,48],[1716,49],[1717,64],[1718,57],[1719,62],[1720,46],[1721,62],[1722,61],[1723,48],[1724,44],[1725,67],[1726,51],[1727,40],[1728,61],[1729,54],[1730,66],[1731,58],[1732,51],[1733,62],[1734,57],[1735,62],[1736,64],[1737,52],[1738,45],[1739,50],[1740,50],[1741,48],[1742,51],[1743,45],[1744,54],[1745,73],[1746,71],[1747,54],[1748,48],[1749,45],[1750,60],[1751,62],[1752,41],[1753,68],[1754,47],[1755,60],[1756,60],[1757,53],[1758,64],[1759,55],[1760,68],[1761,53],[1762,35],[1763,62],[1764,53],[1765,62],[1766,58],[1767,57],[1768,44],[1769,54],[1770,57],[1771,64],[1772,52],[1773,59],[1774,65],[1775,52],[1776,56],[1777,49],[1778,58],[1779,53],[1780,52],[1781,69],[1782,57],[1783,63],[1784,46],[1785,67],[1786,67],[1787,58],[1788,44],[1789,53],[1790,61],[1791,52],[1792,69],[1793,49],[1794,66],[1795,49],[1796,52],[1797,47],[1798,62],[1799,69],[1800,52],[1801,61],[1802,42],[1803,66],[1804,48],[1805,55],[1806,47],[1807,68],[1808,69],[1809,70],[1810,58],[1811,58],[1812,48],[1813,56],[1814,58],[1815,48],[1816,49],[1817,57],[1818,43],[1819,49],[1820,46],[1821,76],[1822,49],[1823,64],[1824,50],[1825,53],[1826,60],[1827,60],[1828,57],[1829,49],[1830,54],[1831,57],[1832,51],[1833,63],[1834,59],[1835,56],[1836,61],[1837,52],[1838,53],[1839,48],[1840,61],[1841,56],[1842,64],[1843,63],[1844,54],[1845,54],[1846,52],[1847,48],[1848,48],[1849,48],[1850,46],[1851,56],[1852,65],[1853,61],[1854,68],[1855,46],[1856,46],[1857,43],[1858,58],[1859,47],[1860,58],[1861,62],[1862,67],[1863,43],[1864,55],[1865,54],[1866,47],[1867,42],[1868,68],[1869,53],[1870,51],[1871,62],[1872,60],[1873,45],[1874,52],[1875,42],[1876,58],[1877,62],[1878,54],[1879,59],[1880,53],[1881,60],[1882,49],[1883,70],[1884,55],[1885,55],[1886,59],[1887,39],[1888,48],[1889,71],[1890,48],[1891,54],[1892,44],[1893,43],[1894,52],[1895,74],[1896,62],[1897,55],[1898,61],[1899,50],[1900,51],[1901,62],[1902,59],[1903,63],[1904,38],[1905,53],[1906,51],[1907,62],[1908,49],[1909,62],[1910,54],[1911,48],[1912,47],[1913,50],[1914,49],[1915,72],[1916,45],[1917,50],[1918,60],[1919,53],[1920,57],[1921,59],[1922,59],[1923,48],[1924,30],[1925,38],[1926,51],[1927,47],[1928,46],[1929,50],[1930,56],[1931,55],[1932,39],[1933,43],[1934,51],[1935,58],[1936,52],[1937,42],[1938,45],[1939,50],[1940,49],[1941,42],[1942,42],[1943,51],[1944,54],[1945,44],[1946,49],[1947,61],[1948,60],[1949,43],[1950,42],[1951,44],[1952,46],[1953,45],[1954,63],[1955,47],[1956,53],[1957,45],[1958,48],[1959,51],[1960,41],[1961,50],[1962,53],[1963,49],[1964,45],[1965,57],[1966,43],[1967,65],[1968,37],[1969,51],[1970,56],[1971,59],[1972,53],[1973,63],[1974,47],[1975,50],[1976,47],[1977,51],[1978,48],[1979,59],[1980,42],[1981,54],[1982,51],[1983,57],[1984,49],[1985,45],[1986,42],[1987,61],[1988,46],[1989,49],[1990,50],[1991,41],[1992,37],[1993,61],[1994,48],[1995,55],[1996,42],[1997,40],[1998,45],[1999,64],[2000,49],[2001,58],[2002,42],[2003,43],[2004,55],[2005,53],[2006,43],[2007,47],[2008,40],[2009,63],[2010,45],[2011,51],[2012,47],[2013,57],[2014,50],[2015,49],[2016,45],[2017,55],[2018,44],[2019,48],[2020,42],[2021,46],[2022,43],[2023,62],[2024,44],[2025,57],[2026,44],[2027,46],[2028,55],[2029,41],[2030,37],[2031,46],[2032,45],[2033,47],[2034,48],[2035,53],[2036,51],[2037,51],[2038,40],[2039,46],[2040,60],[2041,50],[2042,51],[2043,52],[2044,47],[2045,41],[2046,50],[2047,45],[2049,108],[2051,83],[2053,96],[2055,97],[2057,90],[2059,106],[2061,84],[2063,90],[2065,102],[2067,97],[2069,76],[2071,86],[2073,93],[2075,93],[2077,94],[2079,90],[2081,78],[2083,88],[2085,110],[2087,94],[2089,106],[2091,94],[2093,77],[2095,78],[2097,83],[2099,93],[2101,86],[2103,86],[2105,84],[2107,86],[2109,82],[2111,86],[2113,105],[2115,84],[2117,80],[2119,97],[2121,87],[2123,89],[2125,89],[2127,85],[2129,80],[2131,105],[2133,85],[2135,87],[2137,81],[2139,98],[2141,92],[2143,85],[2145,90],[2147,89],[2149,88],[2151,70],[2153,77],[2155,66],[2157,87],[2159,72],[2161,57],[2163,84],[2165,82],[2167,62],[2169,82],[2171,72],[2173,67],[2175,82],[2177,86],[2179,81],[2181,84],[2183,78],[2185,73],[2187,77],[2189,74],[2191,78],[2193,73],[2195,62],[2197,61],[2199,66],[2201,92],[2203,70],[2205,77],[2207,77],[2209,75],[2211,82],[2213,62],[2215,68],[2217,67],[2219,87],[2221,63],[2223,72],[2225,89],[2227,81],[2229,81],[2231,75],[2233,60],[2235,88],[2237,69],[2239,89],[2241,75],[2243,72],[2245,62],[2247,75],[2249,88],[2251,79],[2253,100],[2255,70],[2257,77],[2259,73],[2261,83],[2263,90],[2265,87],[2267,80],[2269,83],[2271,64],[2273,76],[2275,82],[2277,86],[2279,84],[2281,80],[2283,71],[2285,84],[2287,70],[2289,89],[2291,76],[2293,99],[2295,89],[2297,92],[2299,93],[2301,83],[2303,81],[2305,82],[2307,92],[2309,68],[2311,70],[2313,82],[2315,84],[2317,66],[2319,78],[2321,81],[2323,79],[2325,80],[2327,73],[2329,64],[2331,68],[2333,60],[2335,79],[2337,63],[2339,92],[2341,66],[2343,73],[2345,65],[2347,78],[2349,63],[2351,57],[2353,92],[2355,86],[2357,73],[2359,81],[2361,79],[2363,76],[2365,66],[2367,78],[2369,64],[2371,71],[2373,55],[2375,69],[2377,71],[2379,57],[2381,57],[2383,68],[2385,60],[2387,68],[2389,69],[2391,71],[2393,67],[2395,57],[2397,65],[2399,48],[2401,64],[2403,65],[2405,62],[2407,70],[2409,61],[2411,67],[2413,60],[2415,67],[2417,59],[2419,55],[2421,72],[2423,63],[2425,62],[2427,42],[2429,66],[2431,53],[2433,64],[2435,75],[2437,53],[2439,75],[2441,54],[2443,74],[2445,70],[2447,56],[2449,55],[2451,65],[2453,67],[2455,62],[2457,53],[2459,58],[2461,69],[2463,73],[2465,59],[2467,68],[2469,66],[2471,63],[2473,76],[2475,64],[2477,74],[2479,57],[2481,66],[2483,63],[2485,55],[2487,84],[2489,67],[2491,58],[2493,57],[2495,57],[2497,56],[2499,61],[2501,63],[2503,63],[2505,64],[2507,50],[2509,65],[2511,75],[2513,43],[2515,58],[2517,68],[2519,59],[2521,67],[2523,55],[2525,53],[2527,52],[2529,59],[2531,75],[2533,52],[2535,73],[2537,67],[2539,65],[2541,84],[2543,75],[2545,61],[2547,70],[2549,54],[2551,53],[2553,58],[2555,59],[2557,73],[2559,50],[2561,65],[2563,64],[2565,51],[2567,51],[2569,73],[2571,40],[2573,58],[2575,52],[2577,53],[2579,53],[2581,78],[2583,56],[2585,45],[2587,44],[2589,53],[2591,61],[2593,50],[2595,46],[2597,55],[2599,55],[2601,63],[2603,72],[2605,58],[2607,68],[2609,67],[2611,44],[2613,49],[2615,61],[2617,63],[2619,58],[2621,52],[2623,62],[2625,61],[2627,49],[2629,65],[2631,52],[2633,46],[2635,58],[2637,62],[2639,53],[2641,58],[2643,52],[2645,53],[2647,53],[2649,58],[2651,49],[2653,47],[2655,53],[2657,40],[2659,68],[2661,48],[2663,40],[2665,40],[2667,48],[2669,56],[2671,43],[2673,44],[2675,43],[2677,42],[2679,54],[2681,43],[2683,60],[2685,59],[2687,44],[2689,45],[2691,60],[2693,44],[2695,55],[2697,56],[2699,49],[2701,38],[2703,51],[2705,45],[2707,49],[2709,36],[2711,54],[2713,33],[2715,59],[2717,58],[2719,38],[2721,48],[2723,50],[2725,58],[2727,48],[2729,39],[2731,39],[2733,49],[2735,45],[2737,56],[2739,55],[2741,57],[2743,52],[2745,51],[2747,33],[2749,43],[2751,51],[2753,61],[2755,48],[2757,34],[2759,60],[2761,47],[2763,51],[2765,45],[2767,54],[2769,64],[2771,40],[2773,43],[2775,54],[2777,44],[2779,40],[2781,37],[2783,53],[2785,52],[2787,47],[2789,51],[2791,48],[2793,57],[2795,47],[2797,50],[2799,51],[2801,53],[2803,33],[2805,34],[2807,42],[2809,46],[2811,35],[2813,35],[2815,42],[2817,48],[2819,47],[2821,43],[2823,45],[2825,39],[2827,43],[2829,55],[2831,39],[2833,38],[2835,42],[2837,32],[2839,37],[2841,41],[2843,37],[2845,45],[2847,53],[2849,46],[2851,50],[2853,34],[2855,49],[2857,38],[2859,30],[2861,43],[2863,44],[2865,41],[2867,33],[2869,34],[2871,40],[2873,46],[2875,39],[2877,43],[2879,52],[2881,34],[2883,47],[2885,49],[2887,50],[2889,31],[2891,47],[2893,48],[2895,42],[2897,35],[2899,39],[2901,38],[2903,39],[2905,29],[2907,28],[2909,34],[2911,45],[2913,38],[2915,27],[2917,23],[2919,22],[2921,36],[2923,43],[2925,32],[2927,32],[2929,33],[2931,30],[2933,38],[2935,36],[2937,28],[2939,41],[2941,39],[2943,33],[2945,39],[2947,41],[2949,44],[2951,28],[2953,37],[2955,36],[2957,34],[2959,27],[2961,34],[2963,40],[2965,35],[2967,34],[2969,36],[2971,34],[2973,40],[2975,43],[2977,40],[2979,42],[2981,32],[2983,48],[2985,37],[2987,35],[2989,38],[2991,33],[2993,25],[2995,23],[2997,32],[2999,39],[3001,37],[3003,40],[3005,31],[3007,39],[3009,37],[3011,38],[3013,48],[3015,43],[3017,34],[3019,27],[3021,34],[3023,25],[3025,38],[3027,32],[3029,49],[3031,38],[3033,39],[3035,31],[3037,28],[3039,30],[3041,32],[3043,28],[3045,33],[3047,31],[3049,32],[3051,28],[3053,34],[3055,30],[3057,32],[3059,31],[3061,34],[3063,20],[3065,37],[3067,26],[3069,20],[3071,37],[3073,32],[3075,19],[3077,33],[3079,30],[3081,28],[3083,25],[3085,26],[3087,21],[3089,31],[3091,26],[3093,35],[3095,29],[3097,26],[3099,47],[3101,22],[3103,28],[3105,26],[3107,18],[3109,26],[3111,22],[3113,27],[3115,22],[3117,25],[3119,24],[3121,24],[3123,25],[3125,24],[3127,28],[3129,24],[3131,25],[3133,29],[3135,24],[3137,28],[3139,22],[3141,31],[3143,27],[3145,18],[3147,14],[3149,25],[3151,22],[3153,29],[3155,18],[3157,20],[3159,21],[3161,23],[3163,18],[3165,21],[3167,31],[3169,23],[3171,25],[3173,24],[3175,23],[3177,18],[3179,19],[3181,21],[3183,26],[3185,24],[3187,18],[3189,19],[3191,19],[3193,24],[3195,15],[3197,17],[3199,23],[3201,26],[3203,24],[3205,22],[3207,23],[3209,26],[3211,22],[3213,16],[3215,28],[3217,26],[3219,21],[3221,15],[3223,18],[3225,22],[3227,20],[3229,17],[3231,25],[3233,21],[3235,20],[3237,14],[3239,25],[3241,23],[3243,21],[3245,20],[3247,22],[3249,17],[3251,19],[3253,17],[3255,21],[3257,25],[3259,28],[3261,19],[3263,17],[3265,16],[3267,18],[3269,20],[3271,21],[3273,12],[3275,22],[3277,21],[3279,20],[3281,23],[3283,19],[3285,14],[3287,13],[3289,18],[3291,20],[3293,25],[3295,25],[3297,22],[3299,22],[3301,21],[3303,20],[3305,15],[3307,16],[3309,10],[3311,14],[3313,19],[3315,11],[3317,18],[3319,21],[3321,21],[3323,8],[3325,20],[3327,19],[3329,8],[3331,17],[3333,16],[3335,11],[3337,21],[3339,21],[3341,16],[3343,22],[3345,17],[3347,15],[3349,13],[3351,24],[3353,12],[3355,17],[3357,19],[3359,25],[3361,19],[3363,13],[3365,14],[3367,20],[3369,22],[3371,16],[3373,11],[3375,7],[3377,16],[3379,17],[3381,12],[3383,16],[3385,15],[3387,15],[3389,12],[3391,24],[3393,16],[3395,12],[3397,24],[3399,14],[3401,9],[3403,10],[3405,12],[3407,11],[3409,18],[3411,15],[3413,16],[3415,14],[3417,12],[3419,13],[3421,12],[3423,12],[3425,14],[3427,19],[3429,9],[3431,12],[3433,21],[3435,17],[3437,12],[3439,11],[3441,10],[3443,13],[3445,10],[3447,14],[3449,9],[3451,20],[3453,17],[3455,8],[3457,7],[3459,9],[3461,14],[3463,11],[3465,19],[3467,12],[3469,8],[3471,7],[3473,15],[3475,9],[3477,8],[3479,15],[3481,13],[3483,12],[3485,12],[3487,10],[3489,12],[3491,9],[3493,12],[3495,12],[3497,18],[3499,6],[3501,13],[3503,10],[3505,14],[3507,14],[3509,10],[3511,20],[3513,12],[3515,11],[3517,11],[3519,16],[3521,13],[3523,15],[3525,8],[3527,11],[3529,14],[3531,12],[3533,10],[3535,9],[3537,13],[3539,18],[3541,10],[3543,9],[3545,8],[3547,16],[3549,9],[3551,9],[3553,16],[3555,12],[3557,16],[3559,12],[3561,15],[3563,19],[3565,8],[3567,13],[3569,15],[3571,10],[3573,10],[3575,17],[3577,12],[3579,7],[3581,10],[3583,7],[3585,12],[3587,9],[3589,5],[3591,9],[3593,11],[3595,11],[3597,7],[3599,11],[3601,9],[3603,11],[3605,11],[3607,11],[3609,7],[3611,11],[3613,7],[3615,15],[3617,10],[3619,8],[3621,11],[3623,6],[3625,9],[3627,5],[3629,6],[3631,7],[3633,7],[3635,11],[3637,7],[3639,5],[3641,8],[3643,5],[3645,9],[3647,8],[3649,10],[3651,9],[3653,8],[3655,7],[3657,6],[3659,14],[3661,5],[3663,9],[3665,9],[3667,10],[3669,14],[3671,7],[3673,8],[3675,8],[3677,6],[3679,7],[3681,12],[3683,6],[3685,4],[3687,6],[3689,3],[3691,1],[3693,5],[3695,4],[3697,2],[3699,7],[3701,6],[3703,7],[3705,3],[3707,9],[3709,7],[3711,10],[3713,3],[3715,5],[3717,9],[3719,6],[3721,6],[3723,7],[3725,10],[3727,4],[3729,6],[3731,8],[3733,8],[3735,4],[3737,9],[3739,5],[3741,10],[3743,7],[3745,7],[3747,5],[3749,12],[3751,5],[3753,2],[3755,8],[3757,8],[3759,7],[3761,4],[3763,8],[3765,7],[3767,5],[3769,3],[3771,8],[3773,6],[3775,2],[3777,7],[3779,7],[3781,6],[3783,2],[3785,8],[3787,8],[3789,3],[3791,4],[3793,6],[3795,5],[3797,3],[3799,4],[3801,2],[3803,1],[3805,3],[3807,3],[3809,3],[3811,7],[3813,1],[3815,3],[3817,3],[3819,7],[3821,2],[3823,7],[3825,3],[3827,5],[3829,4],[3831,4],[3833,6],[3835,5],[3837,2],[3839,7],[3841,3],[3843,2],[3845,3],[3847,4],[3849,1],[3851,3],[3853,2],[3855,3],[3857,2],[3859,4],[3861,4],[3863,5],[3865,5],[3867,6],[3869,1],[3871,4],[3873,1],[3875,3],[3877,6],[3879,1],[3881,4],[3883,5],[3885,2],[3887,3],[3889,2],[3891,3],[3893,2],[3895,8],[3897,2],[3899,4],[3901,5],[3903,4],[3905,1],[3907,2],[3909,2],[3911,4],[3913,5],[3915,1],[3919,5],[3921,2],[3923,3],[3925,6],[3929,3],[3931,3],[3933,3],[3937,6],[3939,4],[3941,4],[3943,4],[3945,3],[3947,4],[3949,2],[3951,1],[3953,5],[3955,2],[3957,2],[3961,3],[3963,2],[3965,5],[3967,2],[3969,2],[3971,2],[3973,1],[3977,1],[3979,4],[3981,3],[3983,2],[3985,4],[3987,2],[3989,3],[3991,3],[3993,1],[3995,4],[3997,2],[3999,1],[4001,3],[4003,3],[4005,2],[4007,3],[4011,1],[4013,4],[4015,2],[4017,6],[4019,1],[4021,2],[4023,3],[4025,2],[4029,4],[4031,2],[4033,2],[4035,3],[4037,2],[4039,1],[4041,1],[4043,2],[4045,3],[4047,4],[4049,2],[4051,3],[4053,4],[4055,3],[4059,4],[4061,3],[4063,2],[4065,3],[4067,3],[4069,1],[4071,4],[4073,2],[4075,2],[4077,3],[4079,2],[4081,2],[4083,4],[4085,1],[4087,2],[4089,1],[4091,1],[4095,2],[4099,3],[4103,6],[4107,2],[4111,5],[4115,3],[4119,5],[4123,8],[4127,2],[4131,4],[4135,1],[4139,3],[4143,4],[4147,3],[4151,2],[4155,1],[4159,1],[4167,5],[4171,2],[4175,2],[4179,2],[4183,1],[4187,5],[4191,6],[4195,2],[4199,9],[4207,1],[4211,3],[4215,2],[4227,3],[4235,3],[4239,2],[4243,2],[4247,2],[4251,3],[4255,3],[4259,2],[4263,4],[4267,3],[4271,5],[4275,3],[4279,3],[4283,3],[4287,1],[4291,1],[4295,5],[4299,2],[4307,2],[4311,1],[4315,2],[4319,3],[4327,2],[4335,1],[4339,2],[4347,2],[4359,1],[4367,1],[4383,2],[4391,1],[4411,1],[4415,3],[4419,1],[4431,1],[4443,1],[4447,2],[4455,1],[4463,1],[4467,1],[4471,2],[4475,1],[4499,3],[4503,2],[4507,1],[4511,1],[4515,1],[4519,1],[4527,2],[4531,2],[4547,1],[4551,2],[4555,1],[4563,1],[4567,2],[4575,1],[4603,1],[4631,1],[4635,2],[4639,1],[4659,1],[4687,1],[4691,1],[4747,2],[4751,2],[4787,1],[4791,1],[4875,1],[4895,1],[4927,1],[4955,1],[4995,2],[5015,1],[5023,1],[5075,1],[5575,1],[5611,1],[5631,1],[5675,2],[5679,1],[5723,1],[5971,1]]}",
+        "seq": 10,
+        "received_utc": "2026-10-26T09:55:56.134521+00:00",
+        "received_monotonic": 13403.430200999,
+        "valid": true,
+        "pid": 257915,
+        "raw_log": "/tmp/oe-live-sandbox-pefgil6o/wrk2-257915.log"
+      },
+      "background": null,
+      "p99_ms": 3.615,
+      "p95_ms": 3.043,
+      "rps": 25600.455948567967,
+      "completion_fraction": 1.0000178104909363,
+      "errors": 0,
+      "eps": null
+    }
+  ],
+  "quality": "complete",
+  "ended_utc": "2026-10-26T09:55:57.155607+00:00",
+  "ended_monotonic": 13404.445954954,
+  "kernel_final": {
+    "policy_id": "kernel.default",
+    "slice_us": null,
+    "sched_ext": "disabled"
+  },
+  "background_raw_points": [
+    {
+      "elapsed_seconds": 1.090658,
+      "events_per_sec": 58.680191,
+      "raw_line": "[ 1.090658s ] threads: 2 eps: 58.680191",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13243.111066416,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 2.091112,
+      "events_per_sec": 61.971875,
+      "raw_line": "[ 2.091112s ] threads: 2 eps: 61.971875",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13244.111283677,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 3.091312,
+      "events_per_sec": 61.987585,
+      "raw_line": "[ 3.091312s ] threads: 2 eps: 61.987585",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13245.111506141,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 4.091531,
+      "events_per_sec": 61.986436,
+      "raw_line": "[ 4.091531s ] threads: 2 eps: 61.986436",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13246.112556145,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 5.092133,
+      "events_per_sec": 63.961453,
+      "raw_line": "[ 5.092133s ] threads: 2 eps: 63.961453",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13247.112261028,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 6.092659,
+      "events_per_sec": 63.966385,
+      "raw_line": "[ 6.092659s ] threads: 2 eps: 63.966385",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13248.112820112,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 7.093424,
+      "events_per_sec": 63.95108,
+      "raw_line": "[ 7.093424s ] threads: 2 eps: 63.951080",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13249.113592101,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 8.093673,
+      "events_per_sec": 65.983541,
+      "raw_line": "[ 8.093673s ] threads: 2 eps: 65.983541",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13250.113814092,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 9.094207,
+      "events_per_sec": 63.965855,
+      "raw_line": "[ 9.094207s ] threads: 2 eps: 63.965855",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13251.116828307,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 10.094433,
+      "events_per_sec": 63.985529,
+      "raw_line": "[ 10.094433s ] threads: 2 eps: 63.985529",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13252.114603736,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 11.094684,
+      "events_per_sec": 63.98396,
+      "raw_line": "[ 11.094684s ] threads: 2 eps: 63.983960",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13253.114928145,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 12.09558,
+      "events_per_sec": 63.942694,
+      "raw_line": "[ 12.095580s ] threads: 2 eps: 63.942694",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13254.115864127,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 13.096354,
+      "events_per_sec": 62.9513,
+      "raw_line": "[ 13.096354s ] threads: 2 eps: 62.951300",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13255.116495463,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 14.096886,
+      "events_per_sec": 62.966503,
+      "raw_line": "[ 14.096886s ] threads: 2 eps: 62.966503",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13256.116981908,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 15.097362,
+      "events_per_sec": 61.970497,
+      "raw_line": "[ 15.097362s ] threads: 2 eps: 61.970497",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13257.117600349,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 16.09764,
+      "events_per_sec": 57.983864,
+      "raw_line": "[ 16.097640s ] threads: 2 eps: 57.983864",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13258.117954172,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 17.098332,
+      "events_per_sec": 61.957121,
+      "raw_line": "[ 17.098332s ] threads: 2 eps: 61.957121",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13259.118716859,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 18.099013,
+      "events_per_sec": 59.959144,
+      "raw_line": "[ 18.099013s ] threads: 2 eps: 59.959144",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13260.11918023,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 19.099591,
+      "events_per_sec": 61.96424,
+      "raw_line": "[ 19.099591s ] threads: 2 eps: 61.964240",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13261.129948446,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 20.099928,
+      "events_per_sec": 59.979763,
+      "raw_line": "[ 20.099928s ] threads: 2 eps: 59.979763",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13262.120249984,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 21.100421,
+      "events_per_sec": 61.969453,
+      "raw_line": "[ 21.100421s ] threads: 2 eps: 61.969453",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13263.120718652,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 22.106256,
+      "events_per_sec": 61.64031,
+      "raw_line": "[ 22.106256s ] threads: 2 eps: 61.640310",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13264.126600616,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 23.107465,
+      "events_per_sec": 59.927554,
+      "raw_line": "[ 23.107465s ] threads: 2 eps: 59.927554",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13265.127629482,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 24.111568,
+      "events_per_sec": 67.722134,
+      "raw_line": "[ 24.111568s ] threads: 2 eps: 67.722134",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13266.131728432,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 25.117882,
+      "events_per_sec": 65.585883,
+      "raw_line": "[ 25.117882s ] threads: 2 eps: 65.585883",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13267.138048645,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 26.121838,
+      "events_per_sec": 68.728107,
+      "raw_line": "[ 26.121838s ] threads: 2 eps: 68.728107",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13268.142107273,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 27.131157,
+      "events_per_sec": 66.381388,
+      "raw_line": "[ 27.131157s ] threads: 2 eps: 66.381388",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13269.151309062,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 28.132987,
+      "events_per_sec": 68.874006,
+      "raw_line": "[ 28.132987s ] threads: 2 eps: 68.874006",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13270.153136163,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 29.143483,
+      "events_per_sec": 67.293686,
+      "raw_line": "[ 29.143483s ] threads: 2 eps: 67.293686",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13271.163692946,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 30.154613,
+      "events_per_sec": 68.240481,
+      "raw_line": "[ 30.154613s ] threads: 2 eps: 68.240481",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13272.174751356,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 31.157504,
+      "events_per_sec": 66.806823,
+      "raw_line": "[ 31.157504s ] threads: 2 eps: 66.806823",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13273.181418806,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 32.163064,
+      "events_per_sec": 65.635068,
+      "raw_line": "[ 32.163064s ] threads: 2 eps: 65.635068",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13274.183222349,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 33.171078,
+      "events_per_sec": 68.451471,
+      "raw_line": "[ 33.171078s ] threads: 2 eps: 68.451471",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13275.191364147,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 34.176274,
+      "events_per_sec": 68.643297,
+      "raw_line": "[ 34.176274s ] threads: 2 eps: 68.643297",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13276.196436517,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 35.186129,
+      "events_per_sec": 65.355926,
+      "raw_line": "[ 35.186129s ] threads: 2 eps: 65.355926",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13277.206293999,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 36.187951,
+      "events_per_sec": 66.878171,
+      "raw_line": "[ 36.187951s ] threads: 2 eps: 66.878171",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13278.208114295,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 37.199271,
+      "events_per_sec": 67.238851,
+      "raw_line": "[ 37.199271s ] threads: 2 eps: 67.238851",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13279.219434528,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 38.20303,
+      "events_per_sec": 65.752801,
+      "raw_line": "[ 38.203030s ] threads: 2 eps: 65.752801",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13280.224142584,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 39.204045,
+      "events_per_sec": 67.931065,
+      "raw_line": "[ 39.204045s ] threads: 2 eps: 67.931065",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13281.224222749,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 40.213063,
+      "events_per_sec": 66.40122,
+      "raw_line": "[ 40.213063s ] threads: 2 eps: 66.401220",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13282.233225936,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 41.22207,
+      "events_per_sec": 67.392971,
+      "raw_line": "[ 41.222070s ] threads: 2 eps: 67.392971",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13283.242247155,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 42.224493,
+      "events_per_sec": 64.842895,
+      "raw_line": "[ 42.224493s ] threads: 2 eps: 64.842895",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13284.244680947,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 43.225262,
+      "events_per_sec": 63.950791,
+      "raw_line": "[ 43.225262s ] threads: 2 eps: 63.950791",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13285.245566252,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 44.226569,
+      "events_per_sec": 61.91911,
+      "raw_line": "[ 44.226569s ] threads: 2 eps: 61.919110",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13286.246738692,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 45.229342,
+      "events_per_sec": 63.822992,
+      "raw_line": "[ 45.229342s ] threads: 2 eps: 63.822992",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13287.249542966,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 46.231851,
+      "events_per_sec": 55.859874,
+      "raw_line": "[ 46.231851s ] threads: 2 eps: 55.859874",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13288.252019283,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 47.232536,
+      "events_per_sec": 61.95752,
+      "raw_line": "[ 47.232536s ] threads: 2 eps: 61.957520",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13289.25275685,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 48.233352,
+      "events_per_sec": 59.951083,
+      "raw_line": "[ 48.233352s ] threads: 2 eps: 59.951083",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13290.25361637,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 49.233589,
+      "events_per_sec": 61.985345,
+      "raw_line": "[ 49.233589s ] threads: 2 eps: 61.985345",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13291.253764225,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 50.234308,
+      "events_per_sec": 63.953963,
+      "raw_line": "[ 50.234308s ] threads: 2 eps: 63.953963",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13292.254460016,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 51.234558,
+      "events_per_sec": 63.984006,
+      "raw_line": "[ 51.234558s ] threads: 2 eps: 63.984006",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13293.2547228,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 52.235468,
+      "events_per_sec": 63.94186,
+      "raw_line": "[ 52.235468s ] threads: 2 eps: 63.941860",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13294.255799621,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 53.236106,
+      "events_per_sec": 64.958533,
+      "raw_line": "[ 53.236106s ] threads: 2 eps: 64.958533",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13295.256269134,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 54.236342,
+      "events_per_sec": 63.984883,
+      "raw_line": "[ 54.236342s ] threads: 2 eps: 63.984883",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13296.256491292,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 55.236836,
+      "events_per_sec": 62.968917,
+      "raw_line": "[ 55.236836s ] threads: 2 eps: 62.968917",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13297.256960155,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 56.23761,
+      "events_per_sec": 63.950467,
+      "raw_line": "[ 56.237610s ] threads: 2 eps: 63.950467",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13298.257770758,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 57.238382,
+      "events_per_sec": 63.95063,
+      "raw_line": "[ 57.238382s ] threads: 2 eps: 63.950630",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13299.258638949,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 58.23884,
+      "events_per_sec": 63.970763,
+      "raw_line": "[ 58.238840s ] threads: 2 eps: 63.970763",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13300.258994863,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 59.242045,
+      "events_per_sec": 65.789129,
+      "raw_line": "[ 59.242045s ] threads: 2 eps: 65.789129",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13301.26237042,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 60.245925,
+      "events_per_sec": 65.744877,
+      "raw_line": "[ 60.245925s ] threads: 2 eps: 65.744877",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13302.26609144,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 61.246685,
+      "events_per_sec": 67.948349,
+      "raw_line": "[ 61.246685s ] threads: 2 eps: 67.948349",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13303.275062867,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 62.249749,
+      "events_per_sec": 65.798443,
+      "raw_line": "[ 62.249749s ] threads: 2 eps: 65.798443",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13304.269914694,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 63.251366,
+      "events_per_sec": 67.890207,
+      "raw_line": "[ 63.251366s ] threads: 2 eps: 67.890207",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13305.27162287,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 64.254497,
+      "events_per_sec": 67.787719,
+      "raw_line": "[ 64.254497s ] threads: 2 eps: 67.787719",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13306.274641867,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 65.25645,
+      "events_per_sec": 67.867473,
+      "raw_line": "[ 65.256450s ] threads: 2 eps: 67.867473",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13307.276603309,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 66.257463,
+      "events_per_sec": 66.932193,
+      "raw_line": "[ 66.257463s ] threads: 2 eps: 66.932193",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13308.277619316,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 67.259767,
+      "events_per_sec": 66.845993,
+      "raw_line": "[ 67.259767s ] threads: 2 eps: 66.845993",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13309.279944637,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 68.262791,
+      "events_per_sec": 67.794978,
+      "raw_line": "[ 68.262791s ] threads: 2 eps: 67.794978",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13310.282970241,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 69.265456,
+      "events_per_sec": 67.819266,
+      "raw_line": "[ 69.265456s ] threads: 2 eps: 67.819266",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13311.285600909,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 70.267926,
+      "events_per_sec": 67.832457,
+      "raw_line": "[ 70.267926s ] threads: 2 eps: 67.832457",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13312.288100524,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 71.268576,
+      "events_per_sec": 66.95647,
+      "raw_line": "[ 71.268576s ] threads: 2 eps: 66.956470",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13313.288875065,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 72.272617,
+      "events_per_sec": 67.726356,
+      "raw_line": "[ 72.272617s ] threads: 2 eps: 67.726356",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13314.292712461,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 73.275628,
+      "events_per_sec": 66.798826,
+      "raw_line": "[ 73.275628s ] threads: 2 eps: 66.798826",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13315.295791662,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 74.27848,
+      "events_per_sec": 67.806662,
+      "raw_line": "[ 74.278480s ] threads: 2 eps: 67.806662",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13316.298695113,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 75.279291,
+      "events_per_sec": 67.944856,
+      "raw_line": "[ 75.279291s ] threads: 2 eps: 67.944856",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13317.299512779,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 76.280755,
+      "events_per_sec": 67.900585,
+      "raw_line": "[ 76.280755s ] threads: 2 eps: 67.900585",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13318.300959315,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 77.281538,
+      "events_per_sec": 66.94762,
+      "raw_line": "[ 77.281538s ] threads: 2 eps: 66.947620",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13319.301694134,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 78.284306,
+      "events_per_sec": 66.815054,
+      "raw_line": "[ 78.284306s ] threads: 2 eps: 66.815054",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13320.304488343,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 79.286864,
+      "events_per_sec": 68.823924,
+      "raw_line": "[ 79.286864s ] threads: 2 eps: 68.823924",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13321.307011438,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 80.28759,
+      "events_per_sec": 67.95065,
+      "raw_line": "[ 80.287590s ] threads: 2 eps: 67.950650",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13322.307744771,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 81.289216,
+      "events_per_sec": 66.891292,
+      "raw_line": "[ 81.289216s ] threads: 2 eps: 66.891292",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13323.309664606,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 82.289872,
+      "events_per_sec": 62.958661,
+      "raw_line": "[ 82.289872s ] threads: 2 eps: 62.958661",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13324.309977859,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 83.290257,
+      "events_per_sec": 63.975361,
+      "raw_line": "[ 83.290257s ] threads: 2 eps: 63.975361",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13325.310462808,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 84.29038,
+      "events_per_sec": 63.992143,
+      "raw_line": "[ 84.290380s ] threads: 2 eps: 63.992143",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13326.310672519,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 85.291105,
+      "events_per_sec": 64.952935,
+      "raw_line": "[ 85.291105s ] threads: 2 eps: 64.952935",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13327.311241993,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 86.291458,
+      "events_per_sec": 63.977376,
+      "raw_line": "[ 86.291458s ] threads: 2 eps: 63.977376",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13328.311644059,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 87.291847,
+      "events_per_sec": 63.975163,
+      "raw_line": "[ 87.291847s ] threads: 2 eps: 63.975163",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13329.311990149,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 88.29223,
+      "events_per_sec": 63.975489,
+      "raw_line": "[ 88.292230s ] threads: 2 eps: 63.975489",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13330.312364709,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 89.292608,
+      "events_per_sec": 63.975822,
+      "raw_line": "[ 89.292608s ] threads: 2 eps: 63.975822",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13331.313267925,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 90.29319,
+      "events_per_sec": 63.962782,
+      "raw_line": "[ 90.293190s ] threads: 2 eps: 63.962782",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13332.313348013,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 91.293593,
+      "events_per_sec": 63.974195,
+      "raw_line": "[ 91.293593s ] threads: 2 eps: 63.974195",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13333.313725874,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 92.294281,
+      "events_per_sec": 63.955981,
+      "raw_line": "[ 92.294281s ] threads: 2 eps: 63.955981",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13334.314457494,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 93.294848,
+      "events_per_sec": 64.963205,
+      "raw_line": "[ 93.294848s ] threads: 2 eps: 64.963205",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13335.315111862,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 94.295734,
+      "events_per_sec": 62.944234,
+      "raw_line": "[ 94.295734s ] threads: 2 eps: 62.944234",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13336.316018084,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 95.296409,
+      "events_per_sec": 63.95677,
+      "raw_line": "[ 95.296409s ] threads: 2 eps: 63.956770",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13337.316749996,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 96.296638,
+      "events_per_sec": 64.985178,
+      "raw_line": "[ 96.296638s ] threads: 2 eps: 64.985178",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13338.316796509,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 97.29732,
+      "events_per_sec": 63.95636,
+      "raw_line": "[ 97.297320s ] threads: 2 eps: 63.956360",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13339.317406658,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 98.29754,
+      "events_per_sec": 63.985927,
+      "raw_line": "[ 98.297540s ] threads: 2 eps: 63.985927",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13340.317727091,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 99.298151,
+      "events_per_sec": 63.960888,
+      "raw_line": "[ 99.298151s ] threads: 2 eps: 63.960888",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13341.318311438,
+      "pid": 256301
+    },
+    {
+      "elapsed_seconds": 100.298424,
+      "events_per_sec": 63.982584,
+      "raw_line": "[ 100.298424s ] threads: 2 eps: 63.982584",
+      "raw_log": "/tmp/oe-live-sandbox-pefgil6o/sysbench-256301.log",
+      "received_monotonic": 13342.318582797,
+      "pid": 256301
+    }
+  ],
+  "agent_events": [],
+  "final_agent_phase": "disabled",
+  "controller_cpu_pct": 1.487148365198582,
+  "summary": {
+    "p99_ms": 3.615,
+    "p95_ms": 3.042,
+    "rps": 25598.77487852665,
+    "completion_fraction": 0.9999521436924472,
+    "eps": null,
+    "errors": 0
+  },
+  "observed_policy_counts": [
+    {
+      "policy_id": "kernel.default",
+      "slice_us": null,
+      "samples": 45
+    }
+  ]
+}

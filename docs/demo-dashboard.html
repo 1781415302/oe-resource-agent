@@ -294,6 +294,40 @@
   .log-ok { color: #34d399; }
   .log-warn { color: #fbbf24; }
   .log-err { color: #fb7185; }
+  .identity-strip { display:flex; flex-wrap:wrap; gap:10px 24px; padding:10px 14px; margin-bottom:14px; border:1px solid var(--border); border-radius:9px; background:#0b1322; font-size:12px; color:var(--muted); }
+  .identity-strip strong { color:var(--text); font-weight:600; }
+  .evidence-card { margin-bottom:14px; }
+  .evidence-layout { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(260px,1fr); gap:14px; }
+  .evidence-tabs { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:9px; }
+  .evidence-tabs .btn { padding:5px 10px; font-size:11.5px; }
+  .kernel-terminal { margin:0; padding:12px; height:245px; overflow:auto; white-space:pre-wrap; overflow-wrap:anywhere; background:#030812; color:#b7e4d8; border:1px solid #25433e; border-radius:8px; font:11.5px/1.65 Consolas,monospace; }
+  .evidence-aside { min-width:0; font-size:12px; color:var(--muted); line-height:1.65; }
+  .evidence-aside p { margin:0 0 10px; }
+  .evidence-aside code { color:var(--cyan); }
+  .ssh-command { padding:10px; margin:8px 0; overflow-wrap:anywhere; border:1px solid var(--border); background:#070b14; border-radius:7px; color:var(--text); font:11.5px/1.6 Consolas,monospace; }
+  .evidence-actions { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+  .measure-note { font-size:11px; color:var(--muted); line-height:1.6; margin-top:8px; }
+  .wrk-strip { padding:12px 16px; margin-bottom:14px; border:1px solid var(--border); border-radius:10px; background:#0b1322; }
+  .wrk-values { display:flex; flex-wrap:wrap; gap:12px 28px; font-size:12px; color:var(--muted); }
+  .wrk-values strong { display:inline-block; margin-left:7px; color:var(--text); font-size:16px; font-variant-numeric:tabular-nums; }
+  .data-stale .kpi-grid, .data-stale .charts-grid, .data-stale .wrk-strip { opacity:.55; }
+  .scenario-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0; }
+  .scenario-controls select,.scenario-controls input { color:var(--text); background:#101b30; border:1px solid var(--border); border-radius:8px; padding:9px 12px; }
+  .tuning-table { width:100%; border-collapse:collapse; font-size:12px; margin-top:12px; }
+  .tuning-table th,.tuning-table td { padding:10px 8px; text-align:left; border-bottom:1px solid rgba(148,163,184,.14); }
+  .tuning-table th { color:var(--muted); font-weight:500; }
+  .tuning-table tr.chosen { background:rgba(16,185,129,.1); }
+  .tuning-progress { height:6px; background:rgba(148,163,184,.12); border-radius:8px; overflow:hidden; margin:12px 0; }
+  .tuning-progress div { height:100%; background:var(--cyan); transition:width .3s; }
+  .tuning-status { display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; }
+  .suite-result { display:inline-block; padding:7px 10px; margin:4px; border:1px solid var(--border); border-radius:8px; font-size:12px; }
+  @media (max-width:1000px) { .evidence-layout { grid-template-columns:1fr; } .identity-strip { gap:8px 14px; } }
+  .scene-switch-row { display:flex;align-items:center;gap:14px;margin:14px 0;padding:13px 16px; }
+  .scene-switch-row label { white-space:nowrap;font-size:14px;font-weight:600; }
+  .scene-switch-row select { background:#101b30;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px 12px;min-width:210px; }
+  .scene-switch-row .current-policy { flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--emerald);font-size:13px; }
+  .scene-switch-row .scene-mode { white-space:nowrap;color:var(--muted);font-size:12px; }
+  @media(max-width:760px) { .scene-switch-row {gap:8px;} .scene-switch-row select {min-width:0;max-width:48%;} .scene-mode {display:none;} }
 </style>
 </head>
 <body>
@@ -301,8 +335,8 @@
 <!-- Topbar -->
 <header class="topbar">
   <div class="title-box">
-    <h1>openEuler 资源管控 Agent — 真机实时交互沙盒与示波器</h1>
-    <p>实时连接 openEuler 24.03 LTS-SP4 (Kernel 6.6.0-scx) · 1秒级真实内核采样与在线策略调控</p>
+    <h1>openEuler 资源管控 Agent — 实时演示与内核核验</h1>
+    <p>进程调度观测 · 原始内核回读 · 独立 SSH 旁证</p>
   </div>
   <div style="display:flex;align-items:center;gap:10px;">
     <a href="/report" target="_blank" style="text-decoration:none;color:#38bdf8;padding:6px 13px;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.35);border-radius:999px;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;">
@@ -310,20 +344,28 @@
     </a>
     <div class="conn-badge" id="connBadge">
       <span class="pulse-dot" id="connDot"></span>
-      <span id="connText">正在连接虚拟机 172.26.1.3:8899...</span>
+      <span id="connText">等待首次实时采样...</span>
     </div>
   </div>
 </header>
+<div class="identity-strip">
+  <span>主机 <strong id="machineHost">—</strong></span>
+  <span>内核 <strong id="machineKernel">—</strong></span>
+  <span>vCPU <strong id="machineCpus">—</strong></span>
+  <span>Boot ID <strong id="machineBoot" title="完整启动身份">—</strong></span>
+  <span>Agent PID <strong id="machinePid">—</strong></span>
+  <span>采样状态 <strong id="sampleFreshness">待采样</strong></span>
+</div>
 
 <!-- Interactive Control Deck -->
 <section class="control-deck">
   <div class="deck-row">
     <div class="stage-banner" id="stageBanner">
-      💡 实时沙盒已就绪：你可以点击右侧【🎬 一键 25秒全自动真机实况剧本】，或手动开关【🔥 后台 sysbench 干扰】与【⚡ SCX 调度策略】实时观察下方波形变化！
+      等待连接。连接后可运行演示，或手动切换负载与调度策略，并在下方核验原始内核状态。
     </div>
     <div class="btn-group">
-      <button class="btn hero" id="btnChoreo" onclick="sendControl({action:'start_choreography'})">
-        🎬 一键 25秒全自动真机实况剧本
+      <button class="btn hero" id="btnChoreo" onclick="applyScenario()">
+        ↻ 重启当前场景
       </button>
     </div>
   </div>
@@ -332,7 +374,7 @@
     <div class="btn-group">
       <span style="font-size:12px;color:var(--muted);font-weight:600;">真实负载开关：</span>
       <button class="btn emerald-on" id="btnTraffic" onclick="toggleTraffic()">
-        🟢 前台 Nginx+wrk2 (25.6k RPS): 运行中
+        前台 Nginx+wrk2：等待状态
       </button>
       <button class="btn" id="btnSysbench" onclick="toggleSysbench()">
         🔥 注入 CPU0 后台 sysbench 干扰: 已关闭
@@ -353,7 +395,7 @@
         ⚡ SCX 1ms + 唤醒抢占
       </button>
       <button class="btn" id="btnPolScx2m" onclick="sendControl({action:'set_policy',policy:'scx',slice_us:500,wakeup_preempt:true})">
-        🚀 热更新 500µs + 抢占 (极致低延迟)
+        热更新 500µs + 抢占
       </button>
       <button class="btn" id="btnPolScx10m" onclick="sendControl({action:'set_policy',policy:'scx',slice_us:10000,wakeup_preempt:false})">
         🐢 热更新 10ms 无抢占 (劣化对比)
@@ -362,24 +404,31 @@
   </div>
 </section>
 
+<section class="card scene-switch-row" id="scenePanel">
+  <label for="scenarioSelect">负载场景</label>
+  <select id="scenarioSelect" onchange="switchScenario()"><option>等待读取场景...</option></select>
+  <span id="quickPolicyName" class="current-policy">等待读取当前配置</span>
+  <span id="quickModeBadge" class="scene-mode">Agent 观察中</span>
+</section>
+
 <!-- 4 Live KPI Gauges -->
 <section class="kpi-grid">
   <div class="kpi-card emerald" id="cardLat">
     <div class="kpi-label">
-      <span>前台 Nginx 实时响应延迟 (HTTP)</span>
-      <span id="latBadge" style="color:#34d399;font-weight:700;">● 极速响应</span>
+      <span id="latencyMetricLabel">Nginx HTTP 探测延迟</span>
+      <span id="latBadge" style="color:#94a3b8;font-weight:700;">待采样</span>
     </div>
-    <div class="kpi-main" id="kpiP95">p95: 0.24 ms</div>
-    <div class="kpi-sub" id="kpiLatSub">p50: 0.09 ms &nbsp;|&nbsp; p99: 0.42 ms</div>
+    <div class="kpi-main" id="kpiP95">p95: — ms</div>
+    <div class="kpi-sub" id="kpiLatSub">等待本次 HTTP 探测样本</div>
   </div>
 
   <div class="kpi-card" id="cardWait">
     <div class="kpi-label">
-      <span>CPU0 内核运行队列排队占比 (schedstat)</span>
+      <span>Nginx 进程调度等待占比</span>
       <span id="waitBadge" style="color:#38bdf8;font-weight:700;">/proc/pid/schedstat</span>
     </div>
-    <div class="kpi-main" id="kpiWaitPct">0.3 %</div>
-    <div class="kpi-sub" id="kpiWaitSub">单次唤醒排队: 0.6 µs &nbsp;|&nbsp; 调度: 605 次/s</div>
+    <div class="kpi-main" id="kpiWaitPct">— %</div>
+    <div class="kpi-sub" id="kpiWaitSub">来源：/proc/PID/schedstat 的窗口增量</div>
   </div>
 
   <div class="kpi-card violet">
@@ -393,12 +442,22 @@
 
   <div class="kpi-card amber">
     <div class="kpi-label">
-      <span>CPU0 后台批处理吞吐 (sysbench)</span>
+      <span>CPU0 后台任务吞吐</span>
       <span id="sysbBadge" style="color:#94a3b8;font-weight:700;">未注入</span>
     </div>
-    <div class="kpi-main" id="kpiEps">0.0 EPS</div>
-    <div class="kpi-sub" id="kpiCpuSub">sysbench CPU0: 0.0% &nbsp;|&nbsp; Nginx CPU0: 14.0%</div>
+    <div class="kpi-main" id="kpiEps">— EPS</div>
+    <div class="kpi-sub" id="kpiCpuSub">等待进程采样</div>
   </div>
+</section>
+
+<section class="wrk-strip">
+  <div class="wrk-values">
+    <span>wrk2 实际完成 <strong id="wrkRps">— RPS</strong></span>
+    <span>HDR p99 <strong id="wrkP99">— ms</strong></span>
+    <span>HTTP 状态错误 <strong id="wrkStatusErrors">—</strong></span>
+    <span>连接 / 读 / 写 / 超时 <strong id="wrkSocketErrors">—</strong></span>
+  </div>
+  <div class="measure-note" id="wrkWindowNote">等待 wrk2 校准和首个完整 5 秒窗口。发压目标为 25,600 RPS，实际完成量以窗口输出为准。</div>
 </section>
 
 <!-- Two Live Scrolling Oscilloscopes -->
@@ -406,11 +465,11 @@
   <!-- Chart 1: Latency -->
   <div class="card">
     <div class="card-header">
-      <div class="card-title">📈 实时示波器 A：前台 Nginx 响应延迟 (p95 / p50 ms)</div>
+      <div class="card-title" id="latencyChartTitle">📈 前台响应延迟 (p95 / p50 ms)</div>
       <div class="legend">
         <span><i class="dot" style="background:#f43f5e;"></i>p95 延迟 (ms)</span>
         <span><i class="dot" style="background:#38bdf8;"></i>p50 中位延迟 (ms)</span>
-        <span><i class="dot" style="background:rgba(16,185,129,0.35);"></i>绿色背景 = SCX 生效中</span>
+        <span><i class="dot" style="background:rgba(16,185,129,0.35);"></i>绿色背景 = SCX · 竖虚线 = 场景切换</span>
       </div>
     </div>
     <div class="chart-wrap">
@@ -421,10 +480,10 @@
   <!-- Chart 2: Queue Wait % & Wakeup Delay -->
   <div class="card">
     <div class="card-header">
-      <div class="card-title">📊 实时示波器 B：CPU0 内核调度排队占比 (%) 与后台吞吐 (EPS)</div>
+      <div class="card-title">📊 CPU0 调度等待占比 (%) 与后台吞吐 (EPS)</div>
       <div class="legend">
-        <span><i class="dot" style="background:#f59e0b;"></i>Nginx 排队等待占比 (%)</span>
-        <span><i class="dot" style="background:#a855f7;"></i>后台 sysbench 吞吐 (EPS/50)</span>
+        <span><i class="dot" style="background:#f59e0b;"></i>Nginx 等待占比（右轴 %）</span>
+        <span><i class="dot" style="background:#a855f7;"></i>后台吞吐 EPS（左轴）</span>
       </div>
     </div>
     <div class="chart-wrap">
@@ -439,7 +498,7 @@
   <div class="card">
     <div class="card-header">
       <div class="card-title">📦 Cgroup 同核权重争用实时实验台</div>
-      <span style="font-size:11.5px;color:var(--emerald);font-weight:700;" id="cgRatioBadge">实测 3.98 : 1</span>
+      <span style="font-size:11.5px;color:var(--muted);font-weight:700;" id="cgRatioBadge">待测</span>
     </div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">
       点击下方按钮在虚拟机 <code>CPU3</code> 启动两个真实争用进程，验证 <code>cpu.shares</code> 实测时间片分配比例：
@@ -450,12 +509,12 @@
       <button class="btn" id="btnCg11" onclick="runCgroup(1024,1024)">▶ 实测 1:1 (1024:1024)</button>
     </div>
     <div class="bar-track">
-      <div class="bar-fill" id="cgBarLow" style="width:20.1%;background:#38bdf8;">低权重 40 ticks (20.1%)</div>
-      <div class="bar-fill" id="cgBarHigh" style="width:79.9%;background:#10b981;">高权重 159 ticks (79.9%)</div>
+      <div class="bar-fill" id="cgBarLow" style="width:50%;background:#38bdf8;">低权重：待测</div>
+      <div class="bar-fill" id="cgBarHigh" style="width:50%;background:#10b981;">高权重：待测</div>
     </div>
     <div style="font-size:11.8px;color:var(--muted);display:flex;justify-content:space-between;" id="cgSubText">
       <span>当前配置: 1024 vs 4096 shares</span>
-      <span>理论比例: 4.0 : 1 | 实测: 3.98 : 1</span>
+      <span>完成实验后显示本次测量结果与时间</span>
     </div>
   </div>
 
@@ -494,17 +553,88 @@
   <!-- Lab 3: Live Kernel & Agent Event Stream -->
   <div class="card">
     <div class="card-header">
-      <div class="card-title">💻 真机内核与 Agent 实时事件流</div>
+      <div class="card-title">Agent 操作与原生后端回读日志</div>
       <span style="font-size:11.5px;color:var(--muted);" id="sampleSeqText">采样 #0</span>
     </div>
     <div class="terminal" id="logBox"></div>
   </div>
 </section>
 
+<section class="card evidence-card">
+  <div class="card-header">
+    <div class="card-title">内核原始核验</div>
+    <span id="evidenceTime" style="font-size:11px;color:var(--muted);">等待读取</span>
+  </div>
+  <div class="evidence-layout">
+    <div>
+      <div class="evidence-tabs" id="evidenceTabs">
+        <button class="btn cyan-on" data-view="system" onclick="selectEvidence('system')">机器身份</button>
+        <button class="btn" data-view="processes" onclick="selectEvidence('processes')">进程 / schedstat</button>
+        <button class="btn" data-view="scheduler" onclick="selectEvidence('scheduler')">SCX / BPF Map</button>
+        <button class="btn" data-view="cgroup" onclick="selectEvidence('cgroup')">Cgroup</button>
+        <button class="btn" data-view="network" onclick="selectEvidence('network')">TC / 丢包</button>
+      </div>
+      <pre class="kernel-terminal" id="kernelTerminal">等待虚拟机返回原始输出...</pre>
+    </div>
+    <div class="evidence-aside">
+      <p>左侧命令由虚拟机服务执行，只读取 Linux 状态。输出附采集时间、退出码；可复制到独立 SSH 终端核对。</p>
+      <p><strong style="color:var(--text);">SSH 独立旁证</strong><br>在已登录的虚拟机 root 终端执行，直接读取内核和进程，不调用网页接口：</p>
+      <div class="ssh-command" id="sshProofCommand">bash /root/oe-resource-agent/scripts/watch-demo.sh</div>
+      <div class="evidence-actions">
+        <button class="btn" onclick="copySshCommand()">复制 SSH 核验命令</button>
+        <button class="btn" onclick="copyEvidenceCommands()">复制当前命令</button>
+        <button class="btn" onclick="downloadEvidence()">导出本次证据 JSON</button>
+      </div>
+      <div class="measure-note" id="evidenceActionStatus" role="status"></div>
+      <div class="measure-note" id="probeWindowNote">HTTP 探测与 wrk2 HDR 为两套独立采样。调度等待占比 = Δwait / (Δrun + Δwait)；平均每次调度等待 = Δwait / Δ调度次数。</div>
+    </div>
+  </div>
+</section>
+
+<details class="card" style="margin:14px 0;" id="tuningPanel">
+  <summary style="cursor:pointer;color:var(--muted);font-size:13px;">可选：完整对照实验与历史报告（耗时数分钟，日常演示无需运行）</summary>
+  <div class="card-header" style="margin-top:14px;"><div class="card-title">四配置完整验证</div><span id="tuningStatus" style="font-size:12px;color:var(--cyan);">未运行</span></div>
+  <div class="scenario-controls"><button class="btn" id="applyScenario" onclick="applyScenario()">重启当前负载（不指定策略）</button></div>
+  <div class="measure-note" id="scenarioDescription">等待读取场景参数。</div>
+  <div class="measure-note" id="activeScenarioDetails" style="margin-top:5px;"></div>
+  <p class="measure-note" id="quickPolicyBasis" style="margin-top:8px;">Agent 根据当前运行指标独立判断。</p>
+  <details style="margin-top:10px;"><summary style="font-size:12px;color:var(--muted);cursor:pointer;">可选：调整 Agent 评分权重（无性能达标门槛）</summary>
+    <div class="scenario-controls"><label for="weightLatency">延迟权重</label><input id="weightLatency" type="number" min="0" max="100" step="1" value="60" style="width:90px;">
+      <label for="weightThroughput">吞吐权重</label><input id="weightThroughput" type="number" min="0" max="100" step="1" value="40" style="width:90px;">
+      <button class="btn" onclick="applyAgentWeights()">应用权重（不重启负载）</button></div>
+    <p class="measure-note">基线分为100，按完整 HDR p99 和实际吞吐的相对比值评分。先试用再比较，保留收益较好的已测配置；请求错误与反馈缺失仍触发保护。</p>
+  </details>
+  <p class="measure-note">需要完整对照时再运行。此过程暂停实时 Agent，依次试运行四组配置并收集完整窗口；采用各场景的实验目标，日常场景切换不会启动它。</p>
+  <div class="scenario-controls">
+    <label for="trialRepeats">重复轮次</label><select id="trialRepeats"><option value="1" selected>1 轮</option><option value="2">2 轮</option><option value="3">3 轮</option></select>
+    <label for="trialWindows">每组完整窗口</label><select id="trialWindows"><option value="2" selected>2 个</option><option value="3">3 个</option><option value="4">4 个</option></select>
+  </div>
+  <div class="scenario-controls">
+    <button class="btn cyan-on" id="startComparison" onclick="startComparison(false)">▶ 比较当前场景四组配置</button>
+    <button class="btn" id="startSuite" onclick="startScenarioSuite()">运行全部典型场景</button>
+    <button class="btn" id="stopTuning" onclick="sendControl({action:'stop_tuning'})">停止测试并恢复默认</button>
+    <button class="btn" onclick="downloadTuning()">导出四策略测试与原始窗口</button>
+  </div>
+  <div class="tuning-status"><strong id="tuningProgressText" style="font-size:13px;">等待测试</strong><span id="tuningWindowText" style="font-size:12px;color:var(--muted);"></span></div>
+  <div class="tuning-progress"><div id="tuningProgressBar" style="width:0%"></div></div>
+  <div id="tuningReason" class="measure-note">点击比较后，根据本次测量选择配置。单场景通常需要数分钟；全部场景依轮次和校准时间需要更久，可随时停止。</div>
+  <div style="overflow-x:auto;"><table class="tuning-table"><thead><tr><th>配置</th><th>有效轮次 / 窗口</th><th>窗口 p99 汇总 (ms)</th><th>实际 RPS</th><th>后台 EPS</th><th>错误</th><th>业务约束 / 选择</th></tr></thead><tbody id="tuningRows"><tr><td colspan="7">尚无本次四策略测量。</td></tr></tbody></table></div>
+  <p class="measure-note">每轮先取窗口指标中位数，再对重复轮次取均值；± 为重复轮次间样本标准差。不同后台负载的 EPS 单位不同，只在同一场景内比较。场景中预设的是业务目标，达到目标与否以实际测量为准。</p>
+  <div id="suiteResults" style="margin-top:12px;"></div>
+  <div id="savedSuiteResults" class="measure-note" style="margin-top:12px;"></div>
+  <details style="margin-top:12px;" id="suiteArchive"><summary style="font-size:13px;color:var(--cyan);cursor:pointer;">查看已完成场景的四配置对照</summary>
+    <div class="scenario-controls"><label for="suiteSceneSelect">报告场景</label><select id="suiteSceneSelect" onchange="renderSuiteCase()"><option>等待场景完成...</option></select></div>
+    <p class="measure-note" id="suiteCaseNote"></p>
+    <div style="overflow-x:auto;"><table class="tuning-table"><thead><tr><th>配置</th><th>有效轮次 / 窗口</th><th>窗口 p99 汇总 (ms)</th><th>实际 RPS</th><th>后台 EPS</th><th>错误</th><th>约束 / 选择</th></tr></thead><tbody id="suiteCaseRows"><tr><td colspan="7">尚无已完成场景。</td></tr></tbody></table></div>
+  </details>
+</details>
+
 <!-- Full 6x4 PPT Matrix Comparison Table -->
 <section class="card" style="margin-top:14px;">
+  <details>
+  <summary style="cursor:pointer;color:var(--muted);font-size:13px;">历史实验对照表（展开查看；本次操作不会更新此表）</summary>
   <div class="card-header">
-    <div class="card-title">📋 开题报告第 10 页完整消融实验矩阵：6 种调度组 × 4 种测试场景真机实测对照 (wrk2 25,600 RPS)</div>
+    <div class="card-title">历史基准实验：6 种调度组 × 4 种场景 (wrk2 25,600 RPS)</div>
     <span style="font-size:11.5px;color:var(--emerald);font-weight:700;">state/ppt-matrix-validation.json</span>
   </div>
   <div style="overflow-x:auto;">
@@ -564,71 +694,18 @@
       </tbody>
     </table>
   </div>
+  </details>
 </section>
 
-<!-- Multi-Resource Automatic Orchestration Validation Table -->
-<section class="card" style="margin-top:14px;">
-  <div class="card-header">
-    <div class="card-title">🤖 多维资源协同自治闭环实验：Agent 根据运行态势自动控制 CPU (SCX) + Cgroup + eBPF TC + LSM 审计</div>
-    <span style="font-size:11.5px;color:var(--cyan);font-weight:700;">state/multi-resource-auto-validation.json (ALL PASSED)</span>
-  </div>
-  <div style="overflow-x:auto;">
-    <table style="width:100%;border-collapse:collapse;font-size:12.2px;text-align:left;">
-      <thead>
-        <tr style="border-bottom:1px solid rgba(148,163,184,0.25);color:var(--muted);">
-          <th style="padding:8px 10px;">运行阶段与实时工况 (Runtime Stage)</th>
-          <th style="padding:8px 10px;">CPU 调度器自动决策 (<code>sched_ext</code>)</th>
-          <th style="padding:8px 10px;">Cgroup 控制器自动决策 (<code>resource.cgroup</code>)</th>
-          <th style="padding:8px 10px;">eBPF 网络钩子自动决策 (<code>network.ebpf_tc</code>)</th>
-          <th style="padding:8px 10px;">LSM 安全审计与实测验证结果</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
-          <td style="padding:8px 10px;"><strong>阶段 1：纯前台服务 (<code>service_only</code>)</strong><br><span style="color:var(--muted);font-size:11px;">仅 Nginx 运行，无后台争抢，端口流量正常</span></td>
-          <td style="padding:8px 10px;">保持 <code>kernel.default</code> (<code>disabled</code>)</td>
-          <td style="padding:8px 10px;">保持未隔离 (<code>active=false</code>，不产生额外开销)</td>
-          <td style="padding:8px 10px;"><span style="color:#38bdf8;font-weight:700;">自动挂载 lo 观测模式</span> (<code>drop_target=false</code>)</td>
-          <td style="padding:8px 10px;"><span style="color:#34d399;">✓ 自动审计 Nginx 进程</span> | 端口 18095 探测 HTTP 200 (0.48 ms)</td>
-        </tr>
-        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
-          <td style="padding:8px 10px;"><strong>阶段 2：注入后台算力争抢 (<code>mixed</code>)</strong><br><span style="color:var(--muted);font-size:11px;">CPU0 启动 sysbench 与 Nginx 混部争抢</span></td>
-          <td style="padding:8px 10px;"><span style="color:#34d399;font-weight:700;">自动切入 <code>scx.slice</code></span> (1ms + 唤醒抢占)</td>
-          <td style="padding:8px 10px;"><span style="color:#34d399;font-weight:700;">自动创建并迁入受管组</span><br><code>auto_latency=4096</code> : <code>auto_batch=1024</code></td>
-          <td style="padding:8px 10px;">持续监测包速 (<code>0.0 pps &lt; 20 pps</code>，保持放行)</td>
-          <td style="padding:8px 10px;"><span style="color:#34d399;">✓ 自动审计新进程 sysbench</span> | SCX 下核实双组 PID 归属生效</td>
-        </tr>
-        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
-          <td style="padding:8px 10px;"><strong>阶段 3：受控端口突发洪泛 (<code>port_flood</code>)</strong><br><span style="color:var(--muted);font-size:11px;">向 18095 端口突发高频请求 (315.3 pkt/s)</span></td>
-          <td style="padding:8px 10px;">维持 <code>scx.slice</code> 保护前台 Nginx</td>
-          <td style="padding:8px 10px;">维持 <code>4096 : 1024</code> Cgroup 隔离</td>
-          <td style="padding:8px 10px;"><span style="color:#fb7185;font-weight:700;">检测到 315.3 pps ≥ 20 pps → 自动切换 <code>drop_target=true</code> (<code>TC_ACT_SHOT</code>)</span></td>
-          <td style="padding:8px 10px;"><span style="color:#34d399;">✓ 18095 端口探测被内核直接阻断 (<code>dropped_packets+1</code>)，前台 Nginx 200 OK 不受影响</span></td>
-        </tr>
-        <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
-          <td style="padding:8px 10px;"><strong>阶段 4：洪泛平息 &amp; 争抢退出 (<code>recovery</code>)</strong><br><span style="color:var(--muted);font-size:11px;">端口冲击停止 + sysbench 退出</span></td>
-          <td style="padding:8px 10px;"><span style="color:#38bdf8;font-weight:700;">自动回退 <code>kernel.default</code></span> (<code>disabled</code>)</td>
-          <td style="padding:8px 10px;"><span style="color:#38bdf8;font-weight:700;">自动解绑释放</span>，将 Nginx 迁回根 Cgroup</td>
-          <td style="padding:8px 10px;"><span style="color:#34d399;font-weight:700;">冷却 2 窗后自动恢复 <code>drop_target=false</code></span>，退出时自动卸载</td>
-          <td style="padding:8px 10px;"><span style="color:#34d399;">✓ 18095 端口自动恢复连通 (HTTP 200, 0.43 ms) | 零内核残留状态</span></td>
-        </tr>
-        <tr style="background:rgba(16,185,129,0.11);">
-          <td style="padding:8px 10px;"><strong>阶段 5：EEVDF 默认调度下 Cgroup 自动隔离实测</strong><br><span style="color:var(--muted);font-size:11px;"><code>mode=default</code> 同核争抢自动赋权验证</span></td>
-          <td style="padding:8px 10px;">固定 <code>kernel.default</code> (EEVDF)</td>
-          <td style="padding:8px 10px;"><strong style="color:#34d399;">自动识别争抢并下发 <code>4096 : 1024</code> 权重</strong></td>
-          <td style="padding:8px 10px;">自动挂载观测模式</td>
-          <td style="padding:8px 10px;"><strong style="color:#34d399;">✓ 实测前台算力占比提升至 79.8% vs 20.2% (3.94 : 1，吻合理论 4 : 1)</strong></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+<p class="measure-note" style="margin:16px 0">Cgroup 权重实验在默认调度器下独立运行；四策略对照不同时改变组权重。LSM 展示进程标签与权限审计。历史报告中的固定数值不会随本次操作更新。</p>
 
 <script>
-// Automatically determine API base URL: works both via http://172.26.1.3:8899, http://127.0.0.1:8899, and file://
+// HTTP pages use their own backend; local files use the SSH tunnel by default.
+// A different backend can be selected with ?api=http://host:port.
+const configuredApi = new URLSearchParams(window.location.search).get("api");
 const API_BASE = (window.location.protocol === "http:" || window.location.protocol === "https:")
   ? ""
-  : "http://172.26.1.3:8899";
+  : (configuredApi || "http://127.0.0.1:8899").replace(/\/$/, "");
 
 let currentState = {
   traffic_running: true,
@@ -636,6 +713,190 @@ let currentState = {
   auto_agent: false
 };
 let lastLogSignature = "";
+let evidenceView = "system";
+let lastEvidence = null;
+let evidenceBusy = false;
+let scenarioCatalog = {};
+let displayedScenario = null;
+let archivedSuiteCases = [];
+let sceneSwitchPending = false;
+let statePollBusy = false;
+let displayedAgentWeights = '';
+const fmt = (value, digits = 1) => Number.isFinite(value) ? value.toFixed(digits) : "—";
+const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+
+async function pollEvidence() {
+  if (evidenceBusy || document.hidden) return;
+  evidenceBusy = true;
+  const requestedView = evidenceView;
+  try {
+    const resp = await fetch(API_BASE + "/api/evidence?view=" + requestedView, {cache:"no-store", signal:AbortSignal.timeout(8000)});
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    if (requestedView !== evidenceView) return;
+    lastEvidence = data;
+    const blocks = (data.results || []).map(item => `$ ${item.command}\n${item.stdout || ""}${item.stderr ? "\n[stderr] " + item.stderr : ""}\n[exit ${item.exit_code ?? "unavailable"} · ${item.duration_ms} ms]`);
+    document.getElementById("kernelTerminal").textContent = [...(data.notes || []), ...blocks].join("\n\n");
+    document.getElementById("evidenceTime").textContent = `采集 ${new Date(data.captured_utc).toLocaleTimeString()} · ${fmt(data.age_seconds, 1)}s 前 · 虚拟机原始回读`;
+  } catch (err) {
+    document.getElementById("evidenceTime").textContent = "原始回读不可用 · 已有输出已冻结";
+  } finally { evidenceBusy = false; }
+}
+
+function selectEvidence(view) {
+  evidenceView = view;
+  document.querySelectorAll("#evidenceTabs button").forEach(button => button.className = button.dataset.view === view ? "btn cyan-on" : "btn");
+  document.getElementById("evidenceTime").textContent = "正在采集...";
+  document.getElementById("kernelTerminal").textContent = "正在读取所选内核状态...";
+  lastEvidence = null;
+  pollEvidence();
+}
+
+async function copyProof(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    document.getElementById("evidenceActionStatus").textContent = "已复制，可粘贴到独立 SSH 终端执行。";
+  } catch (err) {
+    document.getElementById("evidenceActionStatus").textContent = "复制不可用，请选择上方命令文本手动复制。";
+  }
+}
+function copySshCommand() { return copyProof(document.getElementById("sshProofCommand").textContent); }
+function copyEvidenceCommands() {
+  if (!lastEvidence) return;
+  return copyProof(lastEvidence.results.map(item => item.command).join("\n"));
+}
+async function downloadEvidence() {
+  const status = document.getElementById("evidenceActionStatus");
+  status.textContent = "正在汇集本次采样与原始内核回读...";
+  try {
+    const response = await fetch(API_BASE + "/api/evidence/export", {cache:"no-store", signal:AbortSignal.timeout(20000)});
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "oe-demo-evidence.json";
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    status.textContent = "已导出：包含机器身份、原始计数、采样窗口与核验命令输出。";
+  } catch (err) { status.textContent = "导出失败：" + err.message; }
+}
+
+function tuningOptions() {
+  return {repeats:Number(document.getElementById('trialRepeats').value), windows:Number(document.getElementById('trialWindows').value)};
+}
+function startComparison(automatic) { return sendControl({action:'start_tuning',automatic,...tuningOptions()}); }
+function startScenarioSuite() { return sendControl({action:'start_suite',...tuningOptions()}); }
+function switchScenario() { previewScenario(); return applyScenario(); }
+async function applyScenario() {
+  if (sceneSwitchPending) return;
+  const scenario = document.getElementById('scenarioSelect').value;
+  const payload = {action:'set_scenario',scenario};
+  sceneSwitchPending = true;
+  document.getElementById('scenarioSelect').disabled = true;
+  try { return await sendControl(payload); }
+  finally {
+    sceneSwitchPending = false;
+    document.getElementById('scenarioSelect').disabled = Boolean(currentState.cgroup && currentState.cgroup.running);
+  }
+}
+function applyAgentWeights() {
+  return sendControl({action:'set_agent_weights',latency:Number(document.getElementById('weightLatency').value)/100,throughput:Number(document.getElementById('weightThroughput').value)/100});
+}
+function previewScenario() {
+  const scene = scenarioCatalog[document.getElementById('scenarioSelect').value];
+  if (!scene) return;
+  document.getElementById('scenarioDescription').textContent = `${scene.description} 切换只改变负载，调度由 Agent 根据实时采样独立决定。`;
+}
+async function downloadTuning() {
+  const status = document.getElementById('evidenceActionStatus');
+  status.textContent = '正在导出四策略报告与原始窗口...';
+  try {
+    const response = await fetch(API_BASE + '/api/tuning/export', {cache:'no-store',signal:AbortSignal.timeout(30000)});
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const url = URL.createObjectURL(await response.blob());
+    const link = document.createElement('a'); link.href = url; link.download = 'oe-four-strategy-results.json'; link.click();
+    setTimeout(() => URL.revokeObjectURL(url),1000);
+    status.textContent = '已导出：包含每轮配置、实际内核回读、原始窗口、来源摘要与选择理由。';
+  } catch (error) { status.textContent = '测试结果导出失败：' + error.message; }
+}
+function updateTuning(data) {
+  const tuning = data.tuning || {};
+  const search = tuning.search;
+  const running = tuning.running;
+  const suite = tuning.suite || {};
+  const choices = document.getElementById('scenarioSelect');
+  if (!Object.keys(scenarioCatalog).length && data.scenarios) {
+    scenarioCatalog = data.scenarios;
+    choices.innerHTML = Object.entries(scenarioCatalog).map(([key,scene]) => `<option value="${escapeHtml(key)}">${escapeHtml(scene.label)}</option>`).join('');
+  }
+  if (displayedScenario !== data.scenario_id) {
+    displayedScenario = data.scenario_id; choices.value = displayedScenario; previewScenario();
+  }
+  const active = data.scenario;
+  const agent = data.agent || {};
+  const autonomous = Boolean(agent.enabled);
+  const phase = ({observing:'观察',confirming:'连续确认',probing:'候选观测',accepted:'实测保留',holding:'监测',cooldown:'暂缓重试',paused:'暂停'})[agent.phase] || '等待采样';
+  const weightsKey = JSON.stringify(agent.weights || {});
+  if (agent.weights && displayedAgentWeights !== weightsKey) {
+    displayedAgentWeights = weightsKey;
+    document.getElementById('weightLatency').value = agent.weights.latency*100;
+    document.getElementById('weightThroughput').value = agent.weights.throughput*100;
+  }
+  document.getElementById('quickModeBadge').textContent = sceneSwitchPending ? '负载切换中 · Agent 独立监测' : (autonomous ? `Agent：${phase}${agent.phase==='confirming' ? ' '+agent.confirmations+'/'+agent.required_confirmations : ''}` : (running ? '可选对照进行中' : 'Agent 已暂停'));
+  const actual = data.scheduler.policy_id === 'kernel.default' ? '默认 EEVDF' : `SCX ${data.scheduler.slice_us}μs · 抢占${data.scheduler.wakeup_preempt ? '开启' : '关闭'}`;
+  document.getElementById('quickPolicyName').textContent = '当前内核配置：' + actual;
+  const input = agent.observation || {};
+  const scores = Object.entries(agent.measured_configurations || {}).map(([id,value]) => `${(data.strategies[id] || {}).label || id} ${fmt(value.score,1)}分`).join('；');
+  document.getElementById('quickPolicyBasis').textContent = `Agent ${phase}：${agent.reason || '等待数据'}。已测评分：${scores || '等待完整业务窗口建立基线'}。CPU ${fmt(input.cpu_busy_pct,1)}%，服务等待 ${fmt(input.wait_pct,1)}%。不读取场景名称或历史赢家，无 p99/EPS 达标线。`;
+  document.getElementById('activeScenarioDetails').textContent = `当前负载：${active.label} · 前台 ${active.traffic ? active.rps+' RPS' : '关闭'} · 后台 ${active.batch ? (active.batch_kind || 'sysbench')+' '+active.threads+' 线程' : '关闭'}。评分权重独立于场景。`;
+  document.getElementById('tuningStatus').textContent = autonomous ? '独立实时 Agent 运行中；未启动完整对照' : (running ? '可选完整对照运行中' : (search ? '最近对照 '+search.stage : '尚未运行完整对照'));
+  const count = search ? search.completed_trials : 0;
+  const total = search ? search.total_trials : 0;
+  const current = search && search.current;
+  const windowCount = current ? current.window_count : 0;
+  const required = search ? search.required_windows : 0;
+  document.getElementById('tuningProgressBar').style.width = `${total ? Math.min(100,(count + (required ? windowCount/required : 0))/total*100) : 0}%`;
+  document.getElementById('tuningProgressText').textContent = search ? `${running ? '正在测量' : '最近一次对照'}：${search.scenario.label} · 已完成 ${count}/${total} 组` : '等待测试';
+  document.getElementById('tuningWindowText').textContent = current ? `第 ${current.round} 轮 · ${data.strategies[current.strategy_id].label} · ${windowCount}/${required} 个完整窗口` : (suite.running ? `全场景：已完成 ${(tuning.suite_results || []).length}/${suite.total}` : '');
+  const measuredGoals = search ? `${search.scenario.traffic ? '测量时 p99 目标 ≤'+search.scenario.p99_limit_ms+'ms；' : ''}${search.scenario.objective === 'latency' && search.scenario.batch ? 'EPS 保留至少 '+((search.scenario.eps_floor_fraction ?? .9)*100)+'%；' : ''}` : '';
+  document.getElementById('tuningReason').textContent = search ? measuredGoals + search.reason : '选择场景后开始比较；四组配置都需要实际测量。';
+  const decision = search && search.decision;
+  document.getElementById('tuningRows').innerHTML = (search ? search.rows : []).map(row => {
+    const selected = decision && decision.validated && decision.strategy_id === row.strategy_id;
+    const verdict = !row.periods ? '待测' : (row.eligible === undefined ? '已测量，等待全部组完成' : (row.eligible ? (selected ? '本次选择' : '约束通过') : row.rejection_reasons.join('；')));
+    const metric = key => fmt(row[key],key === 'p99_ms' ? 3 : 1) + (Number.isFinite(row[key+'_sd']) ? ` ±${fmt(row[key+'_sd'],key === 'p99_ms' ? 3 : 1)}` : '');
+    return `<tr class="${selected ? 'chosen' : ''}"><td>${escapeHtml(row.label)}</td><td>${row.periods} / ${row.window_count}</td><td>${metric('p99_ms')}</td><td>${metric('rps')}</td><td>${metric('eps')}</td><td>${row.errors}</td><td>${escapeHtml(verdict)}</td></tr>`;
+  }).join('') || '<tr><td colspan="7">尚无本次四策略测量。</td></tr>';
+  const resultText = result => `${result.scenario.label}：${data.strategies[result.decision.strategy_id].label}${result.decision.validated ? '' : '（全部未通过目标，安全回退）'}`;
+  document.getElementById('suiteResults').innerHTML = (tuning.suite_results || []).map(result => `<span class="suite-result" title="${escapeHtml(result.decision.reason)}">${escapeHtml(resultText(result))}</span>`).join('');
+  const saved = tuning.saved_suite;
+  document.getElementById('savedSuiteResults').textContent = saved && saved.results.length ? `已保存的本机测试（非当前实时值）· ${saved.started_utc} · ${saved.status} · Boot ID ${saved.boot_id || '未知'}：` + saved.results.map(resultText).join('；') : '';
+  archivedSuiteCases = (tuning.suite_results || []).length ? tuning.suite_results : (saved ? saved.results : []);
+  const archivedSelect = document.getElementById('suiteSceneSelect');
+  const archivedValue = archivedSelect.value;
+  archivedSelect.innerHTML = archivedSuiteCases.map((result,index) => `<option value="${index}">${escapeHtml(result.scenario.label)}</option>`).join('') || '<option>等待场景完成...</option>';
+  if (Number(archivedValue) < archivedSuiteCases.length) archivedSelect.value = archivedValue;
+  renderSuiteCase();
+  for (const id of ['startComparison','startSuite','trialRepeats','trialWindows','btnChoreo','btnTraffic','btnSysbench','btnCg14','btnCg12','btnCg11','btnEbpfObs','btnEbpfDrop','btnEbpfDet']) {
+    document.getElementById(id).disabled = Boolean(running || data.cgroup.running);
+  }
+  document.getElementById('scenarioSelect').disabled = Boolean(data.cgroup.running || sceneSwitchPending);
+  document.getElementById('applyScenario').disabled = Boolean(data.cgroup.running);
+}
+
+function renderSuiteCase() {
+  const result = archivedSuiteCases[Number(document.getElementById('suiteSceneSelect').value)];
+  if (!result) return;
+  const decision = result.decision;
+  const scene = result.scenario;
+  document.getElementById('suiteCaseNote').textContent = `${scene.label} · ${scene.traffic ? 'p99 目标 ≤'+scene.p99_limit_ms+'ms；' : '无前台请求；'}${scene.objective === 'latency' && scene.batch ? 'EPS 保留至少 '+((scene.eps_floor_fraction ?? .9)*100)+'%；' : ''}${decision.reason} 此处是已完成测量的报告，不是当前实时值。`;
+  document.getElementById('suiteCaseRows').innerHTML = decision.rows.map(row => {
+    const chosen = decision.validated && row.strategy_id === decision.strategy_id;
+    const metric = key => fmt(row[key],key === 'p99_ms' ? 3 : 1) + (Number.isFinite(row[key+'_sd']) ? ` ±${fmt(row[key+'_sd'],key === 'p99_ms' ? 3 : 1)}` : '');
+    return `<tr class="${chosen ? 'chosen' : ''}"><td>${escapeHtml(row.label)}</td><td>${row.periods} / ${row.window_count}</td><td>${metric('p99_ms')}</td><td>${metric('rps')}</td><td>${metric('eps')}</td><td>${row.errors}</td><td>${escapeHtml(row.eligible ? (chosen ? '本次测试选择' : '约束通过') : (row.rejection_reasons || ['未完成']).join('；'))}</td></tr>`;
+  }).join('');
+}
 
 async function sendControl(payload) {
   try {
@@ -644,10 +905,12 @@ async function sendControl(payload) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-    await resp.json();
+    const result = await resp.json();
+    if (!resp.ok || result.ok === false) throw new Error(result.error || `HTTP ${resp.status}`);
     pollState();
+    pollEvidence();
   } catch (err) {
-    console.error("Control failed:", err);
+    document.getElementById("evidenceActionStatus").textContent = "操作未确认成功：" + err.message;
   }
 }
 
@@ -658,7 +921,7 @@ function toggleSysbench() {
   sendControl({ action: "toggle_sysbench", enable: !currentState.sysbench_running });
 }
 function toggleAutoAgent() {
-  sendControl({ action: "toggle_auto_agent", enable: !currentState.auto_agent });
+  sendControl({ action: "toggle_auto_agent", enable: !currentState.auto_agent, ...tuningOptions() });
 }
 function runCgroup(low, high) {
   document.getElementById("cgRatioBadge").textContent = "⏳ 正在 CPU3 实测争用 (1.8s)...";
@@ -670,139 +933,131 @@ async function probeEbpf() {
   await sendControl({ action: "ebpf_probe" });
 }
 
-function renderLatencyChart(history) {
-  const svg = document.getElementById("svgLatency");
-  const W = 600, H = 205, PAD_L = 42, PAD_R = 14, PAD_T = 16, PAD_B = 24;
-  const plotW = W - PAD_L - PAD_R;
-  const plotH = H - PAD_T - PAD_B;
-  const maxPoints = 40;
-  const pts = history.slice(-maxPoints);
-  if (pts.length === 0) return;
+function timelinePoints(history) {
+  const points = history.slice(-60);
+  if (currentState.sample_pending && points.length && points[points.length-1].workload_revision !== currentState.workload_revision) {
+    points.push({workload_revision:currentState.workload_revision,scenario_label:currentState.scenario.label,
+      policy_id:currentState.scheduler.policy_id,sysbench_on:currentState.sysbench_running,transition_only:true});
+  }
+  return points.slice(-60);
+}
 
-  // Dynamic Y scale with minimum 2.5 ms so normal vs spike is super clear
-  let maxY = 2.5;
-  pts.forEach(p => {
-    if (p.http_p95_ms * 1.15 > maxY) maxY = Math.min(6.0, p.http_p95_ms * 1.15);
-  });
-
-  const xOf = i => PAD_L + (i / Math.max(1, maxPoints - 1)) * plotW;
-  const yOf = v => PAD_T + plotH - Math.min(1, Math.max(0, v / maxY)) * plotH;
-
-  let html = "";
-  // Background shading for SCX active or sysbench active
-  const stepW = plotW / Math.max(1, maxPoints - 1);
-  pts.forEach((p, i) => {
-    const x = xOf(i);
-    if (p.policy_id === "scx.slice") {
-      html += `<rect x="${x - stepW/2}" y="${PAD_T}" width="${stepW + 1}" height="${plotH}" fill="rgba(16,185,129,0.13)" />`;
-    } else if (p.sysbench_on) {
-      html += `<rect x="${x - stepW/2}" y="${PAD_T}" width="${stepW + 1}" height="${plotH}" fill="rgba(244,63,94,0.10)" />`;
+function timelineBackdrop(points, xOf, left, right, top, height) {
+  const step = (right-left)/59;
+  let html = '', labels = 0;
+  points.forEach((point,index) => {
+    const color = point.policy_id === 'scx.slice' ? 'rgba(16,185,129,.10)' : (point.sysbench_on ? 'rgba(244,63,94,.07)' : '');
+    if (color) html += `<rect x="${Math.max(left,xOf(index)-step/2)}" y="${top}" width="${step+1}" height="${height}" fill="${color}"/>`;
+    if (index && point.workload_revision !== points[index-1].workload_revision) {
+      const label = point.scenario_label || '场景切换';
+      const title = escapeHtml(`${point.ts || ''} 切换至 ${label}${point.transition_only ? ' · 等待新采样' : ''}`);
+      html += `<line class="scene-boundary" x1="${xOf(index)}" x2="${xOf(index)}" y1="${top}" y2="${top+height}" stroke="#cbd5e1" stroke-opacity=".75" stroke-dasharray="4,4"><title>${title}</title></line>`;
+      const short = label.length > 6 ? label.slice(0,6)+'…' : label;
+      html += `<text x="${Math.min(xOf(index)+4,right-82)}" y="${top+11+(labels++%2)*12}" fill="#cbd5e1" font-size="9"><title>${title}</title>${escapeHtml(short)}</text>`;
     }
   });
+  return html;
+}
 
-  // Horizontal grid lines
-  [0, 0.25, 0.5, 0.75, 1.0].forEach(frac => {
-    const val = (maxY * frac).toFixed(1);
-    const y = yOf(maxY * frac);
-    html += `<line x1="${PAD_L}" y1="${y}" x2="${W - PAD_R}" y2="${y}" stroke="rgba(148,163,184,0.14)" stroke-dasharray="3,3" />`;
-    html += `<text x="${PAD_L - 6}" y="${y + 4}" fill="#64748b" font-size="10" text-anchor="end">${val}ms</text>`;
+function timelineSeries(points, valueOf, xOf, yOf, color, name, unitOf, sourceOf) {
+  let path = '', connected = false, previousSource, last = null;
+  points.forEach((point,index) => {
+    const value = valueOf(point);
+    if (!Number.isFinite(value)) { connected=false; return; }
+    const source = sourceOf ? sourceOf(point) : '';
+    if (source !== previousSource) connected=false;
+    path += `${connected ? 'L' : 'M'}${xOf(index).toFixed(1)},${yOf(value).toFixed(1)} `;
+    connected=true; previousSource=source; last={point,index,value};
   });
+  let html = path ? `<path data-series="${name}" d="${path}" fill="none" stroke="${color}" stroke-width="2.4" stroke-linejoin="round"/>` : '';
+  if (last) {
+    const title=escapeHtml(`${last.point.ts || ''} · ${last.point.scenario_label || ''} · ${name}: ${last.value.toFixed(2)} ${unitOf(last.point)}`);
+    html+=`<circle cx="${xOf(last.index)}" cy="${yOf(last.value)}" r="3.6" fill="${color}" stroke="#fff" stroke-width="1"><title>${title}</title></circle>`;
+  }
+  return html;
+}
 
-  // Alert threshold line at 1.2ms
-  const yAlert = yOf(1.2);
-  html += `<line x1="${PAD_L}" y1="${yAlert}" x2="${W - PAD_R}" y2="${yAlert}" stroke="rgba(244,63,94,0.55)" stroke-dasharray="5,4" />`;
-  html += `<text x="${W - PAD_R - 4}" y="${yAlert - 4}" fill="#fb7185" font-size="10" text-anchor="end">干扰劣化警戒线 (1.2ms)</text>`;
-
-  // Polylines for p95 and p50
-  const p95Points = pts.map((p, i) => `${xOf(i).toFixed(1)},${yOf(p.http_p95_ms).toFixed(1)}`).join(" ");
-  const p50Points = pts.map((p, i) => `${xOf(i).toFixed(1)},${yOf(p.http_p50_ms).toFixed(1)}`).join(" ");
-
-  html += `<polyline fill="none" stroke="#38bdf8" stroke-width="2.2" points="${p50Points}" />`;
-  html += `<polyline fill="none" stroke="#f43f5e" stroke-width="2.8" points="${p95Points}" />`;
-
-  // Latest dots
-  const lastIdx = pts.length - 1;
-  const last = pts[lastIdx];
-  html += `<circle cx="${xOf(lastIdx)}" cy="${yOf(last.http_p95_ms)}" r="4.5" fill="#f43f5e" stroke="#fff" stroke-width="1.2" />`;
-  html += `<circle cx="${xOf(lastIdx)}" cy="${yOf(last.http_p50_ms)}" r="3.5" fill="#38bdf8" />`;
-
-  svg.innerHTML = html;
+function renderLatencyChart(history) {
+  const svg=document.getElementById('svgLatency');
+  const points=timelinePoints(history);
+  if (!points.length) {svg.innerHTML='';return;}
+  const left=48,right=584,top=12,height=163;
+  const p95=p=>p.chart_p95_ms ?? p.http_p95_ms;
+  const p50=p=>p.chart_p50_ms ?? p.http_p50_ms;
+  const peak=Math.max(2.5,...points.map(p95).filter(Number.isFinite).map(value=>value*1.15));
+  const xOf=i=>left+i/59*(right-left),yOf=value=>top+height-Math.max(0,value)/peak*height;
+  let html=timelineBackdrop(points,xOf,left,right,top,height);
+  [0,.25,.5,.75,1].forEach(fraction=>{
+    const value=peak*fraction,y=yOf(value);
+    html+=`<line x1="${left}" x2="${right}" y1="${y}" y2="${y}" stroke="rgba(148,163,184,.15)" stroke-dasharray="3,3"/><text x="${left-5}" y="${y+4}" text-anchor="end" fill="#64748b" font-size="9">${value.toFixed(peak>=100 ? 0 : 1)}ms</text>`;
+  });
+  html+=timelineSeries(points,p50,xOf,yOf,'#38bdf8','p50',()=> 'ms',p=>p.latency_source);
+  html+=timelineSeries(points,p95,xOf,yOf,'#f43f5e','p95',()=> 'ms',p=>p.latency_source);
+  html+=`<text x="${left}" y="199" fill="#64748b" font-size="9">最近 60 次采样 · 保留切换前后记录 · 缺测处断开</text>`;
+  svg.innerHTML=html;
 }
 
 function renderWaitChart(history) {
-  const svg = document.getElementById("svgWait");
-  const W = 600, H = 205, PAD_L = 42, PAD_R = 14, PAD_T = 16, PAD_B = 24;
-  const plotW = W - PAD_L - PAD_R;
-  const plotH = H - PAD_T - PAD_B;
-  const maxPoints = 40;
-  const pts = history.slice(-maxPoints);
-  if (pts.length === 0) return;
-
-  const xOf = i => PAD_L + (i / Math.max(1, maxPoints - 1)) * plotW;
-  const yOf = pct => PAD_T + plotH - Math.min(1, Math.max(0, pct / 100.0)) * plotH;
-
-  let html = "";
-  const stepW = plotW / Math.max(1, maxPoints - 1);
-  pts.forEach((p, i) => {
-    const x = xOf(i);
-    if (p.policy_id === "scx.slice") {
-      html += `<rect x="${x - stepW/2}" y="${PAD_T}" width="${stepW + 1}" height="${plotH}" fill="rgba(16,185,129,0.13)" />`;
-    } else if (p.sysbench_on) {
-      html += `<rect x="${x - stepW/2}" y="${PAD_T}" width="${stepW + 1}" height="${plotH}" fill="rgba(244,63,94,0.10)" />`;
-    }
+  const svg=document.getElementById('svgWait');
+  const points=timelinePoints(history);
+  if (!points.length) {svg.innerHTML='';return;}
+  const left=48,right=557,top=12,height=163;
+  const peak=Math.max(100,...points.map(p=>p.sysbench_eps).filter(Number.isFinite).map(value=>value*1.15));
+  const xOf=i=>left+i/59*(right-left),yEps=value=>top+height-Math.max(0,value)/peak*height;
+  const yWait=value=>top+height-Math.max(0,Math.min(100,value))/100*height;
+  let html=timelineBackdrop(points,xOf,left,right,top,height);
+  [0,.25,.5,.75,1].forEach(fraction=>{
+    const y=top+height-fraction*height;
+    html+=`<line x1="${left}" x2="${right}" y1="${y}" y2="${y}" stroke="rgba(148,163,184,.15)" stroke-dasharray="3,3"/><text x="${left-5}" y="${y+4}" text-anchor="end" fill="#a78bfa" font-size="9">${Math.round(peak*fraction)}</text><text x="${right+5}" y="${y+4}" fill="#f59e0b" font-size="9">${Math.round(fraction*100)}%</text>`;
   });
-
-  [0, 25, 50, 75, 100].forEach(pct => {
-    const y = yOf(pct);
-    html += `<line x1="${PAD_L}" y1="${y}" x2="${W - PAD_R}" y2="${y}" stroke="rgba(148,163,184,0.14)" stroke-dasharray="3,3" />`;
-    html += `<text x="${PAD_L - 6}" y="${y + 4}" fill="#64748b" font-size="10" text-anchor="end">${pct}%</text>`;
-  });
-
-  const waitPoints = pts.map((p, i) => `${xOf(i).toFixed(1)},${yOf(p.nginx_wait_pct).toFixed(1)}`).join(" ");
-  const epsPoints = pts.map((p, i) => `${xOf(i).toFixed(1)},${yOf(Math.min(100, p.sysbench_eps / 45.0)).toFixed(1)}`).join(" ");
-
-  html += `<polyline fill="none" stroke="#a855f7" stroke-width="2.0" stroke-dasharray="4,3" points="${epsPoints}" />`;
-  html += `<polyline fill="none" stroke="#f59e0b" stroke-width="2.8" points="${waitPoints}" />`;
-
-  const lastIdx = pts.length - 1;
-  const last = pts[lastIdx];
-  html += `<circle cx="${xOf(lastIdx)}" cy="${yOf(last.nginx_wait_pct)}" r="4.5" fill="#f59e0b" stroke="#fff" stroke-width="1.2" />`;
-
-  svg.innerHTML = html;
+  html+=timelineSeries(points,p=>p.sysbench_eps,xOf,yEps,'#a855f7','EPS',p=>p.eps_unit || 'EPS',p=>p.eps_unit);
+  html+=timelineSeries(points,p=>p.nginx_wait_pct,xOf,yWait,'#f59e0b','调度等待',()=>'%');
+  html+=`<text x="${left}" y="199" fill="#64748b" font-size="9">左轴：后台吞吐 · 右轴：等待占比 · 吞吐单位见悬停</text>`;
+  svg.innerHTML=html;
 }
+
 
 function updateUI(data) {
   currentState = data;
   const badge = document.getElementById("connBadge");
   badge.classList.remove("offline");
-  document.getElementById("connText").textContent = `已连接 openEuler 真机 (172.26.1.3) · 实时采样 #${data.latest.seq} (${data.timestamp})`;
+  const machine = data.machine || {};
+  const fresh = Number.isFinite(data.sample_age_seconds) && data.sample_age_seconds <= 4 && data.latest.seq > 0;
+  document.body.classList.toggle("data-stale", !fresh && !data.sample_pending);
+  document.getElementById("connText").textContent = `已连接 ${machine.hostname || "虚拟机"} · 采样 #${data.latest.seq} (${data.timestamp})`;
+  document.getElementById("machineHost").textContent = machine.hostname || "—";
+  document.getElementById("machineKernel").textContent = machine.kernel || "—";
+  document.getElementById("machineCpus").textContent = machine.vcpus ?? "—";
+  document.getElementById("machineBoot").textContent = machine.boot_id ? machine.boot_id.slice(0, 12) + "…" : "—";
+  document.getElementById("machineBoot").title = machine.boot_id || "";
+  document.getElementById("machinePid").textContent = machine.agent_pid ?? "—";
+  document.getElementById("sampleFreshness").textContent = data.sample_pending ? "新场景采样中 · 曲线历史保留" : (fresh ? `${fmt(data.sample_age_seconds, 1)}s 前` : "待测 / 采样已过期");
   document.getElementById("sampleSeqText").textContent = `采样 #${data.latest.seq}`;
 
   // Stage banner
   document.getElementById("stageBanner").textContent = data.choreography_stage;
-  document.getElementById("btnChoreo").disabled = data.choreography_running;
-  document.getElementById("btnChoreo").textContent = data.choreography_running
-    ? "⏳ 正在真机执行 25秒实况剧本..."
-    : "🎬 一键 25秒全自动真机实况剧本";
+  document.getElementById("btnChoreo").textContent = data.tuning && data.tuning.running
+    ? "完整对照运行中..."
+    : "↻ 重启当前场景";
 
   // Control buttons state
   const btnTraffic = document.getElementById("btnTraffic");
   btnTraffic.className = data.traffic_running ? "btn emerald-on" : "btn";
   btnTraffic.textContent = data.traffic_running
-    ? "🟢 前台 Nginx+wrk2 (25.6k RPS): 运行中"
+    ? `前台 Nginx+wrk2：目标 ${data.workload.offered_rps} RPS`
     : "⏸ 前台 Nginx+wrk2: 已暂停";
 
   const btnSys = document.getElementById("btnSysbench");
   btnSys.className = data.sysbench_running ? "btn danger-on" : "btn";
   btnSys.textContent = data.sysbench_running
-    ? "🔥 CPU0 后台 sysbench 干扰: 满载争用中 (点击关闭)"
-    : "🔥 注入 CPU0 后台 sysbench 干扰: 已关闭 (点击注入)";
+    ? `CPU0 后台：${data.scenario.batch_kind || 'sysbench'} · ${data.scenario.threads} 线程（点击关闭）`
+    : "CPU0 后台负载：已关闭（点击开启）";
 
   const btnAuto = document.getElementById("btnAutoAgent");
   btnAuto.className = data.auto_agent ? "btn cyan-on" : "btn";
   btnAuto.textContent = data.auto_agent
-    ? "🤖 Agent 自动闭环管控: 已开启 (自动启停 SCX)"
-    : "🤖 Agent 自动闭环管控: 手动模式 (点击开启)";
+    ? (data.control_mode === 'autonomous' ? 'Agent 自主调度：开启（暂停并恢复默认）' : '可选完整对照运行中（点击停止）')
+    : "Agent 已暂停（点击恢复自主调度）";
 
   // Policy buttons highlight
   const sch = data.scheduler;
@@ -812,23 +1067,39 @@ function updateUI(data) {
   document.getElementById("btnPolScx10m").className = (sch.policy_id === "scx.slice" && sch.slice_us === 10000 && !sch.wakeup_preempt) ? "btn danger-on" : "btn";
 
   // KPI 1: Latency
-  const lat = data.latest;
-  document.getElementById("kpiP95").textContent = `p95: ${lat.http_p95_ms.toFixed(2)} ms`;
-  document.getElementById("kpiLatSub").innerHTML = `p50: <strong>${lat.http_p50_ms.toFixed(2)} ms</strong> &nbsp;|&nbsp; p99: <strong>${lat.http_p99_ms.toFixed(2)} ms</strong>`;
+  const useHDR = data.latest.latency_source === 'wrk2.hdr.window';
+  const currentWindow = data.workload.fresh && data.workload.window;
+  const lat = useHDR ? {...data.latest,http_p50_ms:currentWindow ? currentWindow.p50_ms : null,
+    http_p95_ms:currentWindow ? currentWindow.p95_ms : null,http_p99_ms:currentWindow ? currentWindow.p99_ms : null,
+    probe_samples:currentWindow ? currentWindow.requests : 0} : data.latest;
+  document.getElementById('latencyMetricLabel').textContent = useHDR ? 'wrk2 完整窗口响应延迟' : 'Nginx HTTP 探测延迟';
+  document.getElementById('latencyChartTitle').textContent = useHDR ? '📈 wrk2 HDR 完整窗口延迟（每 5 秒更新）' : '📈 短周期 HTTP 探测延迟';
+  document.getElementById("kpiP95").textContent = `p95: ${fmt(lat.http_p95_ms, 2)} ms`;
+  document.getElementById("kpiLatSub").textContent = `p50: ${fmt(lat.http_p50_ms, 2)} ms | p99: ${fmt(lat.http_p99_ms, 2)} ms · n=${lat.probe_samples ?? 0}`;
+  document.getElementById("probeWindowNote").textContent = useHDR ? '对照与自动监测期间暂停额外短探测，延迟卡片/曲线使用 wrk2 HDR；选择表只接受预热后且不跨策略的窗口。' : `HTTP 探测：${lat.probe_samples ?? 0} 个成功样本 / ${fmt(lat.sample_seconds, 2)}s，与 wrk2 HDR 独立。等待占比 = Δwait / (Δrun + Δwait)；平均每次调度等待 = Δwait / Δ调度次数。`;
   const latBadge = document.getElementById("latBadge");
-  if (lat.http_p95_ms > 1.1 || lat.http_p50_ms > 0.4) {
-    latBadge.textContent = "🚨 干扰排队劣化中!";
+  if (!lat.probe_samples) {
+    latBadge.textContent = !data.traffic_running ? '本场景未启动前台服务' : (useHDR ? "等待当前场景的 HDR 完整窗口" : "等待本场景探测样本");
+    latBadge.style.color = "#94a3b8";
+  } else if (useHDR) {
+    latBadge.textContent = 'wrk2 HDR · 最近完整窗口';
+    latBadge.style.color = '#38bdf8';
+  } else if (lat.http_p95_ms > 1.1 || lat.http_p50_ms > 0.4) {
+    latBadge.textContent = "探测延迟较高";
     latBadge.style.color = "#fb7185";
   } else {
-    latBadge.textContent = "● 低延迟健康";
+    latBadge.textContent = "低于演示参考线";
     latBadge.style.color = "#34d399";
   }
 
   // KPI 2: Wait %
-  document.getElementById("kpiWaitPct").textContent = `${lat.nginx_wait_pct.toFixed(1)} %`;
-  document.getElementById("kpiWaitSub").innerHTML = `单次唤醒等待: <strong>${lat.nginx_avg_wait_us.toFixed(1)} µs</strong> &nbsp;|&nbsp; 调度: ${lat.nginx_slices_per_s.toFixed(0)} 次/s`;
+  document.getElementById("kpiWaitPct").textContent = `${fmt(lat.nginx_wait_pct, 1)} %`;
+  document.getElementById("kpiWaitSub").textContent = `平均每次调度等待: ${fmt(lat.nginx_avg_wait_us, 1)} µs | ${fmt(lat.nginx_slices_per_s, 0)} 次/s`;
   const waitBadge = document.getElementById("waitBadge");
-  if (lat.nginx_wait_pct > 35) {
+  if (!lat.schedstat_valid) {
+    waitBadge.textContent = data.traffic_running ? "等待有效 schedstat 窗口" : '本场景无前台进程';
+    waitBadge.style.color = "#94a3b8";
+  } else if (lat.nginx_wait_pct > 35) {
     waitBadge.textContent = "⚠️ 严重排队等待";
     waitBadge.style.color = "#fb7185";
   } else {
@@ -850,26 +1121,41 @@ function updateUI(data) {
   }
 
   // KPI 4: Sysbench
-  document.getElementById("kpiEps").textContent = `${lat.sysbench_eps.toFixed(1)} EPS`;
-  document.getElementById("kpiCpuSub").textContent = `sysbench CPU0: ${lat.sysbench_cpu_pct.toFixed(1)}% | Nginx CPU0: ${lat.nginx_cpu_pct.toFixed(1)}%`;
+  document.getElementById("kpiEps").textContent = `${fmt(lat.sysbench_eps, 1)} EPS`;
+  document.getElementById("kpiCpuSub").textContent = `${data.scenario.batch_kind || 'sysbench'} CPU0: ${fmt(lat.sysbench_cpu_pct, 1)}% | Nginx CPU0: ${fmt(lat.nginx_cpu_pct, 1)}%`;
   const sysbBadge = document.getElementById("sysbBadge");
-  sysbBadge.textContent = data.sysbench_running ? "🔥 正在 CPU0 争用" : "未运行";
+  sysbBadge.textContent = data.sysbench_running ? (Number.isFinite(lat.sysbench_eps) ? "CPU0 运行中 · 每秒报告" : "等待 sysbench 吞吐报告") : "未运行";
   sysbBadge.style.color = data.sysbench_running ? "#fbbf24" : "#94a3b8";
+
+  const workload = data.workload || {};
+  const window = workload.window;
+  document.getElementById("wrkRps").textContent = workload.fresh && window ? `${fmt(window.rps, 1)} RPS` : "— RPS";
+  document.getElementById("wrkP99").textContent = workload.fresh && window ? `${fmt(window.p99_ms, 3)} ms` : "— ms";
+  document.getElementById("wrkStatusErrors").textContent = workload.fresh && window ? window.errors.status : "—";
+  document.getElementById("wrkSocketErrors").textContent = workload.fresh && window ? ["connect","read","write","timeout"].map(key => window.errors[key]).join(" / ") : "—";
+  document.getElementById("wrkWindowNote").textContent = workload.fresh && window
+    ? `wrk2 窗口 #${window.seq} · ${fmt(window.duration_seconds, 3)}s · 完成 ${window.requests} 次 · ${fmt(workload.age_seconds, 1)}s 前结束 · 目标 ${workload.offered_rps} RPS`
+    : (workload.running ? "校准或等待完整 5 秒窗口；暂停和重启会开始新的采样。" : "wrk2 已停止；历史窗口不作为当前吞吐显示。");
 
   // Render live oscilloscopes
   renderLatencyChart(data.history || []);
   renderWaitChart(data.history || []);
+  updateTuning(data);
 
   // Cgroup Lab
   const cg = data.cgroup;
-  if (!cg.running) {
+  if (cg.running) {
+    document.getElementById("cgRatioBadge").textContent = "正在测量...";
+  } else if (cg.measured) {
     document.getElementById("cgRatioBadge").textContent = `实测 ${cg.ratio} : 1 (理论 ${cg.expected_ratio}:1)`;
+  } else {
+    document.getElementById("cgRatioBadge").textContent = "待测";
   }
-  document.getElementById("cgBarLow").style.width = `${cg.low_pct}%`;
-  document.getElementById("cgBarLow").textContent = `低权 ${cg.low_ticks} ticks (${cg.low_pct}%)`;
-  document.getElementById("cgBarHigh").style.width = `${cg.high_pct}%`;
-  document.getElementById("cgBarHigh").textContent = `高权 ${cg.high_ticks} ticks (${cg.high_pct}%)`;
-  document.getElementById("cgSubText").innerHTML = `<span>配置: ${cg.low_shares} vs ${cg.high_shares} shares</span><span>理论: ${cg.expected_ratio}:1 | 实测: <strong>${cg.ratio}:1</strong></span>`;
+  document.getElementById("cgBarLow").style.width = `${cg.measured ? cg.low_pct : 50}%`;
+  document.getElementById("cgBarLow").textContent = cg.measured ? `低权 ${cg.low_ticks} ticks (${cg.low_pct}%)` : "低权重：待测";
+  document.getElementById("cgBarHigh").style.width = `${cg.measured ? cg.high_pct : 50}%`;
+  document.getElementById("cgBarHigh").textContent = cg.measured ? `高权 ${cg.high_ticks} ticks (${cg.high_pct}%)` : "高权重：待测";
+  document.getElementById("cgSubText").textContent = cg.measured ? `配置 ${cg.low_shares}:${cg.high_shares} · 完成 ${new Date(cg.measured_utc).toLocaleTimeString()} · 本会话最近一次实验` : "运行实验后显示本次结果；初始无测量值";
 
   // eBPF Lab
   const eb = data.ebpf;
@@ -902,27 +1188,35 @@ function updateUI(data) {
     const logBox = document.getElementById("logBox");
     logBox.innerHTML = (data.logs || []).map(item => {
       const cls = item.level === "warn" ? "log-warn" : (item.level === "err" ? "log-err" : "log-ok");
-      return `<div class="log-item"><span class="log-ts">[${item.ts}]</span><span class="${cls}">${item.msg}</span></div>`;
+      return `<div class="log-item"><span class="log-ts">[${escapeHtml(item.ts)}]</span><span class="${cls}">${escapeHtml(item.msg)}</span></div>`;
     }).join("");
     logBox.scrollTop = logBox.scrollHeight;
   }
 }
 
 async function pollState() {
+  if (statePollBusy) return;
+  statePollBusy = true;
   try {
-    const resp = await fetch(API_BASE + "/api/live-state", { cache: "no-store" });
+    const resp = await fetch(API_BASE + "/api/live-state", { cache: "no-store", signal:AbortSignal.timeout(5000) });
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     const data = await resp.json();
+    if (currentState.machine && data.machine.agent_pid === currentState.machine.agent_pid
+        && data.workload_revision < currentState.workload_revision) return;
     updateUI(data);
   } catch (err) {
     const badge = document.getElementById("connBadge");
     badge.classList.add("offline");
-    document.getElementById("connText").textContent = "等待连接 openEuler 实时沙盒 (172.26.1.3:8899)...";
-  }
+    document.body.classList.add("data-stale");
+    document.getElementById("sampleFreshness").textContent = "连接中断，已有数据已冻结";
+    document.getElementById("connText").textContent = `连接中断 · 等待 ${API_BASE || window.location.origin}`;
+  } finally { statePollBusy = false; }
 }
 
 setInterval(pollState, 850);
+setInterval(pollEvidence, 2500);
 pollState();
+pollEvidence();
 </script>
 </body>
 </html>

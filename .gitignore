@@ -8,3 +8,8 @@ state/*.o
 state/lock*
 .DS_Store
 Thumbs.db
+state/dashboard-tunnel.json
+state/dashboard-tunnel.*.log
+state/demo-tuning-*.json
+state/demo-tuning-runs/
+state/demo-suite-*.json

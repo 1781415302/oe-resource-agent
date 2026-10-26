@@ -1,0 +1,3930 @@
+{
+  "scenario_id": "compute",
+  "scenario": {
+    "label": "请求内 CPU 计算",
+    "description": "Nginx 代理 CPU0 上的 PBKDF2 计算服务（每请求 4,000 次迭代）；300 RPS + 后台 1 线程。",
+    "traffic": true,
+    "batch": true,
+    "rps": 300,
+    "threads": 1,
+    "compute": true,
+    "objective": "latency",
+    "p99_limit_ms": 20.0,
+    "id": "compute"
+  },
+  "condition": "default",
+  "block": 1,
+  "position": 2,
+  "started_utc": "2026-10-26T10:18:19.316538+00:00",
+  "started_monotonic": 14746.607848986,
+  "accept_after": 14751.607848986,
+  "workload_revision": 6,
+  "process_ids": {
+    "nginx": 305032,
+    "wrk2": 305033,
+    "sysbench": 305035,
+    "compute": 305030,
+    "burst": null
+  },
+  "weights": {
+    "latency": 0.6,
+    "throughput": 0.4
+  },
+  "samples": [
+    {
+      "monotonic": 14746.612751053,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 413,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:18",
+        "sched_ext": "enabled",
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": true,
+        "sysbench_on": true,
+        "http_p50_ms": 0.814,
+        "http_p95_ms": 4.067,
+        "http_p99_ms": 4.067,
+        "nginx_wait_pct": 74.7,
+        "nginx_avg_wait_us": 115.4,
+        "nginx_slices_per_s": 370.7,
+        "nginx_cpu_pct": 1.4,
+        "sysbench_cpu_pct": 78.1,
+        "sysbench_eps": 4492.8,
+        "sysbench_report_age_seconds": 0.649,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 14746.139850475,
+        "sample_utc": "2026-10-26T10:18:18.844194+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            457320521,
+            2780340728,
+            11458
+          ],
+          "after": [
+            465280348,
+            2803888455,
+            11662
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.814,
+        "chart_p95_ms": 4.067
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14747.067648498,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 413,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:18",
+        "sched_ext": "enabled",
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": true,
+        "sysbench_on": true,
+        "http_p50_ms": 0.814,
+        "http_p95_ms": 4.067,
+        "http_p99_ms": 4.067,
+        "nginx_wait_pct": 74.7,
+        "nginx_avg_wait_us": 115.4,
+        "nginx_slices_per_s": 370.7,
+        "nginx_cpu_pct": 1.4,
+        "sysbench_cpu_pct": 78.1,
+        "sysbench_eps": 4492.8,
+        "sysbench_report_age_seconds": 0.649,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 14746.139850475,
+        "sample_utc": "2026-10-26T10:18:18.844194+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            457320521,
+            2780340728,
+            11458
+          ],
+          "after": [
+            465280348,
+            2803888455,
+            11662
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.814,
+        "chart_p95_ms": 4.067
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14747.52443298,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 413,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:18",
+        "sched_ext": "enabled",
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": true,
+        "sysbench_on": true,
+        "http_p50_ms": 0.814,
+        "http_p95_ms": 4.067,
+        "http_p99_ms": 4.067,
+        "nginx_wait_pct": 74.7,
+        "nginx_avg_wait_us": 115.4,
+        "nginx_slices_per_s": 370.7,
+        "nginx_cpu_pct": 1.4,
+        "sysbench_cpu_pct": 78.1,
+        "sysbench_eps": 4492.8,
+        "sysbench_report_age_seconds": 0.649,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 14746.139850475,
+        "sample_utc": "2026-10-26T10:18:18.844194+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            457320521,
+            2780340728,
+            11458
+          ],
+          "after": [
+            465280348,
+            2803888455,
+            11662
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.814,
+        "chart_p95_ms": 4.067
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14747.979909635,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 414,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:20",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.853,
+        "http_p95_ms": 0.895,
+        "http_p99_ms": 0.895,
+        "nginx_wait_pct": 85.5,
+        "nginx_avg_wait_us": 232.3,
+        "nginx_slices_per_s": 548.9,
+        "nginx_cpu_pct": 2.2,
+        "sysbench_cpu_pct": 70.9,
+        "sysbench_eps": 4533.6,
+        "sysbench_report_age_seconds": 0.108,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5502,
+        "sample_ended_monotonic": 14747.598725419,
+        "sample_utc": "2026-10-26T10:18:20.303070+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            481520784,
+            2872345887,
+            12052
+          ],
+          "after": [
+            493447606,
+            2942511089,
+            12354
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.853,
+        "chart_p95_ms": 0.895
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14748.436201708,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 414,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:20",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.853,
+        "http_p95_ms": 0.895,
+        "http_p99_ms": 0.895,
+        "nginx_wait_pct": 85.5,
+        "nginx_avg_wait_us": 232.3,
+        "nginx_slices_per_s": 548.9,
+        "nginx_cpu_pct": 2.2,
+        "sysbench_cpu_pct": 70.9,
+        "sysbench_eps": 4533.6,
+        "sysbench_report_age_seconds": 0.108,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5502,
+        "sample_ended_monotonic": 14747.598725419,
+        "sample_utc": "2026-10-26T10:18:20.303070+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            481520784,
+            2872345887,
+            12052
+          ],
+          "after": [
+            493447606,
+            2942511089,
+            12354
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.853,
+        "chart_p95_ms": 0.895
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14748.892088042,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 415,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:21",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.839,
+        "http_p95_ms": 3.85,
+        "http_p99_ms": 3.85,
+        "nginx_wait_pct": 81.5,
+        "nginx_avg_wait_us": 168.6,
+        "nginx_slices_per_s": 472.2,
+        "nginx_cpu_pct": 1.8,
+        "sysbench_cpu_pct": 74.5,
+        "sysbench_eps": 4615.6,
+        "sysbench_report_age_seconds": 0.01,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14748.500336444,
+        "sample_utc": "2026-10-26T10:18:21.204680+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            500223183,
+            2971992560,
+            12530
+          ],
+          "after": [
+            510146660,
+            3015821048,
+            12790
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.839,
+        "chart_p95_ms": 3.85
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14749.348629099,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 415,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:21",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.839,
+        "http_p95_ms": 3.85,
+        "http_p99_ms": 3.85,
+        "nginx_wait_pct": 81.5,
+        "nginx_avg_wait_us": 168.6,
+        "nginx_slices_per_s": 472.2,
+        "nginx_cpu_pct": 1.8,
+        "sysbench_cpu_pct": 74.5,
+        "sysbench_eps": 4615.6,
+        "sysbench_report_age_seconds": 0.01,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14748.500336444,
+        "sample_utc": "2026-10-26T10:18:21.204680+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            500223183,
+            2971992560,
+            12530
+          ],
+          "after": [
+            510146660,
+            3015821048,
+            12790
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.839,
+        "chart_p95_ms": 3.85
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14749.804734107,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 416,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:22",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.784,
+        "http_p95_ms": 0.911,
+        "http_p99_ms": 0.911,
+        "nginx_wait_pct": 81.5,
+        "nginx_avg_wait_us": 174.2,
+        "nginx_slices_per_s": 479.5,
+        "nginx_cpu_pct": 1.9,
+        "sysbench_cpu_pct": 74.5,
+        "sysbench_eps": 4615.6,
+        "sysbench_report_age_seconds": 0.912,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14749.402099918,
+        "sample_utc": "2026-10-26T10:18:22.106444+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            517142487,
+            3042109946,
+            12971
+          ],
+          "after": [
+            527604793,
+            3088094999,
+            13235
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.784,
+        "chart_p95_ms": 0.911
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14750.261023925,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 416,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:22",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.784,
+        "http_p95_ms": 0.911,
+        "http_p99_ms": 0.911,
+        "nginx_wait_pct": 81.5,
+        "nginx_avg_wait_us": 174.2,
+        "nginx_slices_per_s": 479.5,
+        "nginx_cpu_pct": 1.9,
+        "sysbench_cpu_pct": 74.5,
+        "sysbench_eps": 4615.6,
+        "sysbench_report_age_seconds": 0.912,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14749.402099918,
+        "sample_utc": "2026-10-26T10:18:22.106444+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            517142487,
+            3042109946,
+            12971
+          ],
+          "after": [
+            527604793,
+            3088094999,
+            13235
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.784,
+        "chart_p95_ms": 0.911
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14750.716863341,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 417,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:23",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": null,
+        "http_p95_ms": null,
+        "http_p99_ms": null,
+        "nginx_wait_pct": 81.4,
+        "nginx_avg_wait_us": 188.1,
+        "nginx_slices_per_s": 427.4,
+        "nginx_cpu_pct": 1.8,
+        "sysbench_cpu_pct": 73.5,
+        "sysbench_eps": 4429.8,
+        "sysbench_report_age_seconds": 0.064,
+        "probe_samples": 0,
+        "probe_errors": 1,
+        "probe_attempts": 1,
+        "sample_seconds": 0.8026,
+        "sample_ended_monotonic": 14750.555381673,
+        "sample_utc": "2026-10-26T10:18:23.259726+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            536100690,
+            3128648637,
+            13454
+          ],
+          "after": [
+            550873295,
+            3193157822,
+            13797
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": null,
+        "chart_p95_ms": null
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14751.172998149,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 417,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:23",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": null,
+        "http_p95_ms": null,
+        "http_p99_ms": null,
+        "nginx_wait_pct": 81.4,
+        "nginx_avg_wait_us": 188.1,
+        "nginx_slices_per_s": 427.4,
+        "nginx_cpu_pct": 1.8,
+        "sysbench_cpu_pct": 73.5,
+        "sysbench_eps": 4429.8,
+        "sysbench_report_age_seconds": 0.064,
+        "probe_samples": 0,
+        "probe_errors": 1,
+        "probe_attempts": 1,
+        "sample_seconds": 0.8026,
+        "sample_ended_monotonic": 14750.555381673,
+        "sample_utc": "2026-10-26T10:18:23.259726+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            536100690,
+            3128648637,
+            13454
+          ],
+          "after": [
+            550873295,
+            3193157822,
+            13797
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": null,
+        "chart_p95_ms": null
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14751.629214677,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 418,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:24",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.832,
+        "http_p95_ms": 0.905,
+        "http_p99_ms": 0.905,
+        "nginx_wait_pct": 86.5,
+        "nginx_avg_wait_us": 292.1,
+        "nginx_slices_per_s": 332.2,
+        "nginx_cpu_pct": 1.5,
+        "sysbench_cpu_pct": 79.9,
+        "sysbench_eps": 4429.8,
+        "sysbench_report_age_seconds": 0.966,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5509,
+        "sample_ended_monotonic": 14751.457380849,
+        "sample_utc": "2026-10-26T10:18:24.161726+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            559116943,
+            3232046438,
+            14004
+          ],
+          "after": [
+            567470162,
+            3285508225,
+            14187
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.832,
+        "chart_p95_ms": 0.905
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14752.087004426,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 418,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:24",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.832,
+        "http_p95_ms": 0.905,
+        "http_p99_ms": 0.905,
+        "nginx_wait_pct": 86.5,
+        "nginx_avg_wait_us": 292.1,
+        "nginx_slices_per_s": 332.2,
+        "nginx_cpu_pct": 1.5,
+        "sysbench_cpu_pct": 79.9,
+        "sysbench_eps": 4429.8,
+        "sysbench_report_age_seconds": 0.966,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5509,
+        "sample_ended_monotonic": 14751.457380849,
+        "sample_utc": "2026-10-26T10:18:24.161726+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            559116943,
+            3232046438,
+            14004
+          ],
+          "after": [
+            567470162,
+            3285508225,
+            14187
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.832,
+        "chart_p95_ms": 0.905
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14752.543481141,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 419,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:25",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 7.09,
+        "http_p95_ms": 10.024,
+        "http_p99_ms": 10.024,
+        "nginx_wait_pct": 87.8,
+        "nginx_avg_wait_us": 287.6,
+        "nginx_slices_per_s": 421.3,
+        "nginx_cpu_pct": 1.7,
+        "sysbench_cpu_pct": 76.3,
+        "sysbench_eps": 4258.2,
+        "sysbench_report_age_seconds": 0.869,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 14752.35990293,
+        "sample_utc": "2026-10-26T10:18:25.064250+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            578746587,
+            3326122467,
+            14383
+          ],
+          "after": [
+            588009677,
+            3392837398,
+            14615
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 7.09,
+        "chart_p95_ms": 10.024
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14753.000239377,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 419,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:25",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 7.09,
+        "http_p95_ms": 10.024,
+        "http_p99_ms": 10.024,
+        "nginx_wait_pct": 87.8,
+        "nginx_avg_wait_us": 287.6,
+        "nginx_slices_per_s": 421.3,
+        "nginx_cpu_pct": 1.7,
+        "sysbench_cpu_pct": 76.3,
+        "sysbench_eps": 4258.2,
+        "sysbench_report_age_seconds": 0.869,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 14752.35990293,
+        "sample_utc": "2026-10-26T10:18:25.064250+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            578746587,
+            3326122467,
+            14383
+          ],
+          "after": [
+            588009677,
+            3392837398,
+            14615
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 7.09,
+        "chart_p95_ms": 10.024
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14753.459551718,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 420,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:25",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 1.209,
+        "http_p95_ms": 2.23,
+        "http_p99_ms": 2.23,
+        "nginx_wait_pct": 87.4,
+        "nginx_avg_wait_us": 295.4,
+        "nginx_slices_per_s": 520.9,
+        "nginx_cpu_pct": 2.2,
+        "sysbench_cpu_pct": 70.8,
+        "sysbench_eps": 4081.5,
+        "sysbench_report_age_seconds": 0.77,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.551,
+        "sample_ended_monotonic": 14753.26233399,
+        "sample_utc": "2026-10-26T10:18:25.966679+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            595522076,
+            3437358445,
+            14798
+          ],
+          "after": [
+            607795881,
+            3522142165,
+            15085
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 1.209,
+        "chart_p95_ms": 2.23
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14753.916178013,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 420,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:25",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 1.209,
+        "http_p95_ms": 2.23,
+        "http_p99_ms": 2.23,
+        "nginx_wait_pct": 87.4,
+        "nginx_avg_wait_us": 295.4,
+        "nginx_slices_per_s": 520.9,
+        "nginx_cpu_pct": 2.2,
+        "sysbench_cpu_pct": 70.8,
+        "sysbench_eps": 4081.5,
+        "sysbench_report_age_seconds": 0.77,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.551,
+        "sample_ended_monotonic": 14753.26233399,
+        "sample_utc": "2026-10-26T10:18:25.966679+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            595522076,
+            3437358445,
+            14798
+          ],
+          "after": [
+            607795881,
+            3522142165,
+            15085
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 1.209,
+        "chart_p95_ms": 2.23
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14754.373123107,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 421,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:26",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.926,
+        "http_p95_ms": 2.662,
+        "http_p99_ms": 2.662,
+        "nginx_wait_pct": 81.1,
+        "nginx_avg_wait_us": 213.6,
+        "nginx_slices_per_s": 552.2,
+        "nginx_cpu_pct": 2.8,
+        "sysbench_cpu_pct": 65.4,
+        "sysbench_eps": 4335.6,
+        "sysbench_report_age_seconds": 0.673,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5505,
+        "sample_ended_monotonic": 14754.164082732,
+        "sample_utc": "2026-10-26T10:18:26.868427+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            613105806,
+            3566879816,
+            15226
+          ],
+          "after": [
+            628286006,
+            3631821616,
+            15530
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.926,
+        "chart_p95_ms": 2.662
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14754.830297882,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 421,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:26",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.926,
+        "http_p95_ms": 2.662,
+        "http_p99_ms": 2.662,
+        "nginx_wait_pct": 81.1,
+        "nginx_avg_wait_us": 213.6,
+        "nginx_slices_per_s": 552.2,
+        "nginx_cpu_pct": 2.8,
+        "sysbench_cpu_pct": 65.4,
+        "sysbench_eps": 4335.6,
+        "sysbench_report_age_seconds": 0.673,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5505,
+        "sample_ended_monotonic": 14754.164082732,
+        "sample_utc": "2026-10-26T10:18:26.868427+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            613105806,
+            3566879816,
+            15226
+          ],
+          "after": [
+            628286006,
+            3631821616,
+            15530
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.926,
+        "chart_p95_ms": 2.662
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14755.286579899,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 422,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:27",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 2.326,
+        "http_p95_ms": 3.57,
+        "http_p99_ms": 3.57,
+        "nginx_wait_pct": 82.5,
+        "nginx_avg_wait_us": 228.0,
+        "nginx_slices_per_s": 563.0,
+        "nginx_cpu_pct": 2.7,
+        "sysbench_cpu_pct": 63.6,
+        "sysbench_eps": 3948.1,
+        "sysbench_report_age_seconds": 0.576,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14755.066037963,
+        "sample_utc": "2026-10-26T10:18:27.770382+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            633637171,
+            3677409318,
+            15666
+          ],
+          "after": [
+            648639007,
+            3748099210,
+            15976
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 2.326,
+        "chart_p95_ms": 3.57
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14755.742097382,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 422,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:27",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 2.326,
+        "http_p95_ms": 3.57,
+        "http_p99_ms": 3.57,
+        "nginx_wait_pct": 82.5,
+        "nginx_avg_wait_us": 228.0,
+        "nginx_slices_per_s": 563.0,
+        "nginx_cpu_pct": 2.7,
+        "sysbench_cpu_pct": 63.6,
+        "sysbench_eps": 3948.1,
+        "sysbench_report_age_seconds": 0.576,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14755.066037963,
+        "sample_utc": "2026-10-26T10:18:27.770382+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            633637171,
+            3677409318,
+            15666
+          ],
+          "after": [
+            648639007,
+            3748099210,
+            15976
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 2.326,
+        "chart_p95_ms": 3.57
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14756.198099901,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 423,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:28",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.924,
+        "http_p95_ms": 2.725,
+        "http_p99_ms": 2.725,
+        "nginx_wait_pct": 83.6,
+        "nginx_avg_wait_us": 199.2,
+        "nginx_slices_per_s": 450.5,
+        "nginx_cpu_pct": 1.8,
+        "sysbench_cpu_pct": 76.3,
+        "sysbench_eps": 4107.4,
+        "sysbench_report_age_seconds": 0.474,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 14755.967667794,
+        "sample_utc": "2026-10-26T10:18:28.672013+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            655192960,
+            3788941413,
+            16142
+          ],
+          "after": [
+            664853431,
+            3838341135,
+            16390
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.924,
+        "chart_p95_ms": 2.725
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14756.653905819,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 423,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:28",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.924,
+        "http_p95_ms": 2.725,
+        "http_p99_ms": 2.725,
+        "nginx_wait_pct": 83.6,
+        "nginx_avg_wait_us": 199.2,
+        "nginx_slices_per_s": 450.5,
+        "nginx_cpu_pct": 1.8,
+        "sysbench_cpu_pct": 76.3,
+        "sysbench_eps": 4107.4,
+        "sysbench_report_age_seconds": 0.474,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 14755.967667794,
+        "sample_utc": "2026-10-26T10:18:28.672013+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            655192960,
+            3788941413,
+            16142
+          ],
+          "after": [
+            664853431,
+            3838341135,
+            16390
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.924,
+        "chart_p95_ms": 2.725
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14757.109783006,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 424,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:29",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 2.876,
+        "http_p95_ms": 5.29,
+        "http_p99_ms": 5.29,
+        "nginx_wait_pct": 89.4,
+        "nginx_avg_wait_us": 333.3,
+        "nginx_slices_per_s": 263.3,
+        "nginx_cpu_pct": 1.0,
+        "sysbench_cpu_pct": 83.5,
+        "sysbench_eps": 4615.5,
+        "sysbench_report_age_seconds": 0.379,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 14756.869424398,
+        "sample_utc": "2026-10-26T10:18:29.573770+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            672396686,
+            3877080935,
+            16598
+          ],
+          "after": [
+            678154700,
+            3925403907,
+            16743
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 2.876,
+        "chart_p95_ms": 5.29
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14757.566065019,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 424,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:29",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 2.876,
+        "http_p95_ms": 5.29,
+        "http_p99_ms": 5.29,
+        "nginx_wait_pct": 89.4,
+        "nginx_avg_wait_us": 333.3,
+        "nginx_slices_per_s": 263.3,
+        "nginx_cpu_pct": 1.0,
+        "sysbench_cpu_pct": 83.5,
+        "sysbench_eps": 4615.5,
+        "sysbench_report_age_seconds": 0.379,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 14756.869424398,
+        "sample_utc": "2026-10-26T10:18:29.573770+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            672396686,
+            3877080935,
+            16598
+          ],
+          "after": [
+            678154700,
+            3925403907,
+            16743
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 2.876,
+        "chart_p95_ms": 5.29
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14758.022952786,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 425,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:30",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.93,
+        "http_p95_ms": 3.497,
+        "http_p99_ms": 3.497,
+        "nginx_wait_pct": 88.3,
+        "nginx_avg_wait_us": 286.0,
+        "nginx_slices_per_s": 441.3,
+        "nginx_cpu_pct": 1.7,
+        "sysbench_cpu_pct": 76.3,
+        "sysbench_eps": 4501.7,
+        "sysbench_report_age_seconds": 0.281,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 14757.771395889,
+        "sample_utc": "2026-10-26T10:18:30.475742+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            687328035,
+            4001163847,
+            16977
+          ],
+          "after": [
+            696545837,
+            4070659009,
+            17220
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.93,
+        "chart_p95_ms": 3.497
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14758.479361843,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 425,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:30",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.93,
+        "http_p95_ms": 3.497,
+        "http_p99_ms": 3.497,
+        "nginx_wait_pct": 88.3,
+        "nginx_avg_wait_us": 286.0,
+        "nginx_slices_per_s": 441.3,
+        "nginx_cpu_pct": 1.7,
+        "sysbench_cpu_pct": 76.3,
+        "sysbench_eps": 4501.7,
+        "sysbench_report_age_seconds": 0.281,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 14757.771395889,
+        "sample_utc": "2026-10-26T10:18:30.475742+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            687328035,
+            4001163847,
+            16977
+          ],
+          "after": [
+            696545837,
+            4070659009,
+            17220
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.93,
+        "chart_p95_ms": 3.497
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14758.936809016,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 426,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:31",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 3.367,
+        "http_p95_ms": 4.293,
+        "http_p99_ms": 4.293,
+        "nginx_wait_pct": 87.4,
+        "nginx_avg_wait_us": 262.8,
+        "nginx_slices_per_s": 550.5,
+        "nginx_cpu_pct": 2.1,
+        "sysbench_cpu_pct": 72.7,
+        "sysbench_eps": 4599.6,
+        "sysbench_report_age_seconds": 0.182,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 14758.673280246,
+        "sample_utc": "2026-10-26T10:18:31.377624+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            703261840,
+            4120147485,
+            17402
+          ],
+          "after": [
+            714712373,
+            4199778703,
+            17705
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 3.367,
+        "chart_p95_ms": 4.293
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14759.39329281,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 426,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:31",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 3.367,
+        "http_p95_ms": 4.293,
+        "http_p99_ms": 4.293,
+        "nginx_wait_pct": 87.4,
+        "nginx_avg_wait_us": 262.8,
+        "nginx_slices_per_s": 550.5,
+        "nginx_cpu_pct": 2.1,
+        "sysbench_cpu_pct": 72.7,
+        "sysbench_eps": 4599.6,
+        "sysbench_report_age_seconds": 0.182,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 14758.673280246,
+        "sample_utc": "2026-10-26T10:18:31.377624+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            703261840,
+            4120147485,
+            17402
+          ],
+          "after": [
+            714712373,
+            4199778703,
+            17705
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 3.367,
+        "chart_p95_ms": 4.293
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14759.850474421,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 427,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:32",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 7.163,
+        "http_p95_ms": 7.163,
+        "http_p99_ms": 7.163,
+        "nginx_wait_pct": 90.5,
+        "nginx_avg_wait_us": 344.2,
+        "nginx_slices_per_s": 489.2,
+        "nginx_cpu_pct": 1.8,
+        "sysbench_cpu_pct": 75.2,
+        "sysbench_eps": 4611.0,
+        "sysbench_report_age_seconds": 0.344,
+        "probe_samples": 1,
+        "probe_errors": 1,
+        "probe_attempts": 2,
+        "sample_seconds": 0.8116,
+        "sample_ended_monotonic": 14759.835910013,
+        "sample_utc": "2026-10-26T10:18:32.540255+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            720211446,
+            4257887029,
+            17842
+          ],
+          "after": [
+            734541372,
+            4394527207,
+            18239
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 7.163,
+        "chart_p95_ms": 7.163
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14760.30688926,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 427,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:32",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 7.163,
+        "http_p95_ms": 7.163,
+        "http_p99_ms": 7.163,
+        "nginx_wait_pct": 90.5,
+        "nginx_avg_wait_us": 344.2,
+        "nginx_slices_per_s": 489.2,
+        "nginx_cpu_pct": 1.8,
+        "sysbench_cpu_pct": 75.2,
+        "sysbench_eps": 4611.0,
+        "sysbench_report_age_seconds": 0.344,
+        "probe_samples": 1,
+        "probe_errors": 1,
+        "probe_attempts": 2,
+        "sample_seconds": 0.8116,
+        "sample_ended_monotonic": 14759.835910013,
+        "sample_utc": "2026-10-26T10:18:32.540255+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            720211446,
+            4257887029,
+            17842
+          ],
+          "after": [
+            734541372,
+            4394527207,
+            18239
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 7.163,
+        "chart_p95_ms": 7.163
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14760.763361699,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 428,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:33",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.765,
+        "http_p95_ms": 0.81,
+        "http_p99_ms": 0.81,
+        "nginx_wait_pct": 89.3,
+        "nginx_avg_wait_us": 310.0,
+        "nginx_slices_per_s": 610.4,
+        "nginx_cpu_pct": 2.3,
+        "sysbench_cpu_pct": 69.0,
+        "sysbench_eps": 4579.6,
+        "sysbench_report_age_seconds": 0.245,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 14760.737701601,
+        "sample_utc": "2026-10-26T10:18:33.442046+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            741308666,
+            4423646847,
+            18412
+          ],
+          "after": [
+            753851594,
+            4527792428,
+            18748
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.765,
+        "chart_p95_ms": 0.81
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14761.21930452,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 428,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:33",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.765,
+        "http_p95_ms": 0.81,
+        "http_p99_ms": 0.81,
+        "nginx_wait_pct": 89.3,
+        "nginx_avg_wait_us": 310.0,
+        "nginx_slices_per_s": 610.4,
+        "nginx_cpu_pct": 2.3,
+        "sysbench_cpu_pct": 69.0,
+        "sysbench_eps": 4579.6,
+        "sysbench_report_age_seconds": 0.245,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 14760.737701601,
+        "sample_utc": "2026-10-26T10:18:33.442046+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            741308666,
+            4423646847,
+            18412
+          ],
+          "after": [
+            753851594,
+            4527792428,
+            18748
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.765,
+        "chart_p95_ms": 0.81
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14761.675757556,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 428,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:33",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.765,
+        "http_p95_ms": 0.81,
+        "http_p99_ms": 0.81,
+        "nginx_wait_pct": 89.3,
+        "nginx_avg_wait_us": 310.0,
+        "nginx_slices_per_s": 610.4,
+        "nginx_cpu_pct": 2.3,
+        "sysbench_cpu_pct": 69.0,
+        "sysbench_eps": 4579.6,
+        "sysbench_report_age_seconds": 0.245,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5504,
+        "sample_ended_monotonic": 14760.737701601,
+        "sample_utc": "2026-10-26T10:18:33.442046+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            741308666,
+            4423646847,
+            18412
+          ],
+          "after": [
+            753851594,
+            4527792428,
+            18748
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.765,
+        "chart_p95_ms": 0.81
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14762.131654098,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 429,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:34",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.888,
+        "http_p95_ms": 3.397,
+        "http_p99_ms": 3.397,
+        "nginx_wait_pct": 87.3,
+        "nginx_avg_wait_us": 261.2,
+        "nginx_slices_per_s": 550.5,
+        "nginx_cpu_pct": 2.1,
+        "sysbench_cpu_pct": 72.0,
+        "sysbench_eps": 4678.1,
+        "sysbench_report_age_seconds": 0.418,
+        "probe_samples": 4,
+        "probe_errors": 1,
+        "probe_attempts": 5,
+        "sample_seconds": 0.8193,
+        "sample_ended_monotonic": 14761.908343268,
+        "sample_utc": "2026-10-26T10:18:34.612688+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            756844432,
+            4535504714,
+            18812
+          ],
+          "after": [
+            774015942,
+            4653287162,
+            19263
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.888,
+        "chart_p95_ms": 3.397
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14762.58878137,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 429,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:34",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.888,
+        "http_p95_ms": 3.397,
+        "http_p99_ms": 3.397,
+        "nginx_wait_pct": 87.3,
+        "nginx_avg_wait_us": 261.2,
+        "nginx_slices_per_s": 550.5,
+        "nginx_cpu_pct": 2.1,
+        "sysbench_cpu_pct": 72.0,
+        "sysbench_eps": 4678.1,
+        "sysbench_report_age_seconds": 0.418,
+        "probe_samples": 4,
+        "probe_errors": 1,
+        "probe_attempts": 5,
+        "sample_seconds": 0.8193,
+        "sample_ended_monotonic": 14761.908343268,
+        "sample_utc": "2026-10-26T10:18:34.612688+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            756844432,
+            4535504714,
+            18812
+          ],
+          "after": [
+            774015942,
+            4653287162,
+            19263
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.888,
+        "chart_p95_ms": 3.397
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14763.045875839,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 430,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:35",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 3.375,
+        "http_p95_ms": 6.77,
+        "http_p99_ms": 6.77,
+        "nginx_wait_pct": 87.3,
+        "nginx_avg_wait_us": 264.3,
+        "nginx_slices_per_s": 630.3,
+        "nginx_cpu_pct": 2.4,
+        "sysbench_cpu_pct": 69.0,
+        "sysbench_eps": 4524.2,
+        "sysbench_report_age_seconds": 0.319,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14762.809974542,
+        "sample_utc": "2026-10-26T10:18:35.514319+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            780801332,
+            4729506602,
+            19441
+          ],
+          "after": [
+            794114720,
+            4821213430,
+            19788
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 3.375,
+        "chart_p95_ms": 6.77
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14763.502722499,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 430,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:35",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 3.375,
+        "http_p95_ms": 6.77,
+        "http_p99_ms": 6.77,
+        "nginx_wait_pct": 87.3,
+        "nginx_avg_wait_us": 264.3,
+        "nginx_slices_per_s": 630.3,
+        "nginx_cpu_pct": 2.4,
+        "sysbench_cpu_pct": 69.0,
+        "sysbench_eps": 4524.2,
+        "sysbench_report_age_seconds": 0.319,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14762.809974542,
+        "sample_utc": "2026-10-26T10:18:35.514319+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            780801332,
+            4729506602,
+            19441
+          ],
+          "after": [
+            794114720,
+            4821213430,
+            19788
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 3.375,
+        "chart_p95_ms": 6.77
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14763.959335827,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 431,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:36",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.845,
+        "http_p95_ms": 3.119,
+        "http_p99_ms": 3.119,
+        "nginx_wait_pct": 88.9,
+        "nginx_avg_wait_us": 306.2,
+        "nginx_slices_per_s": 746.5,
+        "nginx_cpu_pct": 2.9,
+        "sysbench_cpu_pct": 61.8,
+        "sysbench_eps": 4623.4,
+        "sysbench_report_age_seconds": 0.218,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5505,
+        "sample_ended_monotonic": 14763.711689672,
+        "sample_utc": "2026-10-26T10:18:36.416034+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            795565116,
+            4824400965,
+            19810
+          ],
+          "after": [
+            811279266,
+            4950238127,
+            20221
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.845,
+        "chart_p95_ms": 3.119
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14764.415900043,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 431,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:36",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.845,
+        "http_p95_ms": 3.119,
+        "http_p99_ms": 3.119,
+        "nginx_wait_pct": 88.9,
+        "nginx_avg_wait_us": 306.2,
+        "nginx_slices_per_s": 746.5,
+        "nginx_cpu_pct": 2.9,
+        "sysbench_cpu_pct": 61.8,
+        "sysbench_eps": 4623.4,
+        "sysbench_report_age_seconds": 0.218,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5505,
+        "sample_ended_monotonic": 14763.711689672,
+        "sample_utc": "2026-10-26T10:18:36.416034+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            795565116,
+            4824400965,
+            19810
+          ],
+          "after": [
+            811279266,
+            4950238127,
+            20221
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.845,
+        "chart_p95_ms": 3.119
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14764.872265384,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 432,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:37",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.949,
+        "http_p95_ms": 3.073,
+        "http_p99_ms": 3.073,
+        "nginx_wait_pct": 88.1,
+        "nginx_avg_wait_us": 302.9,
+        "nginx_slices_per_s": 554.3,
+        "nginx_cpu_pct": 2.3,
+        "sysbench_cpu_pct": 70.9,
+        "sysbench_eps": 4591.0,
+        "sysbench_report_age_seconds": 0.123,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5502,
+        "sample_ended_monotonic": 14764.613218642,
+        "sample_utc": "2026-10-26T10:18:37.317563+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            816288945,
+            4984005625,
+            20347
+          ],
+          "after": [
+            828729297,
+            5076388943,
+            20652
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.949,
+        "chart_p95_ms": 3.073
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14765.328302283,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 432,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:37",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.949,
+        "http_p95_ms": 3.073,
+        "http_p99_ms": 3.073,
+        "nginx_wait_pct": 88.1,
+        "nginx_avg_wait_us": 302.9,
+        "nginx_slices_per_s": 554.3,
+        "nginx_cpu_pct": 2.3,
+        "sysbench_cpu_pct": 70.9,
+        "sysbench_eps": 4591.0,
+        "sysbench_report_age_seconds": 0.123,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5502,
+        "sample_ended_monotonic": 14764.613218642,
+        "sample_utc": "2026-10-26T10:18:37.317563+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            816288945,
+            4984005625,
+            20347
+          ],
+          "after": [
+            828729297,
+            5076388943,
+            20652
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.949,
+        "chart_p95_ms": 3.073
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14765.785299839,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 433,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:38",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.918,
+        "http_p95_ms": 1.319,
+        "http_p99_ms": 1.319,
+        "nginx_wait_pct": 88.3,
+        "nginx_avg_wait_us": 314.1,
+        "nginx_slices_per_s": 332.4,
+        "nginx_cpu_pct": 1.4,
+        "sysbench_cpu_pct": 79.9,
+        "sysbench_eps": 4351.2,
+        "sysbench_report_age_seconds": 0.024,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14765.514646562,
+        "sample_utc": "2026-10-26T10:18:38.218993+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            837465438,
+            5126455206,
+            20880
+          ],
+          "after": [
+            845092691,
+            5183926937,
+            21063
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.918,
+        "chart_p95_ms": 1.319
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14766.242130479,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 433,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:38",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.918,
+        "http_p95_ms": 1.319,
+        "http_p99_ms": 1.319,
+        "nginx_wait_pct": 88.3,
+        "nginx_avg_wait_us": 314.1,
+        "nginx_slices_per_s": 332.4,
+        "nginx_cpu_pct": 1.4,
+        "sysbench_cpu_pct": 79.9,
+        "sysbench_eps": 4351.2,
+        "sysbench_report_age_seconds": 0.024,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14765.514646562,
+        "sample_utc": "2026-10-26T10:18:38.218993+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            837465438,
+            5126455206,
+            20880
+          ],
+          "after": [
+            845092691,
+            5183926937,
+            21063
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.918,
+        "chart_p95_ms": 1.319
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14766.699130038,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 434,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:39",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 6.281,
+        "http_p95_ms": 7.264,
+        "http_p99_ms": 7.264,
+        "nginx_wait_pct": 89.2,
+        "nginx_avg_wait_us": 347.0,
+        "nginx_slices_per_s": 366.8,
+        "nginx_cpu_pct": 1.5,
+        "sysbench_cpu_pct": 79.9,
+        "sysbench_eps": 4351.2,
+        "sysbench_report_age_seconds": 0.925,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 14766.416169555,
+        "sample_utc": "2026-10-26T10:18:39.120514+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            852410187,
+            5221876417,
+            21256
+          ],
+          "after": [
+            860901137,
+            5291963844,
+            21458
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 6.281,
+        "chart_p95_ms": 7.264
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14767.155894592,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 434,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:39",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 6.281,
+        "http_p95_ms": 7.264,
+        "http_p99_ms": 7.264,
+        "nginx_wait_pct": 89.2,
+        "nginx_avg_wait_us": 347.0,
+        "nginx_slices_per_s": 366.8,
+        "nginx_cpu_pct": 1.5,
+        "sysbench_cpu_pct": 79.9,
+        "sysbench_eps": 4351.2,
+        "sysbench_report_age_seconds": 0.925,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5507,
+        "sample_ended_monotonic": 14766.416169555,
+        "sample_utc": "2026-10-26T10:18:39.120514+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            852410187,
+            5221876417,
+            21256
+          ],
+          "after": [
+            860901137,
+            5291963844,
+            21458
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 6.281,
+        "chart_p95_ms": 7.264
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14767.612469575,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 435,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:40",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.844,
+        "http_p95_ms": 1.095,
+        "http_p99_ms": 1.095,
+        "nginx_wait_pct": 89.0,
+        "nginx_avg_wait_us": 302.0,
+        "nginx_slices_per_s": 463.1,
+        "nginx_cpu_pct": 1.7,
+        "sysbench_cpu_pct": 74.5,
+        "sysbench_eps": 4746.4,
+        "sysbench_report_age_seconds": 0.827,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14767.317496453,
+        "sample_utc": "2026-10-26T10:18:40.021841+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            869855336,
+            5370798404,
+            21697
+          ],
+          "after": [
+            879335113,
+            5447813475,
+            21952
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.844,
+        "chart_p95_ms": 1.095
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14768.069813881,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 435,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:40",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.844,
+        "http_p95_ms": 1.095,
+        "http_p99_ms": 1.095,
+        "nginx_wait_pct": 89.0,
+        "nginx_avg_wait_us": 302.0,
+        "nginx_slices_per_s": 463.1,
+        "nginx_cpu_pct": 1.7,
+        "sysbench_cpu_pct": 74.5,
+        "sysbench_eps": 4746.4,
+        "sysbench_report_age_seconds": 0.827,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14767.317496453,
+        "sample_utc": "2026-10-26T10:18:40.021841+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            869855336,
+            5370798404,
+            21697
+          ],
+          "after": [
+            879335113,
+            5447813475,
+            21952
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.844,
+        "chart_p95_ms": 1.095
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14768.527199069,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 436,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:41",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.973,
+        "http_p95_ms": 0.973,
+        "http_p99_ms": 0.973,
+        "nginx_wait_pct": 85.0,
+        "nginx_avg_wait_us": 229.0,
+        "nginx_slices_per_s": 442.3,
+        "nginx_cpu_pct": 1.8,
+        "sysbench_cpu_pct": 75.8,
+        "sysbench_eps": 4581.3,
+        "sysbench_report_age_seconds": 0.983,
+        "probe_samples": 1,
+        "probe_errors": 1,
+        "probe_attempts": 2,
+        "sample_seconds": 0.8049,
+        "sample_ended_monotonic": 14768.474429633,
+        "sample_utc": "2026-10-26T10:18:41.178775+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            884925440,
+            5487680873,
+            22089
+          ],
+          "after": [
+            899300562,
+            5569196234,
+            22445
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.973,
+        "chart_p95_ms": 0.973
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14768.98493776,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 436,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:41",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.973,
+        "http_p95_ms": 0.973,
+        "http_p99_ms": 0.973,
+        "nginx_wait_pct": 85.0,
+        "nginx_avg_wait_us": 229.0,
+        "nginx_slices_per_s": 442.3,
+        "nginx_cpu_pct": 1.8,
+        "sysbench_cpu_pct": 75.8,
+        "sysbench_eps": 4581.3,
+        "sysbench_report_age_seconds": 0.983,
+        "probe_samples": 1,
+        "probe_errors": 1,
+        "probe_attempts": 2,
+        "sample_seconds": 0.8049,
+        "sample_ended_monotonic": 14768.474429633,
+        "sample_utc": "2026-10-26T10:18:41.178775+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            884925440,
+            5487680873,
+            22089
+          ],
+          "after": [
+            899300562,
+            5569196234,
+            22445
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.973,
+        "chart_p95_ms": 0.973
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14769.441714544,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 436,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:41",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 0.973,
+        "http_p95_ms": 0.973,
+        "http_p99_ms": 0.973,
+        "nginx_wait_pct": 85.0,
+        "nginx_avg_wait_us": 229.0,
+        "nginx_slices_per_s": 442.3,
+        "nginx_cpu_pct": 1.8,
+        "sysbench_cpu_pct": 75.8,
+        "sysbench_eps": 4581.3,
+        "sysbench_report_age_seconds": 0.983,
+        "probe_samples": 1,
+        "probe_errors": 1,
+        "probe_attempts": 2,
+        "sample_seconds": 0.8049,
+        "sample_ended_monotonic": 14768.474429633,
+        "sample_utc": "2026-10-26T10:18:41.178775+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            884925440,
+            5487680873,
+            22089
+          ],
+          "after": [
+            899300562,
+            5569196234,
+            22445
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 0.973,
+        "chart_p95_ms": 0.973
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14769.898489557,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 437,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:42",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 8.262,
+        "http_p95_ms": 8.262,
+        "http_p99_ms": 8.262,
+        "nginx_wait_pct": 90.6,
+        "nginx_avg_wait_us": 356.5,
+        "nginx_slices_per_s": 409.8,
+        "nginx_cpu_pct": 1.5,
+        "sysbench_cpu_pct": 77.8,
+        "sysbench_eps": 4440.9,
+        "sysbench_report_age_seconds": 0.156,
+        "probe_samples": 2,
+        "probe_errors": 1,
+        "probe_attempts": 3,
+        "sample_seconds": 0.8224,
+        "sample_ended_monotonic": 14769.648934645,
+        "sample_utc": "2026-10-26T10:18:42.353279+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            908376595,
+            5656674672,
+            22692
+          ],
+          "after": [
+            920808998,
+            5776831289,
+            23029
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 8.262,
+        "chart_p95_ms": 8.262
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14770.355012526,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 437,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:42",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 8.262,
+        "http_p95_ms": 8.262,
+        "http_p99_ms": 8.262,
+        "nginx_wait_pct": 90.6,
+        "nginx_avg_wait_us": 356.5,
+        "nginx_slices_per_s": 409.8,
+        "nginx_cpu_pct": 1.5,
+        "sysbench_cpu_pct": 77.8,
+        "sysbench_eps": 4440.9,
+        "sysbench_report_age_seconds": 0.156,
+        "probe_samples": 2,
+        "probe_errors": 1,
+        "probe_attempts": 3,
+        "sample_seconds": 0.8224,
+        "sample_ended_monotonic": 14769.648934645,
+        "sample_utc": "2026-10-26T10:18:42.353279+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            908376595,
+            5656674672,
+            22692
+          ],
+          "after": [
+            920808998,
+            5776831289,
+            23029
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 8.262,
+        "chart_p95_ms": 8.262
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14770.81135166,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 438,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:43",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 2.428,
+        "http_p95_ms": 2.898,
+        "http_p99_ms": 2.898,
+        "nginx_wait_pct": 87.4,
+        "nginx_avg_wait_us": 267.6,
+        "nginx_slices_per_s": 425.0,
+        "nginx_cpu_pct": 1.6,
+        "sysbench_cpu_pct": 76.3,
+        "sysbench_eps": 4480.2,
+        "sysbench_report_age_seconds": 0.06,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14770.550717399,
+        "sample_utc": "2026-10-26T10:18:43.255063+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            930014709,
+            5865322189,
+            23280
+          ],
+          "after": [
+            939025929,
+            5927931607,
+            23514
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 2.428,
+        "chart_p95_ms": 2.898
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14771.267903824,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 438,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:43",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 2.428,
+        "http_p95_ms": 2.898,
+        "http_p99_ms": 2.898,
+        "nginx_wait_pct": 87.4,
+        "nginx_avg_wait_us": 267.6,
+        "nginx_slices_per_s": 425.0,
+        "nginx_cpu_pct": 1.6,
+        "sysbench_cpu_pct": 76.3,
+        "sysbench_eps": 4480.2,
+        "sysbench_report_age_seconds": 0.06,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5506,
+        "sample_ended_monotonic": 14770.550717399,
+        "sample_utc": "2026-10-26T10:18:43.255063+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            930014709,
+            5865322189,
+            23280
+          ],
+          "after": [
+            939025929,
+            5927931607,
+            23514
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 2.428,
+        "chart_p95_ms": 2.898
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    },
+    {
+      "monotonic": 14771.724370221,
+      "kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "policy_revision": 36,
+      "latest": {
+        "seq": 439,
+        "workload_revision": 6,
+        "scenario_id": "compute",
+        "scenario_label": "请求内 CPU 计算",
+        "eps_unit": "计算事件/s",
+        "ts": "18:18:44",
+        "sched_ext": "disabled",
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": false,
+        "sysbench_on": true,
+        "http_p50_ms": 1.462,
+        "http_p95_ms": 3.205,
+        "http_p99_ms": 3.205,
+        "nginx_wait_pct": 88.6,
+        "nginx_avg_wait_us": 288.9,
+        "nginx_slices_per_s": 686.9,
+        "nginx_cpu_pct": 2.6,
+        "sysbench_cpu_pct": 65.4,
+        "sysbench_eps": 4480.2,
+        "sysbench_report_age_seconds": 0.962,
+        "probe_samples": 5,
+        "probe_errors": 0,
+        "probe_attempts": 5,
+        "sample_seconds": 0.5503,
+        "sample_ended_monotonic": 14771.452413524,
+        "sample_utc": "2026-10-26T10:18:44.156757+00:00",
+        "nginx_pid": 305032,
+        "sysbench_pid": 305035,
+        "raw_schedstat": {
+          "before": [
+            945415740,
+            5972257456,
+            23664
+          ],
+          "after": [
+            959529957,
+            6081451622,
+            24042
+          ]
+        },
+        "schedstat_valid": true,
+        "latency_source": "short_http_probe",
+        "chart_p50_ms": 1.462,
+        "chart_p95_ms": 3.205
+      },
+      "agent_phase": "paused",
+      "agent_reason": "手动接管，旧测试已停止",
+      "observation": null
+    }
+  ],
+  "windows": [
+    {
+      "start_monotonic": 14755.647553164,
+      "end_monotonic": 14760.648096925,
+      "duration_seconds": 5.00054376099979,
+      "frontend": {
+        "source": "wrk2.hdr.window",
+        "source_sha256": "663a2d7f7238b3b620522ea3378ac7a81f277955f2ea37c715d3cbcd141c4cd8",
+        "start_monotonic": 14755.647553164,
+        "end_monotonic": 14760.648096925,
+        "duration_seconds": 5.000543761,
+        "requests": 1555,
+        "terminal_latency_exclusions": 0,
+        "rps": 310.96618174360975,
+        "offered_rps": 300,
+        "completion_fraction": 1.0365539391453658,
+        "p50_ms": 504.319,
+        "p95_ms": 1082.367,
+        "p99_ms": 1648.639,
+        "errors": {
+          "connect": 0,
+          "read": 0,
+          "write": 0,
+          "status": 0,
+          "timeout": 0
+        },
+        "raw_record": "{\"schema_version\":1,\"kind\":\"window\",\"seq\":6,\"start_ns\":14755647553164,\"end_ns\":14760648096925,\"final\":false,\"requests\":1555,\"bytes\":6562100,\"errors\":{\"connect\":0,\"read\":0,\"write\":0,\"status\":0,\"timeout\":0},\"terminal_exclusions\":0,\"histogram_overflows\":0,\"bins_us\":[[1260,1],[1301,1],[1342,1],[1355,1],[1384,1],[1500,1],[1559,1],[1569,1],[1714,1],[1735,1],[1767,1],[1789,1],[1877,1],[1878,1],[1917,1],[1932,1],[1962,1],[2033,1],[2059,1],[2101,1],[2109,1],[2141,1],[2155,1],[2167,1],[2171,1],[2187,1],[2191,1],[2235,1],[2247,1],[2291,1],[2365,1],[2395,1],[2513,1],[2563,1],[2567,1],[2603,1],[2637,1],[2641,1],[2671,1],[2679,1],[2693,1],[2749,1],[2775,1],[2799,1],[2807,1],[2809,1],[2827,1],[2851,1],[2855,1],[2859,1],[2883,1],[2995,1],[3015,1],[3023,1],[3033,1],[3045,1],[3053,1],[3063,1],[3083,1],[3099,1],[3135,1],[3185,1],[3197,1],[3247,1],[3255,1],[3273,2],[3293,1],[3403,1],[3489,1],[3493,1],[3519,1],[3559,1],[3567,1],[3585,2],[3603,1],[3613,1],[3637,1],[3645,1],[3647,1],[3671,1],[3735,1],[3769,1],[3773,1],[3785,1],[3795,1],[3817,1],[3833,1],[3865,1],[3917,1],[3929,1],[3943,1],[3951,1],[4015,1],[4061,1],[4077,1],[4115,1],[4191,1],[4195,1],[4207,1],[4219,1],[4235,1],[4251,2],[4267,1],[4303,1],[4315,1],[4319,1],[4351,1],[4359,1],[4371,1],[4375,1],[4387,1],[4419,1],[4463,1],[4475,1],[4507,1],[4535,1],[4555,2],[4579,1],[4599,1],[4651,1],[4659,2],[4667,2],[4703,1],[4743,1],[4767,1],[4775,1],[4787,1],[4795,1],[4799,1],[4807,1],[4819,1],[4827,1],[4855,1],[4863,1],[4883,1],[4891,1],[4899,2],[4911,1],[4935,1],[4971,2],[4979,2],[5051,1],[5059,1],[5063,2],[5075,1],[5131,1],[5159,1],[5163,1],[5215,1],[5235,1],[5283,1],[5395,1],[5415,1],[5423,2],[5463,1],[5475,1],[5479,1],[5487,1],[5503,1],[5515,1],[5567,1],[5571,1],[5587,1],[5607,1],[5643,1],[5671,1],[5699,1],[5703,1],[5723,1],[5727,1],[5747,1],[5795,1],[5803,1],[5823,1],[5851,1],[5891,1],[5923,1],[5967,1],[5975,1],[6051,1],[6055,1],[6067,1],[6083,1],[6131,1],[6155,1],[6247,1],[6287,1],[6291,1],[6343,1],[6363,1],[6375,1],[6439,1],[6443,1],[6463,1],[6483,1],[6547,1],[6551,1],[6559,1],[6747,1],[6791,1],[6859,1],[6879,1],[6891,1],[7111,1],[7179,1],[7191,1],[7275,1],[7415,1],[7423,1],[7531,1],[7647,1],[7719,1],[7795,1],[8083,1],[8263,1],[8631,1],[9039,1],[9119,1],[9135,1],[9359,1],[9423,1],[10007,1],[10639,1],[10759,1],[10775,1],[11335,1],[11383,1],[11831,1],[12087,1],[12527,1],[12679,1],[12759,1],[13407,1],[13583,1],[14015,1],[14375,1],[14663,1],[15759,1],[17679,1],[18927,1],[18975,1],[27903,1],[27935,1],[29503,1],[29999,1],[30975,1],[31631,1],[31743,1],[31791,1],[32175,1],[32959,2],[33535,1],[33695,1],[33727,1],[33951,1],[34271,1],[34399,1],[34879,1],[38335,1],[38591,1],[38687,1],[39103,1],[39967,1],[40831,1],[41503,1],[42335,1],[42879,1],[43103,1],[43487,1],[43807,1],[44351,1],[45247,1],[45855,1],[46335,1],[51583,1],[51903,1],[52799,1],[53503,1],[56479,1],[59103,1],[59999,1],[61471,1],[63743,2],[64415,1],[65119,1],[65183,1],[69055,1],[69311,1],[73087,1],[77759,1],[77887,1],[78399,1],[79103,1],[81983,1],[86847,1],[87231,1],[87807,1],[89471,1],[90367,1],[90559,1],[91263,1],[91711,1],[92543,1],[93183,1],[93887,1],[95615,1],[96255,1],[96511,1],[97215,1],[97407,1],[97983,1],[99903,1],[100735,1],[100799,1],[101375,1],[101823,1],[102399,1],[102463,1],[103103,1],[103871,1],[103999,1],[104383,1],[104575,1],[104703,1],[105087,1],[105663,1],[106111,1],[106495,1],[107071,1],[107775,1],[107839,1],[107903,1],[108607,1],[108799,1],[109503,1],[109695,1],[110975,1],[111679,1],[112319,1],[112831,1],[112959,1],[114175,1],[115199,1],[116607,1],[117119,1],[117695,1],[118079,1],[118399,1],[119359,1],[120127,1],[121343,1],[123647,1],[127871,1],[128639,1],[131455,1],[131711,1],[132479,1],[132607,2],[133119,1],[133247,1],[133375,1],[133759,1],[134015,1],[135423,1],[136575,1],[136959,1],[137215,1],[137599,1],[138111,1],[138751,1],[139391,2],[139647,1],[141055,1],[141951,1],[142591,1],[143999,1],[144511,2],[145919,1],[146175,1],[146559,2],[147327,1],[147711,1],[151423,1],[151551,1],[152703,1],[153471,1],[161663,1],[162687,1],[163839,1],[164735,1],[167807,1],[169087,1],[169727,1],[170367,1],[170495,1],[174335,1],[175103,1],[177023,1],[179327,1],[179711,1],[180479,1],[181503,1],[187903,1],[189311,1],[190079,1],[191487,1],[192127,1],[192511,1],[192639,1],[193151,1],[193791,1],[194687,1],[195455,1],[195839,1],[196479,1],[196607,1],[200319,1],[200959,1],[201215,1],[201343,1],[202495,1],[202879,1],[203263,1],[204031,2],[204543,2],[205183,2],[205311,1],[205823,1],[205951,2],[206079,1],[206463,1],[206847,1],[207487,1],[208383,2],[209151,1],[210303,1],[210559,1],[211071,1],[211711,1],[211839,1],[212351,1],[212479,1],[212863,1],[213247,1],[214015,1],[215423,1],[216191,1],[216575,1],[216703,1],[220287,1],[221567,1],[221823,1],[223103,1],[224511,1],[225791,1],[226175,1],[231039,1],[231551,2],[232319,1],[232447,1],[232575,1],[232959,1],[233215,1],[233343,1],[233599,1],[234495,1],[236543,1],[237055,2],[239103,1],[240127,1],[240767,1],[241151,1],[241919,1],[242559,1],[243071,1],[243455,1],[244095,1],[244863,2],[245119,1],[245375,1],[245503,1],[246399,2],[247167,1],[249727,1],[249983,1],[251007,1],[251135,1],[251263,1],[252415,1],[253183,1],[264703,1],[265983,1],[267519,1],[270591,1],[271359,1],[271615,1],[274943,1],[275711,2],[278527,1],[279039,1],[280575,1],[283391,1],[284159,1],[284927,1],[285183,1],[290047,1],[291071,1],[293887,1],[294399,1],[294655,1],[295167,1],[295423,1],[295679,1],[296447,1],[297471,1],[297727,1],[298495,1],[298751,1],[299263,1],[300287,1],[301055,1],[301567,1],[302847,1],[303615,1],[304127,1],[304383,2],[305663,1],[306175,2],[306431,1],[306943,1],[307455,1],[307967,2],[308479,1],[308991,1],[309247,1],[309759,2],[310271,1],[311039,3],[311807,1],[312319,1],[312575,1],[313087,1],[313343,1],[313855,1],[314623,1],[316671,1],[316927,2],[317695,1],[318207,1],[319231,1],[320511,1],[320767,1],[321279,1],[322559,1],[326655,1],[326911,1],[327423,1],[327679,1],[330495,2],[330751,1],[331007,1],[331775,1],[332543,1],[333055,2],[333567,1],[334335,1],[334591,1],[336127,1],[336639,2],[337663,1],[342527,1],[342783,1],[343807,1],[344575,2],[344831,1],[345343,1],[345599,1],[346111,2],[346367,1],[346623,1],[347135,1],[348159,1],[349439,2],[349951,1],[350207,1],[350975,1],[351231,2],[352255,1],[353023,1],[355839,1],[364031,1],[369407,1],[370175,1],[374783,1],[375807,1],[376831,1],[378111,1],[378367,1],[378879,1],[381439,1],[383999,1],[384255,1],[384511,1],[388095,1],[388607,1],[388863,1],[390655,1],[391679,1],[395007,1],[395519,1],[395775,1],[396287,1],[398591,1],[399103,1],[399359,1],[399615,1],[399871,1],[400127,3],[400639,1],[401407,1],[402431,1],[403711,2],[404479,1],[405247,1],[406527,1],[406783,1],[407551,1],[407807,1],[408063,1],[408319,1],[409087,1],[409599,2],[409855,2],[410367,2],[411135,1],[411391,1],[411647,1],[412159,1],[412415,1],[412927,3],[413695,1],[415743,1],[417535,1],[418303,1],[420095,2],[420607,1],[421375,1],[421631,1],[422399,1],[422911,1],[423423,1],[424191,1],[424959,1],[426495,1],[427775,1],[428799,1],[429311,1],[429567,1],[430079,1],[431359,1],[432639,3],[432895,1],[433151,2],[433919,1],[434687,1],[435455,1],[436223,1],[436479,1],[437503,1],[444927,1],[445183,1],[445439,1],[445951,1],[446207,1],[446463,2],[446719,1],[446975,1],[447231,1],[447487,1],[447743,1],[447999,1],[448255,1],[448511,1],[449791,1],[450303,1],[450559,1],[450815,1],[451327,1],[452095,1],[452863,1],[453887,1],[461311,1],[461823,1],[473087,1],[473343,1],[478463,1],[481023,1],[482303,1],[483327,1],[483583,1],[484095,1],[485887,1],[487679,1],[488191,1],[488447,1],[489471,1],[489983,1],[492031,1],[492543,1],[495359,1],[496127,1],[496895,1],[498943,1],[499711,1],[500223,1],[500991,1],[501503,1],[502527,1],[503039,2],[503551,1],[504319,3],[504575,1],[505087,2],[505599,1],[506111,1],[506879,2],[507391,1],[507647,1],[507903,1],[508927,1],[509695,1],[510463,1],[510975,1],[511231,2],[511487,1],[511999,2],[512255,1],[512767,1],[513023,1],[513535,2],[514303,2],[516863,1],[517631,1],[518143,1],[518911,1],[520447,1],[521215,1],[523775,1],[524287,1],[524799,1],[525311,1],[525823,1],[526335,1],[527359,1],[527871,2],[528895,2],[529407,2],[529919,1],[530431,2],[530943,2],[531455,3],[532479,2],[532991,1],[534527,1],[535039,1],[535551,2],[537599,1],[545791,1],[546303,1],[547327,1],[547839,2],[548351,2],[548863,2],[549375,1],[549887,2],[550399,1],[550911,2],[551423,1],[551935,1],[552959,1],[553471,2],[554495,2],[555519,1],[562175,1],[563711,1],[574463,1],[575999,1],[582143,1],[583679,1],[587263,1],[587775,1],[588799,2],[589311,1],[591359,1],[592895,2],[593407,1],[593919,1],[595967,1],[596479,1],[596991,1],[597503,2],[598015,1],[600575,1],[601599,1],[602111,1],[602623,2],[603135,1],[605183,1],[605695,1],[606207,1],[606719,2],[607231,1],[607743,5],[608255,2],[609279,1],[609791,1],[610303,1],[610815,1],[611327,1],[611839,1],[612351,1],[612863,1],[613375,1],[613887,1],[614399,1],[614911,3],[615935,1],[616447,1],[617983,1],[618495,2],[619007,1],[619519,1],[620031,1],[621055,1],[624127,1],[625151,2],[626175,1],[626687,2],[627199,1],[628735,1],[629247,2],[629759,3],[630271,1],[630783,2],[631295,4],[631807,1],[632319,2],[634367,1],[635391,1],[635903,1],[636927,2],[637439,2],[643071,1],[648703,1],[649215,1],[649727,1],[650239,2],[650751,1],[651263,2],[651775,2],[652287,1],[652799,3],[653311,2],[653823,2],[654335,2],[654847,1],[655359,1],[656895,1],[663551,1],[665087,1],[677375,1],[679423,1],[683519,1],[686079,1],[691711,1],[692735,1],[693759,1],[694271,1],[694783,1],[695295,1],[697343,1],[697855,2],[698367,1],[698879,1],[699391,2],[699903,1],[701439,1],[701951,2],[702463,1],[702975,3],[703487,1],[703999,1],[704511,1],[705023,1],[706047,1],[706559,2],[707583,4],[708095,3],[708607,1],[711167,1],[712191,1],[712703,1],[713215,1],[713727,1],[714751,2],[715775,1],[716799,2],[717823,1],[718847,3],[719359,2],[719871,2],[720895,1],[721407,1],[721919,1],[722431,1],[722943,1],[723967,1],[725503,2],[726015,1],[726527,2],[727039,1],[729087,2],[729599,1],[730111,1],[730623,3],[731135,2],[731647,1],[732159,1],[734207,1],[734719,1],[735231,2],[735743,1],[736767,1],[737791,1],[738815,1],[739327,1],[740351,2],[743423,1],[748031,2],[748543,2],[749055,2],[750079,1],[751103,1],[751615,1],[752127,2],[752639,3],[753151,3],[753663,3],[754175,1],[754687,2],[757247,1],[757759,1],[762367,1],[762879,1],[778239,1],[780287,1],[783359,1],[789503,1],[796671,1],[798207,1],[798719,2],[799743,2],[801279,2],[801791,2],[802303,3],[802815,4],[803327,1],[803839,2],[804863,1],[805375,1],[805887,1],[806399,1],[806911,1],[807423,3],[807935,4],[808447,2],[808959,1],[810495,1],[811007,1],[811519,1],[812031,1],[813055,1],[814079,1],[819199,1],[819711,1],[820223,1],[821247,1],[821759,2],[822271,3],[822783,1],[823295,3],[823807,2],[824319,1],[824831,2],[825343,1],[825855,2],[826367,2],[826879,2],[827391,3],[828415,3],[828927,1],[829951,1],[830463,1],[830975,1],[831487,2],[831999,1],[835583,1],[839679,1],[840703,1],[841215,1],[841727,1],[842239,1],[843263,1],[843775,1],[844287,2],[845311,1],[845823,1],[846335,1],[848383,1],[848895,2],[849407,3],[849919,2],[850431,1],[850943,1],[851455,3],[852991,3],[853503,1],[854015,2],[855551,2],[856063,1],[856575,1],[857087,1],[862719,1],[865279,1],[881151,1],[882687,1],[886783,1],[892415,1],[901631,1],[902655,1],[903167,1],[904191,1],[904703,2],[905215,1],[905727,4],[906239,5],[906751,3],[907263,4],[907775,4],[908287,3],[908799,1],[909311,3],[909823,1],[910847,1],[911871,1],[912895,1],[913919,1],[914943,2],[915967,1],[921599,1],[925183,2],[925695,3],[926207,2],[926719,2],[927231,3],[927743,4],[928255,4],[928767,2],[929279,3],[929791,2],[930303,3],[930815,2],[931327,3],[931839,2],[936447,1],[937983,1],[944639,1],[945151,1],[945663,1],[946687,1],[947711,2],[948223,3],[948735,2],[949247,1],[949759,3],[950271,2],[950783,2],[951295,7],[951807,2],[952319,2],[952831,1],[953343,1],[953855,1],[954367,1],[954879,2],[955391,1],[965119,2],[981503,1],[982527,1],[990719,1],[996351,1],[1007103,1],[1008127,2],[1008639,2],[1009151,3],[1009663,6],[1010175,5],[1010687,5],[1011199,4],[1011711,7],[1012223,3],[1012735,1],[1013247,2],[1014271,1],[1014783,1],[1026559,1],[1029631,1],[1030143,6],[1030655,5],[1031167,6],[1031679,6],[1032191,4],[1032703,3],[1033215,3],[1033727,2],[1034751,1],[1038335,1],[1039359,1],[1044991,1],[1050623,1],[1051647,8],[1052671,10],[1053695,4],[1054719,7],[1055743,4],[1056767,2],[1062911,1],[1063935,1],[1082367,2],[1094655,1],[1099775,1],[1112063,1],[1115135,1],[1129471,1],[1141759,1],[1142783,2],[1153023,2],[1162239,1],[1164287,1],[1181695,2],[1198079,1],[1203199,1],[1217535,2],[1234943,1],[1242111,1],[1243135,1],[1244159,1],[1252351,1],[1255423,1],[1257471,1],[1265663,1],[1281023,1],[1284095,1],[1301503,1],[1307647,1],[1338367,1],[1342463,2],[1343487,1],[1351679,1],[1357823,1],[1359871,1],[1378303,1],[1383423,1],[1404927,1],[1411071,1],[1440767,1],[1442815,2],[1445887,1],[1451007,1],[1457151,1],[1462271,1],[1480703,1],[1482751,1],[1509375,1],[1514495,1],[1544191,1],[1546239,3],[1551359,1],[1557503,1],[1563647,1],[1612799,1],[1617919,1],[1648639,2],[1649663,2],[1653759,1],[1655807,1],[1716223,1],[1721343,1],[1755135,2],[1757183,1],[1820671,1],[1825791,1],[1859583,1],[1929215,1],[1965055,1],[2070527,1]]}",
+        "seq": 6,
+        "received_utc": "2026-10-26T10:18:33.353863+00:00",
+        "received_monotonic": 14760.649535037,
+        "valid": true,
+        "pid": 305033,
+        "raw_log": "/tmp/oe-live-sandbox-jnee0tid/wrk2-305033.log"
+      },
+      "background": {
+        "events_per_sec": 4583.475177502503,
+        "covered_seconds": 5.00054376099979,
+        "whole_covered_seconds": 4.0,
+        "whole_events_per_sec": 4572.9925,
+        "measurement_seconds": 5.00054376099979,
+        "estimated_origin_monotonic": 14720.490049997,
+        "max_report_delivery_delay_seconds": 0.003925489998437115,
+        "alignment": "boundary-clipped overlap on background-intervals.jsonl",
+        "reason": null
+      },
+      "p99_ms": 1648.639,
+      "p95_ms": 1082.367,
+      "rps": 310.96618174360975,
+      "completion_fraction": 1.0365539391453658,
+      "errors": 0,
+      "eps": 4583.475177502503
+    },
+    {
+      "start_monotonic": 14760.648096925,
+      "end_monotonic": 14765.64857932,
+      "duration_seconds": 5.00048239500029,
+      "frontend": {
+        "source": "wrk2.hdr.window",
+        "source_sha256": "392ae55fd300d336eb5c6c16ac9280ba28b820bdaf598a83ae7a0251fffbd2d6",
+        "start_monotonic": 14760.648096925,
+        "end_monotonic": 14765.64857932,
+        "duration_seconds": 5.000482395,
+        "requests": 1469,
+        "terminal_latency_exclusions": 0,
+        "rps": 293.7716572042846,
+        "offered_rps": 300,
+        "completion_fraction": 0.9792388573476154,
+        "p50_ms": 531.455,
+        "p95_ms": 1335.295,
+        "p99_ms": 1760.255,
+        "errors": {
+          "connect": 0,
+          "read": 0,
+          "write": 0,
+          "status": 0,
+          "timeout": 0
+        },
+        "raw_record": "{\"schema_version\":1,\"kind\":\"window\",\"seq\":7,\"start_ns\":14760648096925,\"end_ns\":14765648579320,\"final\":false,\"requests\":1469,\"bytes\":6199180,\"errors\":{\"connect\":0,\"read\":0,\"write\":0,\"status\":0,\"timeout\":0},\"terminal_exclusions\":0,\"histogram_overflows\":0,\"bins_us\":[[934,1],[1217,1],[1361,1],[1371,1],[1642,1],[1793,1],[1884,1],[1890,1],[1892,1],[1925,1],[1975,1],[1981,1],[2001,1],[2049,1],[2117,1],[2199,1],[2221,1],[2243,1],[2255,1],[2279,1],[2371,1],[2387,1],[2409,1],[2451,1],[2507,1],[2511,1],[2551,1],[2561,1],[2563,1],[2601,1],[2607,1],[2611,1],[2615,1],[2641,1],[2659,1],[2669,1],[2747,1],[2777,1],[2779,1],[2801,1],[2893,1],[2919,1],[3009,1],[3029,1],[3105,1],[3125,1],[3133,1],[3143,1],[3149,1],[3153,1],[3169,1],[3191,1],[3197,1],[3227,1],[3273,1],[3291,1],[3345,2],[3385,1],[3399,1],[3407,1],[3417,1],[3423,1],[3491,1],[3501,1],[3513,1],[3551,1],[3611,1],[3639,1],[3647,1],[3679,1],[3695,1],[3829,1],[3835,1],[3843,1],[3877,1],[3879,1],[3899,1],[3905,1],[3913,1],[3931,1],[3933,1],[3959,1],[3961,1],[3973,1],[3977,1],[4013,1],[4111,1],[4123,1],[4171,1],[4175,1],[4187,1],[4215,1],[4235,1],[4259,1],[4271,1],[4291,1],[4355,1],[4403,1],[4483,1],[4491,1],[4503,1],[4535,1],[4567,1],[4579,1],[4595,1],[4607,1],[4627,1],[4643,1],[4691,1],[4707,1],[4711,1],[4743,1],[4787,1],[4831,1],[4835,1],[4847,1],[4863,1],[4911,2],[4935,1],[4951,1],[4959,1],[4991,1],[5039,1],[5043,1],[5071,1],[5131,1],[5155,2],[5179,1],[5183,1],[5219,1],[5235,1],[5259,1],[5287,1],[5323,1],[5367,1],[5383,1],[5391,2],[5395,1],[5399,1],[5419,1],[5423,1],[5435,1],[5451,1],[5455,1],[5459,1],[5491,1],[5499,1],[5535,1],[5563,1],[5583,1],[5671,1],[5707,1],[5803,1],[5851,1],[5855,1],[5879,1],[5895,1],[5943,2],[5971,1],[5975,1],[6047,1],[6119,1],[6135,1],[6171,1],[6183,1],[6187,1],[6215,1],[6239,1],[6255,1],[6275,1],[6299,1],[6311,1],[6347,2],[6395,1],[6403,1],[6663,1],[6795,1],[6807,1],[6815,1],[6883,1],[6955,1],[7099,1],[7243,1],[7311,1],[7399,1],[7411,1],[7503,1],[7531,1],[7551,2],[7603,1],[7627,1],[7715,1],[7719,1],[8035,1],[8079,1],[8247,1],[8303,1],[8711,1],[8807,1],[8823,1],[8935,1],[8959,1],[8999,1],[9007,2],[9071,1],[9079,1],[9671,1],[10239,1],[10695,1],[11383,1],[11863,1],[12399,1],[12559,1],[15895,1],[16639,1],[17551,1],[17727,1],[20863,1],[21071,1],[23311,1],[23935,1],[24399,1],[25711,1],[26079,1],[26623,1],[26735,1],[27391,1],[27631,1],[27887,1],[28287,1],[28703,1],[28943,1],[29119,1],[29487,1],[29711,1],[29727,1],[29983,1],[30479,1],[31039,1],[32143,1],[33823,1],[34687,1],[35455,1],[35839,1],[37183,1],[38015,1],[38655,1],[39487,2],[40127,1],[42591,1],[45247,1],[46143,1],[46687,1],[46815,1],[47007,1],[48159,1],[48223,1],[48799,1],[48831,1],[48895,1],[49663,1],[51039,1],[51711,1],[52031,1],[52927,1],[53631,2],[54271,1],[54687,1],[55007,2],[55775,2],[56255,1],[56543,1],[58047,1],[58527,1],[62911,1],[76351,1],[78783,1],[86655,1],[89855,1],[91071,1],[100991,1],[103807,1],[104063,1],[104575,1],[105215,1],[105919,1],[106687,1],[106879,1],[107071,1],[107135,1],[107263,1],[107391,1],[107775,1],[108287,1],[108479,1],[108607,1],[108799,1],[109439,1],[110207,1],[110463,1],[111167,1],[111871,2],[112511,1],[113151,1],[113663,1],[118591,1],[119423,1],[120383,1],[121151,1],[126015,1],[126207,1],[126655,1],[126719,2],[126911,1],[127167,1],[127551,1],[128319,1],[128447,1],[129151,1],[129407,1],[129663,1],[130111,2],[130687,1],[130879,1],[131327,2],[131583,1],[131967,1],[132223,1],[132479,1],[135423,1],[135679,1],[138495,1],[138879,1],[139135,1],[139775,1],[144639,1],[144895,1],[145407,1],[145663,1],[145919,1],[146303,1],[146431,1],[147583,1],[148479,2],[149119,1],[149247,1],[149375,1],[150911,1],[151039,1],[151679,1],[152063,1],[152959,1],[153727,1],[154239,1],[154623,1],[154879,1],[155647,1],[156031,1],[156927,1],[157567,2],[157951,1],[159359,1],[160895,1],[161151,1],[168191,1],[179967,1],[181887,1],[190207,1],[190975,1],[192255,1],[204159,1],[204415,1],[204671,1],[205311,1],[206463,2],[206847,1],[207231,2],[207487,2],[208127,1],[208255,1],[208383,1],[208511,1],[208767,1],[210175,1],[211071,2],[211199,1],[211583,2],[211839,2],[212223,2],[213247,1],[213375,1],[214143,1],[216831,1],[217727,1],[218495,1],[219263,1],[220031,1],[226687,1],[227711,1],[229119,2],[229887,2],[230271,1],[230527,1],[230783,1],[231295,1],[231423,1],[231935,1],[232063,2],[232191,1],[232447,1],[232703,1],[232831,1],[233215,1],[234495,1],[235391,1],[236031,1],[236543,1],[238463,1],[239231,1],[242047,1],[242175,1],[242431,1],[242687,1],[243583,1],[245631,1],[246399,2],[246655,1],[246783,1],[247807,1],[248447,2],[249727,1],[249855,1],[250367,1],[250623,2],[251391,1],[252287,1],[252799,1],[253567,1],[254207,1],[254975,1],[255103,1],[255999,1],[256767,1],[257023,1],[259583,1],[260479,2],[260735,1],[261503,1],[263167,1],[264191,1],[273407,1],[283647,1],[285695,1],[293887,1],[294655,1],[295935,1],[304127,2],[304895,2],[306175,1],[306687,1],[307199,1],[307711,1],[308223,1],[308479,1],[308735,2],[309247,1],[309503,2],[310271,2],[310527,1],[310783,1],[311039,1],[311551,1],[311807,1],[312063,1],[312575,1],[312831,1],[313343,1],[314111,1],[315647,1],[316159,1],[316671,1],[316927,1],[317439,1],[318463,1],[319231,2],[329727,1],[329983,1],[330239,1],[330495,1],[330751,2],[331007,1],[331263,1],[331775,2],[332031,2],[332543,2],[333055,1],[334079,1],[335103,1],[335871,1],[336127,1],[336383,1],[337663,2],[338431,1],[343039,1],[343807,1],[344319,1],[345087,1],[345855,2],[346111,2],[346623,1],[347391,2],[347647,1],[348159,1],[349183,1],[349951,1],[350463,1],[351999,1],[352511,1],[352767,2],[353023,2],[353535,2],[353791,1],[354303,1],[354559,1],[355839,1],[356607,1],[356863,1],[357375,1],[357631,1],[364031,1],[364543,1],[365311,1],[365823,1],[366591,1],[378623,1],[387327,1],[389375,1],[395007,1],[395775,1],[397823,1],[405247,1],[405503,1],[406015,1],[406271,2],[406527,1],[407039,2],[407551,1],[408319,1],[408575,1],[409087,2],[409343,2],[409599,1],[409855,1],[410111,1],[410623,2],[410879,2],[412927,1],[413695,1],[414719,1],[415231,1],[415743,1],[416255,1],[417023,1],[418047,2],[418559,1],[419327,1],[421375,1],[422143,1],[427775,1],[428031,1],[428799,1],[429567,2],[430079,2],[430335,1],[430591,1],[431103,2],[431359,1],[431871,1],[432127,1],[432639,1],[432895,1],[433663,1],[434431,1],[434943,1],[435199,1],[436479,1],[438271,1],[439039,1],[439807,1],[440063,1],[442623,1],[443903,1],[444671,1],[445183,1],[445439,1],[446207,1],[446463,1],[446719,2],[447231,1],[447487,1],[447999,1],[448767,1],[449279,1],[449791,2],[450303,1],[450559,2],[451071,1],[451327,1],[452095,1],[452607,1],[453119,1],[454143,1],[454399,1],[455167,2],[456703,1],[457215,1],[457983,1],[458239,1],[459007,1],[465919,1],[468223,1],[468735,1],[469247,1],[471807,1],[480255,1],[491007,1],[493055,1],[495615,1],[496383,1],[497919,1],[502271,1],[504831,1],[505087,1],[505343,1],[505855,1],[506111,1],[506623,1],[506879,1],[507647,2],[508159,1],[508415,1],[509183,2],[509439,1],[509951,2],[510719,1],[511487,1],[512767,2],[513023,1],[513535,1],[514303,1],[514559,1],[515583,1],[516351,1],[517119,1],[517887,1],[518143,1],[518655,1],[518911,1],[521215,1],[525311,1],[527359,4],[528383,1],[529919,1],[530943,1],[531455,1],[531967,2],[532479,2],[532991,3],[533503,2],[534015,1],[534527,1],[535039,2],[535551,1],[542719,1],[543231,1],[543743,2],[544255,2],[544767,3],[547839,1],[548863,1],[549887,3],[550399,1],[550911,1],[551423,2],[551935,3],[552959,1],[553471,1],[553983,2],[555007,5],[556031,2],[556543,1],[557567,1],[562687,2],[563199,1],[568319,1],[571391,1],[572415,1],[572927,1],[574975,1],[585727,1],[594943,1],[596479,1],[599551,1],[600063,1],[601599,1],[604671,1],[605183,3],[606207,1],[606719,2],[607743,1],[608255,1],[608767,1],[609279,3],[609791,1],[610303,1],[611327,1],[612351,1],[612863,4],[613375,1],[614399,2],[614911,2],[615935,1],[616447,1],[617983,1],[618495,1],[619007,1],[620031,2],[626175,1],[626687,1],[627199,1],[627711,1],[628223,1],[628735,2],[629247,2],[629759,1],[630271,1],[630783,1],[631295,2],[631807,2],[632319,1],[632831,1],[633343,2],[633855,1],[634879,1],[635391,1],[642047,1],[642559,1],[643071,1],[643583,2],[644607,1],[645119,1],[647167,1],[648191,1],[648703,1],[649215,2],[649727,1],[650239,1],[650751,1],[651263,1],[651775,2],[652287,1],[653311,1],[653823,4],[654335,2],[654847,1],[655359,3],[655871,1],[656383,1],[656895,1],[658943,2],[666623,1],[667647,2],[668671,1],[675327,1],[676351,1],[676863,1],[680447,1],[690687,1],[698367,1],[700415,1],[702975,1],[703999,1],[705023,1],[707071,2],[707583,2],[708095,1],[708607,1],[709119,3],[709631,2],[710143,2],[710655,2],[711167,2],[712191,1],[712703,1],[713727,1],[714751,1],[715263,1],[715775,1],[716799,1],[717311,1],[718847,2],[719871,2],[720383,2],[720895,1],[723455,1],[724479,1],[725503,1],[726015,1],[727039,1],[727551,1],[728063,1],[728575,1],[729087,3],[729599,2],[730111,2],[730623,1],[731135,1],[731647,1],[732159,1],[733695,1],[734207,1],[734719,1],[735743,2],[736255,1],[740351,1],[743423,1],[745471,1],[745983,2],[747007,2],[747519,1],[748031,1],[748543,1],[749055,1],[749567,2],[750079,2],[750591,3],[751103,1],[751615,1],[752127,1],[752639,1],[753151,3],[753663,1],[754175,2],[754687,1],[755199,2],[756223,1],[758271,1],[758783,1],[759295,2],[766975,1],[767487,1],[770559,1],[771071,1],[778751,1],[780287,1],[782335,1],[783359,1],[795647,1],[801791,2],[802303,1],[803839,1],[805375,1],[805887,2],[806399,3],[806911,1],[807423,1],[807935,1],[808447,3],[808959,1],[809471,2],[809983,1],[810495,1],[811007,2],[811519,2],[812031,1],[813055,1],[813567,2],[815103,2],[820223,1],[820735,1],[821759,1],[822783,1],[823295,3],[824319,1],[824831,1],[825855,1],[826367,1],[826879,1],[827391,3],[827903,2],[828415,1],[828927,2],[829439,2],[829951,2],[830463,3],[830975,1],[831487,2],[831999,1],[832511,1],[840703,1],[841727,1],[842239,1],[846847,1],[847871,2],[848383,2],[848895,3],[849407,3],[849919,1],[850431,1],[850943,2],[851455,2],[851967,1],[852479,2],[852991,1],[853503,2],[854015,2],[854527,5],[855551,4],[856063,2],[858111,1],[863231,1],[867327,1],[869375,1],[875519,1],[876031,1],[882175,1],[883199,1],[883711,1],[887807,1],[901119,1],[905215,1],[905727,1],[906239,1],[906751,1],[907263,3],[907775,5],[908287,1],[908799,3],[909311,1],[909823,3],[910335,2],[910847,2],[911359,3],[911871,1],[912383,1],[912895,1],[913407,1],[914431,1],[919039,1],[925695,1],[926207,2],[926719,1],[927231,2],[927743,1],[928255,5],[928767,2],[929791,2],[930303,3],[930815,3],[931327,1],[931839,3],[932351,3],[932863,1],[934399,1],[934911,1],[942079,1],[946175,1],[946687,1],[948223,1],[949247,1],[949759,2],[950271,4],[950783,2],[951295,5],[951807,1],[952319,4],[952831,2],[953343,6],[953855,3],[954367,2],[955391,1],[957951,1],[958975,1],[959999,1],[962559,1],[963583,1],[970239,1],[971263,1],[980991,1],[981503,1],[983551,1],[985599,1],[987135,1],[991743,1],[1006591,1],[1008639,2],[1009151,4],[1009663,6],[1010175,1],[1010687,5],[1011199,6],[1011711,2],[1012223,3],[1012735,1],[1013247,1],[1013759,2],[1018879,1],[1028607,1],[1029631,1],[1030143,3],[1030655,7],[1031679,5],[1032191,2],[1032703,4],[1033215,4],[1033727,1],[1034239,2],[1034751,2],[1044479,1],[1051647,5],[1052671,8],[1053695,7],[1054719,8],[1055743,7],[1056767,1],[1057791,1],[1059839,1],[1060863,2],[1063935,1],[1068031,1],[1070079,1],[1083391,1],[1084415,1],[1085439,1],[1089535,1],[1090559,1],[1095679,1],[1108991,1],[1115135,1],[1120255,1],[1132543,1],[1134591,1],[1136639,1],[1143807,1],[1151999,1],[1154047,1],[1157119,1],[1162239,1],[1163263,3],[1167359,1],[1169407,1],[1172479,1],[1183743,1],[1189887,2],[1192959,1],[1195007,1],[1199103,1],[1213439,1],[1218559,1],[1233919,1],[1238015,1],[1244159,1],[1250303,1],[1251327,1],[1259519,1],[1262591,2],[1264639,1],[1265663,1],[1266687,1],[1269759,1],[1271807,1],[1283071,1],[1294335,1],[1295359,1],[1296383,2],[1302527,1],[1316863,1],[1321983,1],[1335295,1],[1342463,1],[1349631,1],[1351679,1],[1358847,1],[1364991,1],[1372159,2],[1383423,1],[1399807,3],[1400831,1],[1405951,1],[1419263,1],[1426431,1],[1438719,1],[1447935,1],[1448959,1],[1452031,1],[1461247,2],[1482751,1],[1503231,1],[1505279,3],[1510399,1],[1523711,1],[1529855,1],[1542143,1],[1548287,1],[1552383,1],[1553407,1],[1561599,1],[1563647,1],[1582079,1],[1607679,1],[1610751,3],[1615871,1],[1628159,1],[1633279,1],[1649663,1],[1652735,1],[1654783,1],[1658879,1],[1666047,1],[1680383,1],[1713151,1],[1715199,1],[1716223,2],[1721343,1],[1736703,1],[1756159,1],[1760255,2],[1765375,1],[1781759,1],[1821695,1],[1827839,1],[1840127,1],[1864703,1],[1866751,1],[1884159,1],[1928191,1],[1931263,1],[1970175,1],[2036735,1],[2075647,1],[2181119,1],[2285567,1]]}",
+        "seq": 7,
+        "received_utc": "2026-10-26T10:18:38.354251+00:00",
+        "received_monotonic": 14765.649920479,
+        "valid": true,
+        "pid": 305033,
+        "raw_log": "/tmp/oe-live-sandbox-jnee0tid/wrk2-305033.log"
+      },
+      "background": {
+        "events_per_sec": 4555.7593157886395,
+        "covered_seconds": 5.00048239500029,
+        "whole_covered_seconds": 4.0,
+        "whole_events_per_sec": 4522.4475,
+        "measurement_seconds": 5.00048239500029,
+        "estimated_origin_monotonic": 14720.490049997,
+        "max_report_delivery_delay_seconds": 0.003925489998437115,
+        "alignment": "boundary-clipped overlap on background-intervals.jsonl",
+        "reason": null
+      },
+      "p99_ms": 1760.255,
+      "p95_ms": 1335.295,
+      "rps": 293.7716572042846,
+      "completion_fraction": 0.9792388573476154,
+      "errors": 0,
+      "eps": 4555.7593157886395
+    },
+    {
+      "start_monotonic": 14765.64857932,
+      "end_monotonic": 14770.650748219,
+      "duration_seconds": 5.002168899000026,
+      "frontend": {
+        "source": "wrk2.hdr.window",
+        "source_sha256": "09186066ecea6355f4d4c5b1c427d78da2462fb930adf6c6a0729624ec756195",
+        "start_monotonic": 14765.64857932,
+        "end_monotonic": 14770.650748219,
+        "duration_seconds": 5.002168899,
+        "requests": 1437,
+        "terminal_latency_exclusions": 0,
+        "rps": 287.2753857406285,
+        "offered_rps": 300,
+        "completion_fraction": 0.9575846191354284,
+        "p50_ms": 503.039,
+        "p95_ms": 1300.479,
+        "p99_ms": 1901.567,
+        "errors": {
+          "connect": 0,
+          "read": 0,
+          "write": 0,
+          "status": 0,
+          "timeout": 0
+        },
+        "raw_record": "{\"schema_version\":1,\"kind\":\"window\",\"seq\":8,\"start_ns\":14765648579320,\"end_ns\":14770650748219,\"final\":false,\"requests\":1437,\"bytes\":6064140,\"errors\":{\"connect\":0,\"read\":0,\"write\":0,\"status\":0,\"timeout\":0},\"terminal_exclusions\":0,\"histogram_overflows\":0,\"bins_us\":[[1085,1],[1174,1],[1183,1],[1266,1],[1272,1],[1404,1],[1537,1],[1555,1],[1630,1],[1674,1],[1929,1],[1930,1],[1937,1],[1961,1],[1970,2],[1984,1],[2014,1],[2089,1],[2093,1],[2107,1],[2123,1],[2135,1],[2209,1],[2291,2],[2323,1],[2325,1],[2347,1],[2355,1],[2377,1],[2457,1],[2471,1],[2495,1],[2517,1],[2583,1],[2605,1],[2651,1],[2657,1],[2669,1],[2711,1],[2725,1],[2751,1],[2761,1],[2765,1],[2819,1],[2841,1],[2859,1],[2903,1],[2923,1],[2931,1],[2939,1],[2981,1],[3005,1],[3015,1],[3067,1],[3117,1],[3149,1],[3167,1],[3175,1],[3185,1],[3187,1],[3219,1],[3225,1],[3285,1],[3301,1],[3315,1],[3321,1],[3335,1],[3365,1],[3375,1],[3383,1],[3439,1],[3449,1],[3469,1],[3489,1],[3501,1],[3505,1],[3613,1],[3697,1],[3743,1],[3769,1],[3779,1],[3783,1],[3823,1],[3841,1],[3843,1],[3857,1],[3925,1],[3943,1],[3947,1],[4051,1],[4055,1],[4063,1],[4127,1],[4143,1],[4155,2],[4191,1],[4195,1],[4227,1],[4239,1],[4287,1],[4323,1],[4367,1],[4371,1],[4411,1],[4463,1],[4487,2],[4507,1],[4515,1],[4531,1],[4551,1],[4595,2],[4607,1],[4639,1],[4643,1],[4659,1],[4687,2],[4699,1],[4719,1],[4735,2],[4743,1],[4747,1],[4759,1],[4767,1],[4787,1],[4811,1],[4815,1],[4831,1],[4847,1],[4855,1],[4859,2],[4887,1],[4903,1],[4911,1],[4995,1],[5059,1],[5075,1],[5103,3],[5111,1],[5163,2],[5175,1],[5207,1],[5263,1],[5287,1],[5311,1],[5323,1],[5327,1],[5363,1],[5379,1],[5399,1],[5407,1],[5411,1],[5415,2],[5419,1],[5431,2],[5451,1],[5491,1],[5519,1],[5531,1],[5575,1],[5667,1],[5699,1],[5715,1],[5815,1],[5839,1],[5843,1],[5867,1],[5887,1],[5911,1],[5939,1],[5963,1],[6011,1],[6079,1],[6103,1],[6163,1],[6211,1],[6351,1],[6423,1],[6427,1],[6459,1],[6483,1],[6499,1],[6595,1],[6631,1],[6639,1],[6679,1],[6687,1],[6755,1],[6775,1],[6995,1],[7007,1],[7027,1],[7031,1],[7035,1],[7175,1],[7255,1],[7523,1],[7891,1],[7903,1],[7911,1],[7967,1],[8163,1],[8231,1],[8471,1],[8487,1],[8535,1],[9607,1],[9879,1],[10495,1],[10743,1],[10895,1],[11023,1],[11151,1],[11295,1],[11463,1],[11615,1],[11767,1],[12071,1],[12439,1],[12463,1],[12831,1],[13087,1],[13231,1],[13399,1],[13551,1],[13991,1],[14143,1],[14159,1],[14183,1],[14255,1],[14391,1],[14471,1],[14999,1],[15127,1],[22207,1],[22831,1],[23039,1],[23775,1],[24799,1],[25551,1],[26239,1],[26287,1],[27231,1],[28031,1],[28735,1],[29119,1],[29519,1],[30015,1],[30959,1],[33375,1],[33663,1],[33759,1],[33823,1],[33983,1],[34847,1],[37439,1],[38207,1],[41311,1],[42303,1],[42815,1],[42975,1],[43295,1],[43487,1],[45151,1],[45983,1],[46271,1],[46591,1],[46623,1],[46783,1],[47039,1],[47327,1],[47679,1],[47999,1],[48063,1],[50079,1],[51327,1],[52383,1],[52639,1],[58719,1],[61727,1],[64447,1],[68927,1],[69311,1],[69503,1],[72767,1],[75263,1],[75775,1],[76543,1],[77631,1],[80511,1],[84991,1],[85439,1],[88447,1],[89727,1],[91583,1],[92095,1],[92607,1],[92671,1],[93247,1],[93439,1],[93887,1],[93951,1],[94527,1],[94847,1],[95935,1],[96255,1],[96767,1],[98879,1],[99711,1],[100223,1],[104831,1],[104959,1],[105727,1],[106367,1],[110335,1],[110463,1],[111231,1],[111743,1],[112063,1],[112319,1],[112447,1],[112895,1],[113407,1],[114047,1],[114431,1],[114879,1],[115007,1],[116159,1],[116799,2],[116863,1],[117439,1],[118015,1],[118271,1],[118335,1],[119935,1],[125887,1],[126719,1],[127487,1],[127551,1],[127999,1],[128127,1],[128383,1],[128639,1],[129407,1],[130111,1],[131711,1],[132351,1],[132479,1],[133375,1],[134143,1],[134527,1],[135167,1],[136191,1],[136959,1],[137343,1],[137727,1],[138495,1],[139135,1],[144255,1],[145023,1],[145407,2],[145663,1],[145791,1],[146303,3],[146943,1],[147327,1],[147583,1],[148095,1],[148479,1],[148735,1],[148991,1],[149631,1],[150143,1],[151295,1],[155519,1],[156415,1],[162175,1],[165375,1],[167935,1],[173055,1],[173567,1],[173823,1],[174719,1],[178943,1],[179455,1],[180351,1],[180735,1],[184319,1],[190847,1],[191359,2],[192127,1],[193023,1],[193407,2],[194047,1],[194175,1],[194943,1],[196095,1],[197247,1],[197503,1],[197759,1],[198911,1],[199679,1],[199935,1],[203519,1],[204287,1],[205055,1],[208639,2],[209023,1],[209663,1],[210559,1],[212223,1],[212607,1],[213247,1],[213631,1],[213887,2],[214143,1],[214399,2],[216447,1],[216703,1],[217087,1],[217471,1],[217983,1],[219903,1],[220031,1],[220799,1],[221439,1],[221823,1],[221951,1],[226559,1],[227327,1],[228479,1],[229375,1],[230271,1],[231295,1],[231423,1],[232063,1],[232319,1],[232447,1],[232575,1],[232703,1],[233087,1],[233343,1],[233983,1],[234751,1],[237567,1],[237823,1],[238335,1],[241151,1],[241407,1],[242047,1],[242943,1],[245247,1],[245375,1],[245503,1],[246399,1],[246783,1],[247167,1],[248575,1],[248703,1],[249343,1],[249599,2],[249727,1],[250111,1],[250367,1],[250623,1],[250751,1],[251007,1],[251135,1],[251519,1],[259199,1],[260095,1],[265471,1],[268799,1],[271615,1],[276479,1],[278015,1],[278271,1],[279039,1],[280575,1],[282623,1],[283135,1],[283903,1],[287999,1],[291839,1],[292607,1],[293375,1],[293887,1],[294911,1],[296703,1],[296959,1],[297215,1],[297471,1],[297727,2],[298495,1],[299007,1],[299775,2],[301311,1],[303615,1],[305663,1],[306431,1],[307199,1],[309759,2],[310783,1],[311551,1],[312063,1],[312831,1],[313343,1],[313599,1],[313855,2],[314111,1],[316415,1],[317183,1],[317439,1],[317695,2],[317951,1],[318975,1],[320511,2],[321279,1],[322303,1],[322559,1],[323327,1],[327423,1],[327679,1],[328447,1],[329471,1],[331007,1],[331775,1],[332287,1],[332543,1],[332799,1],[333055,1],[333311,1],[333567,1],[333823,1],[334335,1],[334847,1],[337663,1],[338431,1],[341247,1],[341503,1],[342015,1],[342271,1],[342783,1],[343551,1],[343807,1],[344575,1],[344831,1],[346111,1],[347647,1],[348415,2],[348927,1],[349183,1],[349439,2],[349951,2],[350207,1],[350463,2],[351231,1],[351743,1],[354559,1],[362751,1],[363775,1],[368895,1],[371711,1],[374783,1],[382463,1],[382719,1],[382975,1],[383231,1],[383999,1],[386047,1],[386815,1],[387583,1],[391679,1],[395007,1],[395519,1],[396287,1],[396799,1],[397311,1],[397567,1],[397823,1],[398079,1],[398591,1],[399359,1],[399615,1],[400127,1],[400639,2],[402687,1],[404735,1],[407295,1],[408063,1],[408831,1],[410367,1],[410879,1],[411647,1],[412415,1],[412671,1],[413183,1],[413439,2],[413695,2],[414207,1],[414463,1],[415231,1],[415743,1],[416511,1],[417023,1],[418047,1],[418815,1],[421119,1],[421375,1],[422655,2],[423423,2],[424703,1],[425471,1],[425727,1],[426239,1],[429055,2],[429823,1],[430335,1],[430591,1],[431359,1],[431871,2],[432383,1],[433151,1],[433919,2],[435455,1],[437247,1],[438015,1],[438783,1],[442623,1],[442879,1],[443903,1],[444927,1],[445183,1],[446463,1],[446975,1],[447487,2],[448511,2],[448767,1],[449279,2],[449791,1],[450047,1],[450303,1],[450559,1],[450815,1],[451839,2],[452351,1],[453119,1],[454143,1],[454655,1],[466175,1],[467199,1],[472319,1],[475391,1],[478463,1],[483839,1],[485375,1],[486399,1],[487423,1],[488191,1],[489983,1],[490239,1],[491519,1],[494591,1],[495103,1],[498175,1],[498943,1],[499711,1],[500223,1],[500479,1],[500991,2],[501759,1],[502271,2],[503039,1],[503807,1],[506111,1],[506367,1],[507391,1],[508415,1],[508671,1],[509695,1],[510975,1],[511487,1],[511743,1],[512767,1],[513023,1],[513279,1],[513535,1],[515327,1],[516095,1],[516351,1],[517119,2],[518143,1],[518911,1],[519423,1],[520191,1],[520959,1],[521727,1],[524287,1],[525311,1],[526335,1],[527359,2],[527871,2],[528383,1],[528895,3],[529407,2],[529919,2],[530431,2],[530943,1],[531455,2],[533503,1],[534015,1],[534527,1],[537599,1],[539647,1],[542719,1],[543231,1],[545279,1],[545791,1],[546303,3],[547839,2],[548351,1],[548863,1],[549375,1],[549887,1],[550911,1],[551935,1],[552447,1],[552959,3],[553471,3],[554495,3],[555007,1],[558079,1],[569343,1],[571391,1],[578559,1],[579071,1],[582143,1],[586751,1],[588799,1],[590847,1],[591359,1],[591871,1],[592895,1],[593407,1],[594431,1],[598015,1],[598527,1],[599039,2],[599551,1],[600063,1],[601087,1],[601599,1],[603135,1],[604159,2],[605183,2],[605695,1],[606207,1],[606719,1],[608767,1],[609791,2],[612351,3],[612863,1],[614399,1],[615423,1],[615935,2],[616959,1],[617471,1],[618495,2],[619007,2],[620031,2],[621055,1],[621567,1],[622591,1],[626175,1],[626687,1],[628223,2],[628735,2],[629247,3],[630271,3],[630783,3],[631295,2],[631807,1],[632831,1],[633343,2],[634879,1],[636927,1],[637439,1],[640511,1],[641535,1],[642047,1],[642559,1],[644095,1],[644607,1],[645119,1],[645631,2],[646655,1],[647167,1],[651263,2],[651775,1],[652287,3],[652799,1],[653311,4],[654335,2],[654847,2],[655359,1],[655871,1],[659967,1],[672767,1],[674303,1],[681983,1],[683007,1],[685567,1],[688639,1],[692735,1],[695295,1],[695807,1],[696319,1],[696831,1],[697343,2],[700415,1],[700927,1],[701439,1],[701951,1],[702463,2],[703487,1],[703999,2],[704511,1],[705023,1],[705535,1],[706047,1],[706559,2],[707583,1],[708607,1],[709631,1],[712191,1],[712703,1],[713215,2],[713727,1],[715775,2],[718335,2],[718847,1],[719359,1],[721919,2],[722431,1],[722943,2],[723455,1],[723967,1],[724479,1],[724991,1],[726527,1],[728063,3],[728575,2],[729087,1],[729599,2],[730111,1],[730623,2],[731647,1],[732671,1],[733695,2],[734207,2],[734719,1],[736255,1],[736767,1],[737279,1],[739839,1],[741375,2],[743423,1],[744959,2],[745471,2],[745983,3],[747007,2],[748031,1],[749055,1],[750079,1],[751615,1],[752127,1],[753151,1],[753663,2],[754687,2],[755711,1],[756223,2],[756735,2],[757247,3],[757759,1],[760319,1],[776703,1],[777215,1],[785919,1],[786431,1],[788479,1],[788991,1],[797183,1],[799743,1],[800255,3],[800767,1],[801279,1],[803327,1],[803839,1],[804351,2],[804863,3],[805375,2],[806399,4],[806911,2],[808447,1],[808959,1],[809471,2],[810495,1],[813055,1],[813567,1],[818687,3],[821247,1],[821759,1],[822271,1],[822783,1],[823807,1],[824319,1],[824831,2],[825343,1],[825855,2],[826367,3],[826879,1],[827391,1],[827903,1],[828415,1],[829439,1],[829951,1],[830975,2],[831487,2],[832511,2],[833023,1],[833535,1],[834047,1],[837119,1],[839679,1],[840191,1],[840703,1],[841215,1],[841727,1],[844799,3],[845823,1],[846335,3],[846847,3],[847359,1],[847871,1],[848895,2],[849407,2],[849919,2],[850431,1],[850943,2],[851967,2],[854015,2],[855039,1],[855551,3],[856063,1],[856575,1],[859135,1],[859647,1],[860159,2],[879615,1],[882175,1],[889343,1],[890367,1],[891391,1],[892415,1],[902655,1],[903167,1],[904191,3],[904703,1],[905215,1],[906239,1],[906751,2],[907263,3],[907775,2],[908287,3],[908799,2],[909311,5],[909823,1],[910335,2],[911359,1],[913407,1],[924671,3],[925183,1],[925695,1],[926719,1],[927231,1],[927743,3],[928255,3],[928767,2],[929279,3],[929791,2],[930303,3],[930815,3],[931327,1],[931839,3],[932351,1],[933375,1],[936959,1],[945663,2],[946175,1],[946687,1],[947199,1],[948223,3],[949247,3],[949759,2],[950271,3],[950783,3],[951295,2],[951807,4],[952319,1],[952831,1],[953343,2],[953855,2],[954367,1],[954879,3],[955391,1],[955903,1],[956415,2],[957439,1],[959999,1],[983039,1],[985087,1],[991231,1],[993279,1],[993791,1],[995839,1],[1006591,1],[1008639,3],[1009151,4],[1009663,4],[1010175,3],[1010687,3],[1011199,3],[1011711,4],[1012223,3],[1012735,2],[1013247,1],[1029631,1],[1030143,5],[1030655,3],[1031167,5],[1031679,3],[1032191,3],[1032703,4],[1033215,3],[1033727,2],[1034239,2],[1035263,1],[1037311,1],[1051647,7],[1052671,9],[1053695,11],[1054719,7],[1055743,3],[1056767,2],[1059839,2],[1068031,1],[1086463,1],[1088511,1],[1090559,1],[1096703,1],[1097727,1],[1099775,1],[1111039,1],[1137663,1],[1140735,1],[1153023,1],[1155071,1],[1156095,1],[1169407,1],[1188863,1],[1191935,1],[1196031,1],[1200127,1],[1201151,1],[1203199,1],[1216511,1],[1243135,1],[1251327,1],[1252351,1],[1258495,1],[1269759,1],[1270783,1],[1291263,1],[1298431,1],[1300479,1],[1303551,1],[1304575,1],[1306623,1],[1341439,1],[1351679,1],[1354751,1],[1358847,1],[1371135,1],[1372159,1],[1390591,1],[1391615,1],[1401855,1],[1405951,1],[1406975,2],[1407999,1],[1443839,1],[1453055,1],[1456127,1],[1482751,1],[1487871,1],[1489919,1],[1505279,1],[1506303,2],[1510399,1],[1511423,1],[1546239,1],[1553407,1],[1555455,1],[1587199,1],[1592319,1],[1605631,2],[1609727,1],[1613823,1],[1614847,1],[1649663,1],[1653759,1],[1654783,1],[1686527,1],[1695743,1],[1704959,1],[1705983,1],[1715199,1],[1717247,1],[1719295,1],[1755135,1],[1756159,1],[1783807,1],[1798143,1],[1803263,1],[1805311,1],[1820671,1],[1821695,1],[1822719,1],[1883135,1],[1901567,1],[1904639,1],[1927167,1],[1985535,1],[2003967,1],[2007039,1],[2084863,1],[2105343,1],[2109439,1],[2187263,1],[2201599,1],[2207743,1],[2301951,1],[2310143,1],[2400255,1]]}",
+        "seq": 8,
+        "received_utc": "2026-10-26T10:18:43.356515+00:00",
+        "received_monotonic": 14770.652187931,
+        "valid": true,
+        "pid": 305033,
+        "raw_log": "/tmp/oe-live-sandbox-jnee0tid/wrk2-305033.log"
+      },
+      "background": {
+        "events_per_sec": 4558.738668590047,
+        "covered_seconds": 5.002168899000026,
+        "whole_covered_seconds": 4.0,
+        "whole_events_per_sec": 4523.8525,
+        "measurement_seconds": 5.002168899000026,
+        "estimated_origin_monotonic": 14720.490049997,
+        "max_report_delivery_delay_seconds": 0.003925489998437115,
+        "alignment": "boundary-clipped overlap on background-intervals.jsonl",
+        "reason": null
+      },
+      "p99_ms": 1901.567,
+      "p95_ms": 1300.479,
+      "rps": 287.2753857406285,
+      "completion_fraction": 0.9575846191354284,
+      "errors": 0,
+      "eps": 4558.738668590047
+    }
+  ],
+  "quality": "complete",
+  "ended_utc": "2026-10-26T10:18:44.438675+00:00",
+  "ended_monotonic": 14771.730232613,
+  "kernel_final": {
+    "policy_id": "kernel.default",
+    "slice_us": null,
+    "sched_ext": "disabled"
+  },
+  "background_raw_points": [
+    {
+      "elapsed_seconds": 1.0,
+      "events_per_sec": 5929.53,
+      "raw_line": "[ 1s ] thds: 1 eps: 5929.53 lat (ms,95%): 0.22",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14721.491250614,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 2.0,
+      "events_per_sec": 5718.94,
+      "raw_line": "[ 2s ] thds: 1 eps: 5718.94 lat (ms,95%): 0.22",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14722.490101247,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 3.0,
+      "events_per_sec": 4276.29,
+      "raw_line": "[ 3s ] thds: 1 eps: 4276.29 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14723.490495273,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 4.0,
+      "events_per_sec": 4422.14,
+      "raw_line": "[ 4s ] thds: 1 eps: 4422.14 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14724.491816191,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 5.0,
+      "events_per_sec": 4655.99,
+      "raw_line": "[ 5s ] thds: 1 eps: 4655.99 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14725.493369689,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 6.0,
+      "events_per_sec": 4605.56,
+      "raw_line": "[ 6s ] thds: 1 eps: 4605.56 lat (ms,95%): 0.22",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14726.490938078,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 7.0,
+      "events_per_sec": 4362.67,
+      "raw_line": "[ 7s ] thds: 1 eps: 4362.67 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14727.490447334,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 8.0,
+      "events_per_sec": 4587.49,
+      "raw_line": "[ 8s ] thds: 1 eps: 4587.49 lat (ms,95%): 0.22",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14728.492388601,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 9.0,
+      "events_per_sec": 4484.51,
+      "raw_line": "[ 9s ] thds: 1 eps: 4484.51 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14729.490621175,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 10.0,
+      "events_per_sec": 4533.53,
+      "raw_line": "[ 10s ] thds: 1 eps: 4533.53 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14730.49005505,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 11.0,
+      "events_per_sec": 4719.93,
+      "raw_line": "[ 11s ] thds: 1 eps: 4719.93 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14731.490725983,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 12.0,
+      "events_per_sec": 4675.39,
+      "raw_line": "[ 12s ] thds: 1 eps: 4675.39 lat (ms,95%): 0.22",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14732.490636337,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 13.0,
+      "events_per_sec": 4528.79,
+      "raw_line": "[ 13s ] thds: 1 eps: 4528.79 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14733.490446315,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 14.0,
+      "events_per_sec": 4764.82,
+      "raw_line": "[ 14s ] thds: 1 eps: 4764.82 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14734.490928998,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 15.0,
+      "events_per_sec": 4575.06,
+      "raw_line": "[ 15s ] thds: 1 eps: 4575.06 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14735.490454902,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 16.0,
+      "events_per_sec": 4585.96,
+      "raw_line": "[ 16s ] thds: 1 eps: 4585.96 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14736.491101008,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 17.0,
+      "events_per_sec": 4532.07,
+      "raw_line": "[ 17s ] thds: 1 eps: 4532.07 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14737.490892813,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 18.0,
+      "events_per_sec": 4514.75,
+      "raw_line": "[ 18s ] thds: 1 eps: 4514.75 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14738.491178548,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 19.0,
+      "events_per_sec": 4565.06,
+      "raw_line": "[ 19s ] thds: 1 eps: 4565.06 lat (ms,95%): 0.22",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14739.490404164,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 20.0,
+      "events_per_sec": 4495.39,
+      "raw_line": "[ 20s ] thds: 1 eps: 4495.39 lat (ms,95%): 0.22",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14740.490190381,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 21.0,
+      "events_per_sec": 4415.89,
+      "raw_line": "[ 21s ] thds: 1 eps: 4415.89 lat (ms,95%): 0.22",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14741.490541887,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 22.0,
+      "events_per_sec": 4551.23,
+      "raw_line": "[ 22s ] thds: 1 eps: 4551.23 lat (ms,95%): 0.22",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14742.490612106,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 23.0,
+      "events_per_sec": 3811.42,
+      "raw_line": "[ 23s ] thds: 1 eps: 3811.42 lat (ms,95%): 0.26",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14743.490225552,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 24.0,
+      "events_per_sec": 4465.01,
+      "raw_line": "[ 24s ] thds: 1 eps: 4465.01 lat (ms,95%): 0.22",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14744.490478554,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 25.0,
+      "events_per_sec": 4492.75,
+      "raw_line": "[ 25s ] thds: 1 eps: 4492.75 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14745.490517219,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 26.0,
+      "events_per_sec": 4756.02,
+      "raw_line": "[ 26s ] thds: 1 eps: 4756.02 lat (ms,95%): 0.22",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14746.490052422,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 27.0,
+      "events_per_sec": 4533.64,
+      "raw_line": "[ 27s ] thds: 1 eps: 4533.64 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14747.490409355,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 28.0,
+      "events_per_sec": 4615.57,
+      "raw_line": "[ 28s ] thds: 1 eps: 4615.57 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14748.490482857,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 29.0,
+      "events_per_sec": 4582.71,
+      "raw_line": "[ 29s ] thds: 1 eps: 4582.71 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14749.490115853,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 30.0,
+      "events_per_sec": 4429.8,
+      "raw_line": "[ 30s ] thds: 1 eps: 4429.80 lat (ms,95%): 0.24",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14750.491428579,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 31.0,
+      "events_per_sec": 4258.25,
+      "raw_line": "[ 31s ] thds: 1 eps: 4258.25 lat (ms,95%): 0.24",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14751.491365185,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 32.0,
+      "events_per_sec": 4081.52,
+      "raw_line": "[ 32s ] thds: 1 eps: 4081.52 lat (ms,95%): 0.28",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14752.492319161,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 33.0,
+      "events_per_sec": 4335.64,
+      "raw_line": "[ 33s ] thds: 1 eps: 4335.64 lat (ms,95%): 0.24",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14753.490772043,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 34.0,
+      "events_per_sec": 3948.06,
+      "raw_line": "[ 34s ] thds: 1 eps: 3948.06 lat (ms,95%): 0.27",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14754.490322718,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 35.0,
+      "events_per_sec": 4107.35,
+      "raw_line": "[ 35s ] thds: 1 eps: 4107.35 lat (ms,95%): 0.25",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14755.493975487,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 36.0,
+      "events_per_sec": 4615.49,
+      "raw_line": "[ 36s ] thds: 1 eps: 4615.49 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14756.490049997,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 37.0,
+      "events_per_sec": 4501.73,
+      "raw_line": "[ 37s ] thds: 1 eps: 4501.73 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14757.490111665,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 38.0,
+      "events_per_sec": 4599.64,
+      "raw_line": "[ 38s ] thds: 1 eps: 4599.64 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14758.491448589,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 39.0,
+      "events_per_sec": 4611.01,
+      "raw_line": "[ 39s ] thds: 1 eps: 4611.01 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14759.492065506,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 40.0,
+      "events_per_sec": 4579.59,
+      "raw_line": "[ 40s ] thds: 1 eps: 4579.59 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14760.492451316,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 41.0,
+      "events_per_sec": 4678.12,
+      "raw_line": "[ 41s ] thds: 1 eps: 4678.12 lat (ms,95%): 0.22",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14761.490288232,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 42.0,
+      "events_per_sec": 4524.24,
+      "raw_line": "[ 42s ] thds: 1 eps: 4524.24 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14762.491343407,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 43.0,
+      "events_per_sec": 4623.36,
+      "raw_line": "[ 43s ] thds: 1 eps: 4623.36 lat (ms,95%): 0.24",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14763.493218622,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 44.0,
+      "events_per_sec": 4590.97,
+      "raw_line": "[ 44s ] thds: 1 eps: 4590.97 lat (ms,95%): 0.25",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14764.490163853,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 45.0,
+      "events_per_sec": 4351.22,
+      "raw_line": "[ 45s ] thds: 1 eps: 4351.22 lat (ms,95%): 0.24",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14765.49093108,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 46.0,
+      "events_per_sec": 4746.42,
+      "raw_line": "[ 46s ] thds: 1 eps: 4746.42 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14766.490706856,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 47.0,
+      "events_per_sec": 4581.28,
+      "raw_line": "[ 47s ] thds: 1 eps: 4581.28 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14767.491411379,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 48.0,
+      "events_per_sec": 4592.98,
+      "raw_line": "[ 48s ] thds: 1 eps: 4592.98 lat (ms,95%): 0.23",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14768.491167685,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 49.0,
+      "events_per_sec": 4440.93,
+      "raw_line": "[ 49s ] thds: 1 eps: 4440.93 lat (ms,95%): 0.24",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14769.492914363,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 50.0,
+      "events_per_sec": 4480.22,
+      "raw_line": "[ 50s ] thds: 1 eps: 4480.22 lat (ms,95%): 0.24",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14770.490623797,
+      "pid": 305035
+    },
+    {
+      "elapsed_seconds": 51.0,
+      "events_per_sec": 4444.34,
+      "raw_line": "[ 51s ] thds: 1 eps: 4444.34 lat (ms,95%): 0.24",
+      "raw_log": "/tmp/oe-live-sandbox-jnee0tid/sysbench-305035.log",
+      "received_monotonic": 14771.491426601,
+      "pid": 305035
+    }
+  ],
+  "agent_events": [],
+  "final_agent_phase": "disabled",
+  "controller_cpu_pct": 1.1543490629938662,
+  "summary": {
+    "p99_ms": 1760.255,
+    "p95_ms": 1300.479,
+    "rps": 293.7716572042846,
+    "completion_fraction": 0.9792388573476154,
+    "eps": 4558.738668590047,
+    "errors": 0
+  },
+  "observed_policy_counts": [
+    {
+      "policy_id": "kernel.default",
+      "slice_us": null,
+      "samples": 56
+    }
+  ]
+}

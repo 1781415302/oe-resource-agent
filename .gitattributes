@@ -1,0 +1,4 @@
+# Preserve archived experimental bytes used by provenance checks.
+experiments-data/** -text whitespace=cr-at-eol
+# Keep generated SVG path formatting consistent with the archived checksums.
+experiments-data/output/**/figures/*.svg -whitespace

@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "study_status": "complete",
+  "trials": 32,
+  "http_windows": 84,
+  "background_windows": 84,
+  "all_raw_p99_rps_eps_recomputed": true,
+  "same_workload_pids_within_blocks": true,
+  "identical_global_preferences": true,
+  "fixed_configuration_kernel_readbacks": true,
+  "decision_inputs_exclude_scene_and_history": true
+}

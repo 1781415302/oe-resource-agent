@@ -40,8 +40,8 @@ def _start_http(port):
 
 def main():
     registry = create_registry()
-    port_target = 18091
-    port_other = 18092
+    port_target = 18095
+    port_other = 18096
     evidence = {"schema_version": 1, "status": "running", "target_port": port_target, "other_port": port_other}
     s_target = None
     s_other = None
@@ -75,6 +75,12 @@ def main():
             stats_obs = status_obs["data"]["stats"]
             if stats_obs["target_packets"] < 5 or stats_obs["target_bytes"] < 200 or stats_obs["dropped_packets"] != 0:
                 raise RuntimeError(f"Unexpected eBPF stats in observe mode: {stats_obs}")
+
+            protected_drop = registry.call("network.ebpf.attach", {
+                "interface": "lo", "target_port": 18091, "drop_target": True})
+            evidence["protected_port_refusal"] = protected_drop
+            if protected_drop["ok"] or protected_drop.get("error", {}).get("code") != "PROTECTED_PORT_REFUSED":
+                raise RuntimeError("Protected business port was not refused")
 
             attached_drop = registry.call("network.ebpf.attach", {
                 "interface": "lo", "target_port": port_target, "drop_target": True})

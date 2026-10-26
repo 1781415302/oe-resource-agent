@@ -1,0 +1,18 @@
+[Unit]
+Description=openEuler Resource Agent Live Dashboard
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/oe-resource-agent
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 /root/oe-resource-agent/experiments/web_dashboard.py --host 127.0.0.1 --port 8899 --no-browser
+CPUAffinity=2
+Restart=on-failure
+RestartSec=3
+KillSignal=SIGINT
+KillMode=control-group
+TimeoutStopSec=20
+
+[Install]
+WantedBy=multi-user.target
