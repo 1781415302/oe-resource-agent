@@ -1,5 +1,5 @@
 param(
-    [string]$GuestHost = '172.26.1.3',
+    [string]$GuestHost = '192.168.200.130',
     [string]$GuestUser = 'root',
     [string]$KeyPath,
     [ValidateRange(1024, 65535)][int]$LocalPort = 8899,
@@ -8,11 +8,14 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
-if ($KeyPath) { $KeyPath = (Resolve-Path -LiteralPath $KeyPath).Path }
+if (-not $KeyPath) {
+    $workspaceRoot = Split-Path -Parent (Split-Path -Parent $projectRoot)
+    $KeyPath = Join-Path $workspaceRoot '.vm-access/openeuler_ed25519'
+}
+$KeyPath = (Resolve-Path -LiteralPath $KeyPath).Path
 $ssh = (Get-Command ssh -ErrorAction Stop).Source
 $sshOptions = @('-o', 'BatchMode=yes', '-o', 'ConnectTimeout=10',
-    '-o', 'StrictHostKeyChecking=yes')
-if ($KeyPath) { $sshOptions += @('-i', $KeyPath) }
+    '-o', 'StrictHostKeyChecking=yes', '-i', $KeyPath)
 $destination = "${GuestUser}@${GuestHost}"
 
 & $ssh @sshOptions $destination 'systemctl start oe-live-dashboard.service'
@@ -37,8 +40,7 @@ if (-not $ready) {
     $arguments = @('-N', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=10',
         '-o', 'StrictHostKeyChecking=yes', '-o', 'ExitOnForwardFailure=yes',
         '-o', 'ServerAliveInterval=30', '-o', 'ServerAliveCountMax=3',
-        '-L', "127.0.0.1:${LocalPort}:127.0.0.1:8899", $destination)
-    if ($KeyPath) { $arguments = @('-i', ('"' + $KeyPath + '"')) + $arguments }
+        '-i', ('"' + $KeyPath + '"'), '-L', "127.0.0.1:${LocalPort}:127.0.0.1:8899", $destination)
     $tunnel = Start-Process -FilePath $ssh -ArgumentList $arguments -WindowStyle Hidden -PassThru `
         -RedirectStandardError (Join-Path $stateDir 'dashboard-tunnel.stderr.log') `
         -RedirectStandardOutput (Join-Path $stateDir 'dashboard-tunnel.stdout.log')

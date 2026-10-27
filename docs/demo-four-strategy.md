@@ -16,7 +16,7 @@
 
 纯后台场景没有前台延迟，相关卡片显示无前台进程。切场景无需刷新，滚动曲线保留前后记录并标出场景分界；缺测位置断开，不伪造零延迟。后台吞吐在纯后台场景也继续绘制。旧窗口不会充当新场景卡片的当前数据。Cgroup、TC 网络扩展仍可独立操作；不需要展开完整对照。
 
-## 历史阈值版 Agent 的自主判断
+## 实时 Agent 的自主判断
 
 `oeagent/live_observe.py` 从实际 PID、启动时间、CPU 亲和性、`/proc/stat`、进程 CPU 计数、线程运行状态、调度等待、HTTP 探测、后台报告和完整 wrk2 窗口生成观测。`oeagent/live_agent.py` 只接受这些观测及独立全局目标，没有场景或历史赢家字段，也不读取历史测试文件。进程变化会作废正在进行的对比，但不会直接指定配置。
 
@@ -56,14 +56,14 @@
 | 频繁休眠唤醒 | 静态页面，8,000 RPS | 4 线程，每轮 PBKDF2 300 次迭代后休眠 2ms | 延迟并保护后台吞吐 | 8ms |
 | 较大工作集计算 | 静态页面，4,000 RPS | 2 线程，各反复散列 32MiB，总工作集 64MiB | 延迟达标后比较后台吞吐 | 8ms |
 
-这些目标仅用于下方可选完整对照，不会覆盖当前加权 Agent 的权重；不是已经测出的系统容量保证，也没有为任何场景指定获胜配置。工作集大小本身不能证明某一硬件上的缓存未命中率。突发生成器使用 CPU3；Nginx、请求计算服务和后台计算使用 CPU0；wrk2 使用 CPU1；控制服务使用 CPU2。
+这些目标仅用于下方可选完整对照，不会覆盖实时 Agent 的全局目标；不是已经测出的系统容量保证，也没有为任何场景指定获胜配置。工作集大小本身不能证明某一硬件上的缓存未命中率。突发生成器使用 CPU3；Nginx、请求计算服务和后台计算使用 CPU0；wrk2 使用 CPU1；控制服务使用 CPU2。
 
 sysbench 的 EPS 是计算事件/s，休眠唤醒负载的 EPS 是完成周期/s，工作集负载的 EPS 是完成散列/s。不同场景的 EPS 不能直接排序。突发请求的累计完成量和错误保存在独立原始日志中，不并入 wrk2 主流的 RPS 或错误计数。
 
 ## 可选：完整对照实验与历史报告
 
 1. 主界面切换到需要验证的场景，再展开下方“可选：完整对照实验与历史报告”。
-   完整对照使用上表中的实验目标；当前实时 Agent 使用独立的延迟/吞吐权重。
+   完整对照使用上表中的实验目标；“Agent 全局业务目标”只控制独立实时 Agent，两者分开显示。
 2. 选择重复轮次和每组完整窗口数。1 轮适合功能演示，2–3 轮提供更多对照；一次窗口不是一次独立进程重启实验。
 3. 点“比较当前场景四组配置”。测试会暂时关闭负载与扩展操作，防止比较期间改变条件；手动接管策略或切换场景会明确作废当前搜索。
 4. 观察每组内核状态、窗口数、实际 RPS、后台 EPS、错误、约束通过与否。测试不要求四组各赢一个场景。
@@ -135,4 +135,4 @@ taskset -c 2 python3 -u experiments/check_demo_tuning.py --repeats 1 --windows 2
 
 119 项通用和来宾相关测试通过（不含缺少 research 依赖的主机侧模块）。浏览器覆盖场景选择、目标设置、完整比较、报告查看/下载和缺失反馈回退；Cgroup 本次复测约 4.03:1，网络放行、丢包计数增加和恢复通过。
 
-队友环境的历史记录位于原交接包 `evidence/deployment-20261026/`：`demo-tuning-validation.json`、`demo-tuning-validation-summary.json`、`four-strategy-summary.md`、`independent-window-audit.json`、`four-strategy-actions-qa.json`、`four-strategy-extensions-qa.json`。报告含各次运行的代码来源摘要；测试矩阵与后续自动保护检查分别保留，历史数据不参与新搜索。
+本机记录位于项目上级 `deployment-20261026/`：`demo-tuning-validation.json`、`demo-tuning-validation-summary.json`、`four-strategy-summary.md`、`independent-window-audit.json`、`four-strategy-actions-qa.json`、`four-strategy-extensions-qa.json`。报告含各次运行的代码来源摘要；测试矩阵与后续自动保护检查分别保留，历史数据不参与新搜索。

@@ -2,12 +2,6 @@
 
 版本 0.2.0，GPL-2.0。面向 **openEuler 24.03 LTS-SP4（x86_64，自建内核 `6.6.0-scx`）** 的多维内核资源自治管控系统，协同控制 **`sched_ext` 可编程 CPU 调度器**、**Cgroup v1 CPU 权重隔离**、**eBPF TC 网络流量观测与熔断** 以及 **LSM 栈发现与 Capability 审计 + 用户态策略执行（nice/CPU 亲和性，`security.policy.enforce`）**。
 
-## 当前网页控制器
-
-网页默认使用[相对加权 Agent](docs/weighted-agent.md)：根据实时完整HDR p99与实际RPS/EPS，按延迟60%/吞吐40%的默认权重试用和比较默认调度、SCX 1ms、500μs与10ms配置。场景选择只改变负载，决策输入不含场景名或历史赢家；请求错误、反馈过期和内核异常仍保留保护。
-
-部署与Windows访问见[演示部署](docs/demo-setup.md)。队友环境的112次两轮试运行、原始数据与图表见[实验数据](experiments-data/README.md)。该结果包含负收益和明显波动，尚未在本机重跑。`./agent run` 仍使用原有Router/SLO/Profile机制。下文核心闭环与2026-10-24实验表描述原有CLI及历史版本。
-
 ---
 
 ## 核心能力
@@ -25,7 +19,7 @@
 
 ---
 
-## 历史实验结果汇总（2026-10-24）
+## 实验结果汇总
 
 完整实验设计、负载强度梯度与多资源定量消融数据详见 **[课程设计总结报告](docs/course-project-report.md)** 与 **[交互式 HTML 实验报告](docs/experiment-report.html)**：
 
@@ -82,22 +76,20 @@ bash build.sh
 ./agent run --profile nginx-wakeup-slo --duration 60
 ```
 
-### 启动网页演示
+### 启动真机实时交互沙盒与双通道示波器大屏（辅助交互工具，演示以录屏视频为准）
 
-在来宾安装 `scripts/oe-live-dashboard.service` 后，从Windows项目目录运行：
-
-```powershell
-pwsh -NoProfile -File .\scripts\start-dashboard.ps1
+```bash
+python3 experiments/web_dashboard.py --host 0.0.0.0 --port 8899
 ```
 
-浏览器访问 `http://127.0.0.1:8899/`。默认使用现有OpenSSH认证连接Hyper-V来宾；部署前先核对旧实例及固定负载端口，详见[部署与核验](docs/demo-setup.md)。
+浏览器访问 `http://<虚拟机IP>:8899/`，即可在线操控真实 `Nginx + wrk2 (25.6k RPS)`、`sysbench` 干扰注入、`SCX` BPF Map 热更新、25 秒一键全自动实况剧本、Cgroup 权重争用测试以及 eBPF 端口突发洪泛自动熔断。
 
 ---
 
 ## 验证与实验脚本清单
 
 ```bash
-# 1. 协议、策略、度量、网页与加权控制器全量测试（172 项；主机侧模块依赖 ../research）
+# 1. 离线确定性协议、策略、度量与多维自动协调器单元测试（103 项）
 python3 -m unittest discover -s tests -v
 
 # 2. 各子系统与端到端闭环真机验证
@@ -124,9 +116,6 @@ python3 experiments/run_demo.py
 - [课程设计总结报告（含架构、优化细节、6×4 矩阵与多维闭环实测）](docs/course-project-report.md)
 - [交互式 HTML 实验报告（N=5 周期 Mean±SD、负载梯度与多资源定量消融）](docs/experiment-report.html)
 - [版本变更记录（CHANGELOG.md）](CHANGELOG.md)
-- [网页部署与核验](docs/demo-setup.md)
-- [当前网页加权 Agent](docs/weighted-agent.md)
-- [两轮原始数据、统计与图表](experiments-data/README.md)
 - [真机实时交互沙盒与可视化大屏](docs/demo-dashboard.html)
 - [唤醒抢占专家与 BPF 调度优化说明](docs/wakeup-preemption.md)
 - [在线业务 SLO 反馈机制说明](docs/business-feedback.md)
