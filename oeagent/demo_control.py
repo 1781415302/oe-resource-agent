@@ -9,7 +9,7 @@ from dataclasses import asdict
 
 from . import demo_evidence
 from .business import align_background_intervals
-from .demo_tuning import SCENARIOS, STRATEGIES, StrategySearch
+from .demo_tuning import SCENARIOS, STRATEGIES, StrategySearch, scx_strategy_id, strategy_name, strategy_spec
 from .live_observe import LiveSampler
 
 
@@ -38,9 +38,10 @@ class DemoControl:
         snapshot = snapshot or self.backend.snapshot()
         if snapshot.get("policy_id") == "kernel.default":
             return "default"
-        return next((key for key, value in STRATEGIES.items()
-                     if value["slice_us"] == snapshot.get("slice_us")
-                     and value["wakeup_preempt"] == snapshot.get("wakeup_preempt")), "unknown")
+        slice_us = snapshot.get("slice_us")
+        if slice_us is None:
+            return "unknown"
+        return scx_strategy_id(slice_us, bool(snapshot.get("wakeup_preempt")))
 
     def _release_groups(self):
         # Only migrate the dashboard's own live processes from its own groups.
@@ -55,7 +56,7 @@ class DemoControl:
         self._auto_cgroup_pids = {"latency": [], "batch": []}
 
     def _apply_strategy(self, strategy_id):
-        spec = STRATEGIES[strategy_id]
+        spec = strategy_spec(strategy_id)
         current = self.backend.snapshot()
         if strategy_id == "default":
             if self.backend.process is not None:
@@ -260,7 +261,7 @@ class DemoControl:
         self.last_monitor_feedback = time.monotonic()
         self.tuning_seen = set()
         self.tuning_last_batch_end = None
-        self.choreography_stage = f"本次选择：{STRATEGIES[decision['strategy_id']]['label']} · {decision['reason']}"
+        self.choreography_stage = f"本次选择：{strategy_name(decision['strategy_id'])} · {decision['reason']}"
         self._log("[选择结果] " + self.choreography_stage, "ok" if decision["validated"] else "warn")
         if self.suite["running"]:
             self.suite["results"].append(report)
@@ -329,7 +330,7 @@ class DemoControl:
             self.tuning.begin(time.monotonic(), context)
             self.tuning.current["kernel_snapshot"] = snapshot
             self.tuning_last_batch_end = None
-            self._log(f"[试运行 {self.tuning.index + 1}/{len(self.tuning.plan)}] {STRATEGIES[strategy_id]['label']}，预热 5 秒后采集。", "info")
+            self._log(f"[试运行 {self.tuning.index + 1}/{len(self.tuning.plan)}] {strategy_name(strategy_id)}，预热 5 秒后采集。", "info")
         context = self._measurement_context()
         if context != self.tuning.current["context"]:
             raise RuntimeError("测试期间负载、进程身份或策略版本发生变化，结果已作废")
@@ -343,7 +344,7 @@ class DemoControl:
         if self.tuning_running:
             current = self.tuning.current
             self.choreography_stage = (f"{self.scenario['label']} · {self.tuning.index + 1}/{len(self.tuning.plan)} 组 · "
-                f"{STRATEGIES[current['strategy_id']]['label']} · {len(current['windows'])}/{self.tuning.required_windows} 个完整窗口") if current else "准备下一组配置"
+                f"{strategy_name(current['strategy_id'])} · {len(current['windows'])}/{self.tuning.required_windows} 个完整窗口") if current else "准备下一组配置"
 
     def _step_network(self):
         if not self.auto_agent:

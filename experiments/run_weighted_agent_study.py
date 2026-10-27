@@ -21,7 +21,7 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from oeagent.business import align_background_intervals
-from oeagent.demo_tuning import SCENARIOS, STRATEGIES
+from oeagent.demo_tuning import SCENARIOS, STRATEGIES, strategy_spec
 from oeagent.observe import process_snapshot
 
 POLICIES = [*STRATEGIES, "agent"]
@@ -49,7 +49,7 @@ def control(action, **fields):
 
 
 def set_policy(policy):
-    spec = STRATEGIES[policy]
+    spec = strategy_spec(policy)
     return control("set_policy", policy="default" if policy == "default" else "scx",
                    slice_us=spec["slice_us"], wakeup_preempt=spec["wakeup_preempt"])
 
@@ -126,7 +126,7 @@ def trial(scenario_id, policy, block, position, count, timeout):
         if not snap["uniform_probes"]:
             raise RuntimeError("Experiment sampling settings changed")
         if policy != "agent":
-            spec = STRATEGIES[policy]
+            spec = strategy_spec(policy)
             kernel = snap["kernel_snapshot"]
             assert kernel.get("slice_us") == spec["slice_us"]
             assert kernel.get("wakeup_preempt", False) == spec["wakeup_preempt"]

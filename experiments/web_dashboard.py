@@ -26,7 +26,7 @@ import webbrowser
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
-from oeagent.demo_tuning import SCENARIOS, STRATEGIES
+from oeagent.demo_tuning import SCENARIOS, STRATEGIES, SLICE_MAX_US, SLICE_MIN_US, scx_strategy_id, strategy_spec
 from oeagent.demo_control import DemoControl
 from oeagent.weighted_agent import AgentWeights, WeightedAgent
 from oeagent.live_observe import LiveSampler
@@ -801,14 +801,16 @@ class LiveSandbox(DemoControl):
                     if payload.get("policy", "default") == "default":
                         strategy_id = "default"
                     else:
-                        strategy_id = next((key for key, spec in STRATEGIES.items()
-                            if spec["slice_us"] == payload.get("slice_us", 1000)
-                            and spec["wakeup_preempt"] == payload.get("wakeup_preempt", True)), None)
-                        if strategy_id is None:
-                            raise ValueError("只允许四组已声明的调度配置")
+                        slice_us = payload.get("slice_us", 1000)
+                        preempt = payload.get("wakeup_preempt", True)
+                        if type(slice_us) is not int or type(preempt) is not bool:
+                            raise ValueError("时间片需要整数微秒，抢占开关需要布尔值")
+                        if not SLICE_MIN_US <= slice_us <= SLICE_MAX_US:
+                            raise ValueError(f"时间片需要落在 {SLICE_MIN_US}µs–{SLICE_MAX_US}µs 的可验证范围")
+                        strategy_id = scx_strategy_id(slice_us, preempt)
                     self._cancel_search("手动接管，旧测试已停止", restore=False)
                     snapshot = self._apply_strategy(strategy_id)
-                    self._log(f"[手动配置] {STRATEGIES[strategy_id]['label']}，map_id={snapshot.get('map_id')}，generation={snapshot.get('generation')}", "info")
+                    self._log(f"[手动配置] {strategy_spec(strategy_id)['label']}，map_id={snapshot.get('map_id')}，generation={snapshot.get('generation')}", "info")
                     return {"ok": True}
                 if action in ("toggle_traffic", "toggle_sysbench"):
                     result = self._handle_control(payload)

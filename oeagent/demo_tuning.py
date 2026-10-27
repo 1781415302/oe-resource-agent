@@ -5,6 +5,7 @@ selection uses the measurements taken during that search only.
 """
 from copy import deepcopy
 import math
+import re
 import statistics
 
 
@@ -14,6 +15,54 @@ STRATEGIES = {
     "scx-500us": {"label": "SCX 500μs + 唤醒抢占", "slice_us": 500, "wakeup_preempt": True},
     "scx-10ms": {"label": "SCX 10ms 无抢占", "slice_us": 10000, "wakeup_preempt": False},
 }
+
+# The four named configurations stay the manual/panel set. The live Agent may
+# also pick any value in this range: the native loader validates
+# 100us <= slice <= 20ms and 20ms is the kernel's own maximum slice, so every
+# value the Agent computes stays inside the bounds the loader accepts.
+SLICE_MIN_US = 100
+SLICE_MAX_US = 20000
+_PARAMETRIC = re.compile(r"scx-u(\d+)p([01])")
+
+
+def slice_text(slice_us):
+    if slice_us < 1000:
+        return f"{slice_us}μs"
+    return f"{slice_us // 1000}ms" if slice_us % 1000 == 0 else f"{slice_us / 1000:g}ms"
+
+
+def strategy_label(slice_us, wakeup_preempt):
+    return f"SCX {slice_text(slice_us)} + {'唤醒抢占' if wakeup_preempt else '无抢占'}"
+
+
+def scx_strategy_id(slice_us, wakeup_preempt):
+    """Named id when this value already has one, otherwise a stable parametric id."""
+    for key, spec in STRATEGIES.items():
+        if spec["slice_us"] == slice_us and spec["wakeup_preempt"] == bool(wakeup_preempt):
+            return key
+    return f"scx-u{int(slice_us)}p{int(bool(wakeup_preempt))}"
+
+
+def strategy_spec(strategy_id):
+    """Resolve a named or parametric (scx-u<slice>p<0|1>) configuration."""
+    if strategy_id in STRATEGIES:
+        return dict(STRATEGIES[strategy_id])
+    match = _PARAMETRIC.fullmatch(strategy_id or "")
+    if not match:
+        raise ValueError(f"未知调度配置：{strategy_id}")
+    slice_us, preempt = int(match.group(1)), match.group(2) == "1"
+    if not SLICE_MIN_US <= slice_us <= SLICE_MAX_US:
+        raise ValueError(f"时间片需要落在 {SLICE_MIN_US}µs–{SLICE_MAX_US}µs 的可验证范围")
+    return {"label": strategy_label(slice_us, preempt), "slice_us": slice_us,
+            "wakeup_preempt": preempt, "id": strategy_id}
+
+
+def strategy_name(strategy_id):
+    """Display label for any resolvable id, tolerant of an unknown snapshot."""
+    try:
+        return strategy_spec(strategy_id)["label"]
+    except (ValueError, TypeError):
+        return str(strategy_id)
 
 SCENARIOS = {
     "service": {"label": "纯网页服务", "description": "Nginx 小静态页面；无后台争抢，验证专用策略是否有必要。",

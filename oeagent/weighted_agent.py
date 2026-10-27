@@ -3,6 +3,7 @@ from dataclasses import asdict, dataclass
 import math
 import statistics
 
+from .demo_tuning import scx_strategy_id, strategy_name, strategy_spec
 from .live_agent import LiveAgent, Observation
 
 
@@ -26,6 +27,9 @@ class Timing:
     trial_seconds: float = 8.
     max_trial_seconds: float = 24.
     retry_seconds: float = 30.
+    # Bounded compass search: one measured starting value plus at most this many
+    # evaluated points in total. Not a performance target, only a budget.
+    max_trial_points: int = 2
 
 
 def weighted_score(reference, measured, weights):
@@ -62,6 +66,18 @@ def weighted_score(reference, measured, weights):
 
 
 class WeightedAgent(LiveAgent):
+    # Search bounds for the slice value the Agent computes itself. They match
+    # the range the native loader can actually verify (100us-20ms); the lower
+    # practical bound keeps per-schedule overhead from dominating, and above
+    # 4ms the monitored frontend cannot get a short enough wait for a measured
+    # start to be useful. Neither number is a performance target.
+    SEARCH_MIN_US = 150
+    SEARCH_MAX_US = 4000
+    BACKGROUND_SLICE_US = 10000
+    # Wakeup preemption is a searched bit, not a constant: the native loader
+    # takes it as a separate flag, and whether it pays off depends on how much
+    # the frontend queues behind the background work.
+
     def __init__(self, weights=None):
         # Inherited utilities use only timing fields. No p99/EPS threshold exists.
         super().__init__(Timing())
@@ -70,6 +86,7 @@ class WeightedAgent(LiveAgent):
         self.measured = {}
         self.last_valid = None
         self.last_context = None
+        self.search = {"points": [], "done": False, "first": None}
         self.reason = "等待实时数据，按相对延迟与吞吐加权比较"
 
     def reset(self, reason="重新观察当前数据"):
@@ -78,6 +95,7 @@ class WeightedAgent(LiveAgent):
         self.measured = {}
         self.last_valid = None
         self.last_context = None
+        self.search = {"points": [], "done": False, "first": None}
 
     def configure(self, weights):
         self.weights = weights
@@ -118,6 +136,7 @@ class WeightedAgent(LiveAgent):
             return None
         previous = self.measured[trial["from"]]["score"]
         self.measured[observation.strategy] = {"score": score, "metrics": current, "measured_at": observation.now}
+        self._record_point(observation.strategy, score)
         # This 2% margin is an anti-flapping tolerance, not an SLO.
         keep = score >= previous*1.02 or (observation.strategy == "default" and score >= previous*.99)
         if not keep:
@@ -205,39 +224,129 @@ class WeightedAgent(LiveAgent):
             self.measured = {observation.strategy: {"score": 100., "metrics": summary, "measured_at": observation.now}}
             self.blocked_until.clear()
             self.last_context = observation.now
-        if not observation.frontend_present:
-            order = ["scx-10ms", "default", "scx-1ms", "scx-500us"]
-        elif summary["cpu_busy_pct"] >= 70 and (summary["wait_pct"] or 0) >= 25:
-            order = ["scx-1ms", "scx-500us", "default", "scx-10ms"]
-        else:
-            order = ["default", "scx-1ms", "scx-500us", "scx-10ms"]
-        target = next((p for p in order if p != observation.strategy and p not in self.measured
-                       and self.blocked_until.get(p, 0) <= observation.now), None)
-        if target is None and current_score is not None:
-            alternatives = [(p, r) for p, r in self.measured.items() if p != observation.strategy
-                            and self.blocked_until.get(p, 0) <= observation.now
-                            and r["score"] >= current_score*1.05]
-            if alternatives:
-                target = max(alternatives, key=lambda item:item[1]["score"])[0]
+            self.search = {"points": [], "done": False, "first": None}
+        target = self._next_probe(observation)
         if target is None:
-            self.phase, self.reason = "holding", "已比较本轮候选，保留加权收益较好的配置"
+            self.phase = "holding"
+            self.reason = self._holding_reason()
             self.proposal, self.confirmations = None, 0
             return None
         if target != self.proposal:
             self.proposal, self.confirmations = target, 1
         else:
             self.confirmations += 1
-        self.phase, self.reason = "confirming", f"连续确认后试用 {target}，依据实测加权分决定保留"
+        self.phase, self.reason = "confirming", f"连续确认后试用 {strategy_name(target)}，依据实测加权分决定保留"
         if self.confirmations < self.goals.confirmations or observation.now-self.last_change < self.goals.min_residence:
             return None
         action = self._action(target, self.reason, kind="trial", baseline=self.reference)
         action["trial_kind"] = "weighted"
         return action
 
+    # ---- slice search ---------------------------------------------------- #
+    def _next_probe(self, observation):
+        """The next configuration, computed from measurements rather than a menu.
+
+        First point: a quarter of the frontend's measured runqueue wait, with
+        wakeup preemption on.
+
+        Second point, chosen by what the first measurement showed:
+          * if the first point beat the reference (score > 100), halve its slice.
+            The direction that helped is "shorter", so that is where the only
+            remaining probe goes. Measured: flipping preemption instead lost in
+            every run (700us 149.1 -> 132.0, 750us 257.4 -> 222.1).
+          * if it did not beat the reference, the slice direction is unknown and
+            the cheaper orthogonal test is the other preemption setting.
+
+        With a larger budget, later points take a geometric step (x0.8 or x1.25)
+        on the best slice. The first value is frozen once computed so the
+        confirmation counter sees a stable proposal. Every keep/reject decision
+        still uses the relative weighted score; these values only decide where to
+        look next.
+        """
+        if self.search["done"]:
+            return None
+        points = self.search["points"]
+        if not points:
+            if self.search.get("first") is None:
+                self.search["first"] = self._probe_strategy()
+            return self.search["first"]
+        best = max(points, key=lambda p: p["score"])
+        if len(points) == 1:
+            if best["score"] > 100:
+                value = max(self.SEARCH_MIN_US, self._quantize(best["slice_us"] * 0.5))
+                target = scx_strategy_id(value, best["preempt"])
+            else:
+                target = scx_strategy_id(best["slice_us"], not best["preempt"])
+            if any(p["strategy"] == target for p in points):
+                self.search["done"] = True
+                return None
+            return target
+        factor = 0.8 if best["score"] > 100 else 1.25
+        value = self._quantize(best["slice_us"] * factor)
+        value = max(self.SEARCH_MIN_US, min(self.SEARCH_MAX_US, value))
+        if any(abs(p["slice_us"] - value) < 25 for p in points):
+            self.search["done"] = True
+            return None
+        return scx_strategy_id(value, best["preempt"])
+
+    def _probe_strategy(self):
+        recent = list(self.samples)[-3:]
+        if not recent:
+            return None
+        if not recent[-1].frontend_present:
+            # No monitored frontend means no latency term; a long, non-preempting
+            # slice is the only defensible starting point for pure background.
+            return scx_strategy_id(self.BACKGROUND_SLICE_US, False)
+        waits = [o.avg_wait_us for o in recent if o.avg_wait_us]
+        if not waits:
+            return None
+        value = self._quantize(statistics.median(waits) / 4)
+        return scx_strategy_id(max(self.SEARCH_MIN_US, min(self.SEARCH_MAX_US, value)), True)
+
+    @staticmethod
+    def _quantize(value):
+        # One step size keeps every computed value explainable and repeatable.
+        return int(round(value / 50)) * 50
+
+    def _record_point(self, strategy_id, score):
+        try:
+            spec = strategy_spec(strategy_id)
+        except (ValueError, TypeError):
+            return
+        slice_us = spec.get("slice_us")
+        if slice_us is None:
+            return
+        if any(p["strategy"] == strategy_id for p in self.search["points"]):
+            return
+        self.search["points"].append({"strategy": strategy_id, "slice_us": slice_us,
+                                      "preempt": bool(spec["wakeup_preempt"]), "score": float(score)})
+        if len(self.search["points"]) >= self.goals.max_trial_points:
+            self.search["done"] = True
+
+    def _holding_reason(self):
+        points = self.search["points"]
+        if not points:
+            return "尚无可用的排队实测，保持当前配置并继续观察"
+        best = max(points, key=lambda p: p["score"])
+        return (f"本次搜索已用 {len(points)} 个探测点，保持最优点 "
+                f"{strategy_name(best['strategy'])}（加权分 {best['score']:.2f}）")
+
+    def chosen(self):
+        """The parameter the Agent settled on, in user-facing terms."""
+        points = self.search["points"]
+        if not points:
+            return None
+        best = max(points, key=lambda p: p["score"])
+        return {"strategy": best["strategy"], "label": strategy_name(best["strategy"]),
+                "slice_us": best["slice_us"], "wakeup_preempt": best["preempt"],
+                "weighted_score": round(best["score"], 2),
+                "probed_points": len(points), "budget": self.goals.max_trial_points}
+
     def status(self):
         result = super().status()
         result.pop("goals", None)
         result.update(weights=asdict(self.weights), measured_configurations=self.measured,
                       reference=self.reference, selection="relative_weighted_score", performance_targets=None,
-                      latency_score_source="complete_HDR_window_p99", timing=asdict(self.goals))
+                      latency_score_source="complete_HDR_window_p99", timing=asdict(self.goals),
+                      chosen=self.chosen())
         return result
