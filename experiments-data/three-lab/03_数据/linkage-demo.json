@@ -1,0 +1,566 @@
+{
+  "timestamp": "2026-10-26T22:06:23Z",
+  "profile": "profiles/nginx-multi-auto.json",
+  "all_passed": true,
+  "stages": {
+    "stage1_service_only": {
+      "description": "仅前台 Nginx 服务运行，无后台批处理争抢，受控端口无异常洪泛",
+      "policy_id": "kernel.default",
+      "sched_ext": "disabled",
+      "plugins_status": {
+        "enabled": true,
+        "lsm_audited_count": 1,
+        "lsm_enforced_count": 0,
+        "cgroup": {
+          "enabled": true,
+          "active": false,
+          "latency_group": "auto_latency",
+          "batch_group": "auto_batch",
+          "latency_shares": 4096,
+          "batch_shares": 1024,
+          "latency_pids": [],
+          "batch_pids": []
+        },
+        "ebpf": {
+          "enabled": true,
+          "attached": true,
+          "target_port": 18095,
+          "drop_target": false,
+          "threshold_pps": 20.0,
+          "last_observed_pps": 0.0,
+          "hold_remaining": 0
+        }
+      },
+      "ebpf_kernel_status": {
+        "active": true,
+        "interface": "lo",
+        "config": {
+          "target_port": 18095,
+          "drop_target": 0
+        },
+        "stats": {
+          "total_packets": 162873,
+          "total_bytes": 189345774,
+          "target_packets": 12,
+          "target_bytes": 1044,
+          "dropped_packets": 0
+        }
+      },
+      "monitor_port_probe": {
+        "ok": true,
+        "status_code": 200,
+        "body_len": 2,
+        "latency_ms": 1.032
+      },
+      "checks": {
+        "cpu_stays_default": true,
+        "lsm_audited_nginx": true,
+        "cgroup_inactive_when_no_contention": true,
+        "ebpf_auto_attached_observe": true,
+        "monitor_port_reachable": true
+      }
+    },
+    "stage2_mixed_contention": {
+      "description": "注入后台 sysbench 算力争用，Agent 自动审计新进程、自动创建并迁入 4096:1024 Cgroup、自动切入 SCX 1ms+抢占",
+      "policy_id": "scx.slice",
+      "slice_us": 1000,
+      "wakeup_preempt": true,
+      "sched_ext": "enabled",
+      "plugins_status": {
+        "enabled": true,
+        "lsm_audited_count": 2,
+        "lsm_enforced_count": 1,
+        "cgroup": {
+          "enabled": true,
+          "active": true,
+          "latency_group": "auto_latency",
+          "batch_group": "auto_batch",
+          "latency_shares": 4096,
+          "batch_shares": 1024,
+          "latency_pids": [
+            23231
+          ],
+          "batch_pids": [
+            23245
+          ]
+        },
+        "ebpf": {
+          "enabled": true,
+          "attached": true,
+          "target_port": 18095,
+          "drop_target": false,
+          "threshold_pps": 20.0,
+          "last_observed_pps": 0.0,
+          "hold_remaining": 0
+        }
+      },
+      "kernel_cgroup_inspect": {
+        "auto_latency": {
+          "group": "auto_latency",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/auto_latency",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 4096,
+          "procs": [
+            23231
+          ]
+        },
+        "auto_batch": {
+          "group": "auto_batch",
+          "path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/auto_batch",
+          "cgroup_version": 1,
+          "file": "cpu.shares",
+          "value": 1024,
+          "procs": [
+            23245
+          ]
+        }
+      },
+      "checks": {
+        "cpu_switched_to_scx": true,
+        "lsm_audited_both_roles": true,
+        "cgroup_auto_isolated": true,
+        "cgroup_weights_configured": true,
+        "cgroup_procs_verified_under_scx": true
+      }
+    },
+    "stage3_ebpf_anomaly_and_recovery": {
+      "description": "受控端口 18095 遭遇高频请求冲击，Agent 自动触发 eBPF TC_ACT_SHOT 丢包熔断，冲击停止冷却后自动恢复放行",
+      "when_isolated": {
+        "ebpf_plugin_status": {
+          "enabled": true,
+          "attached": true,
+          "target_port": 18095,
+          "drop_target": true,
+          "threshold_pps": 20.0,
+          "last_observed_pps": 310.76,
+          "hold_remaining": 2
+        },
+        "ebpf_kernel_stats_before_probe": {
+          "total_packets": 530571,
+          "total_bytes": 616543944,
+          "target_packets": 348,
+          "target_bytes": 30276,
+          "dropped_packets": 0
+        },
+        "ebpf_kernel_stats_after_probe": {
+          "total_packets": 582393,
+          "total_bytes": 676793287,
+          "target_packets": 349,
+          "target_bytes": 30350,
+          "dropped_packets": 1
+        },
+        "blocked_port_18095_probe": {
+          "ok": false,
+          "error": "URLError",
+          "latency_ms": 501.214
+        },
+        "foreground_nginx_18086_healthy": {
+          "ok": true,
+          "status_code": 200,
+          "body_len": 4096,
+          "latency_ms": 0.486
+        }
+      },
+      "after_cooldown_recovery": {
+        "ebpf_plugin_status": {
+          "enabled": true,
+          "attached": true,
+          "target_port": 18095,
+          "drop_target": false,
+          "threshold_pps": 20.0,
+          "last_observed_pps": 0.0,
+          "hold_remaining": 0
+        },
+        "recovered_port_18095_probe": {
+          "ok": true,
+          "status_code": 200,
+          "body_len": 2,
+          "latency_ms": 0.673
+        }
+      },
+      "checks": {
+        "ebpf_auto_switched_to_drop": true,
+        "probe_blocked_by_tc_act_shot": true,
+        "foreground_nginx_unharmed": true,
+        "dropped_packets_incremented": true,
+        "ebpf_auto_recovered_after_cooldown": true,
+        "probe_restored_after_recovery": true
+      }
+    },
+    "stage4_recovery_and_cleanup": {
+      "description": "后台批处理退出后，Agent 自动卸载 SCX 恢复 kernel.default，并将 Nginx 自动迁回根 Cgroup，退出时清理 eBPF 钩子",
+      "policy_id": "kernel.default",
+      "sched_ext": "disabled",
+      "plugins_status": {
+        "enabled": true,
+        "lsm_audited_count": 2,
+        "lsm_enforced_count": 1,
+        "cgroup": {
+          "enabled": true,
+          "active": false,
+          "latency_group": "auto_latency",
+          "batch_group": "auto_batch",
+          "latency_shares": 4096,
+          "batch_shares": 1024,
+          "latency_pids": [],
+          "batch_pids": []
+        },
+        "ebpf": {
+          "enabled": true,
+          "attached": true,
+          "target_port": 18095,
+          "drop_target": false,
+          "threshold_pps": 20.0,
+          "last_observed_pps": 0.0,
+          "hold_remaining": 0
+        }
+      },
+      "kernel_cgroup_after_release": {
+        "auto_latency_procs": [],
+        "auto_batch_procs": []
+      },
+      "ebpf_after_agent_stop": {
+        "active": false,
+        "interface": "lo",
+        "config": null,
+        "stats": null
+      },
+      "checks": {
+        "cpu_rolled_back_to_default": true,
+        "cgroup_auto_released": true,
+        "ebpf_detached_on_shutdown": true
+      }
+    },
+    "stage5_cfs_cgroup_isolation_effect": {
+      "description": "在 kernel.default (CFS) 模式下，Agent 自动识别单核争抢并下发 4096:1024 Cgroup 权重，实测前台算力占比提升至 ~80%",
+      "latency_shares": 4096,
+      "batch_shares": 1024,
+      "latency_ticks": 137,
+      "batch_ticks": 35,
+      "latency_cpu_share_pct": 79.7,
+      "measured_ratio": 3.91,
+      "expected_ratio": 4.0,
+      "checks": {
+        "ratio_matches_4_to_1": true
+      }
+    }
+  },
+  "event_timeline": [
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:08.856427+00:00",
+      "monotonic": 4956.19467451,
+      "event": "agent_started",
+      "profile": {
+        "schema_version": 1,
+        "name": "nginx-multi-resource-auto",
+        "selectors": [
+          {
+            "role": "latency",
+            "comm": [
+              "nginx"
+            ]
+          },
+          {
+            "role": "batch",
+            "comm": [
+              "sysbench"
+            ]
+          }
+        ],
+        "sample_seconds": 1.0,
+        "lease_seconds": 15,
+        "controller_cpu": 2,
+        "policy": {
+          "latency_slice_us": 1000,
+          "balanced_slice_us": 4000,
+          "batch_slice_us": 20000,
+          "confirmations": 2,
+          "residence_seconds": 3.0,
+          "batch_active_cpu_percent": 10.0,
+          "latency_switches_per_sec": 20.0,
+          "latency_wait_fraction": 0.05,
+          "wakeup_preempt": true
+        },
+        "plugins": {
+          "enabled": true,
+          "cgroup_enabled": true,
+          "latency_group": "auto_latency",
+          "batch_group": "auto_batch",
+          "latency_shares": 4096,
+          "batch_shares": 1024,
+          "ebpf_enabled": true,
+          "monitor_port": 18095,
+          "drop_threshold_pps": 20.0,
+          "drop_hold_windows": 2,
+          "lsm_audit_enabled": true
+        },
+        "calibration_status": "validated_multi_resource_auto_orchestration",
+        "performance_claim": null
+      },
+      "dry_run": false,
+      "agent_version": "0.2.0",
+      "python_cache_mode": "checked_hash",
+      "kernel": "6.6.0-scx",
+      "mode": "adaptive",
+      "fixed_slice_us": null,
+      "profile_sha256": "251291507b536511ea36171e9f5c30af60afafab52f57423fd46c39944232887"
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:09.864583+00:00",
+      "monotonic": 4957.202821537,
+      "event": "plugin_security_audited",
+      "pid": 23231,
+      "start_ticks": 495608,
+      "roles": [
+        "latency"
+      ],
+      "audit": {
+        "pid": 23231,
+        "comm": "nginx",
+        "lsm_stack": [
+          "lockdown",
+          "capability",
+          "yama",
+          "selinux",
+          "bpf"
+        ],
+        "lsm_label": "unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023\u0000",
+        "no_new_privs": false,
+        "seccomp_mode": 0,
+        "cap_eff_hex": "000001ffffffffff",
+        "has_cap_sys_admin": true,
+        "has_cap_net_admin": true,
+        "cgroups": "13:pids:/system.slice/sshd.service\n12:rdma:/\n11:net_cls,net_prio:/\n10:hugetlb:/\n9:perf_event:/\n8:devices:/system.slice/sshd.service\n7:blkio:/\n6:cpuset:/\n5:freezer:/\n4:memory:/system.slice/sshd.service\n3:misc:/\n2:cpu,cpuacct:/\n1:name=systemd:/system.slice/sshd.service"
+      }
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:09.877876+00:00",
+      "monotonic": 4957.216158386,
+      "event": "plugin_ebpf_attached",
+      "mode": "observe",
+      "interface": "lo",
+      "target_port": 18095,
+      "drop_target": false,
+      "dry_run": false
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:11.894438+00:00",
+      "monotonic": 4959.232672715,
+      "event": "plugin_security_audited",
+      "pid": 23245,
+      "start_ticks": 495880,
+      "roles": [
+        "batch"
+      ],
+      "audit": {
+        "pid": 23245,
+        "comm": "sysbench",
+        "lsm_stack": [
+          "lockdown",
+          "capability",
+          "yama",
+          "selinux",
+          "bpf"
+        ],
+        "lsm_label": "unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023\u0000",
+        "no_new_privs": false,
+        "seccomp_mode": 0,
+        "cap_eff_hex": "000001ffffffffff",
+        "has_cap_sys_admin": true,
+        "has_cap_net_admin": true,
+        "cgroups": "13:pids:/system.slice/sshd.service\n12:rdma:/\n11:net_cls,net_prio:/\n10:hugetlb:/\n9:perf_event:/\n8:devices:/system.slice/sshd.service\n7:blkio:/\n6:cpuset:/\n5:freezer:/\n4:memory:/system.slice/sshd.service\n3:misc:/\n2:cpu,cpuacct:/\n1:name=systemd:/system.slice/sshd.service"
+      }
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:11.894744+00:00",
+      "monotonic": 4959.232978841,
+      "event": "plugin_security_enforced",
+      "pid": 23245,
+      "start_ticks": 495880,
+      "roles": [
+        "batch"
+      ],
+      "enforcement": {
+        "pid": 23245,
+        "comm": "sysbench",
+        "start_ticks": 495880,
+        "enforced": true,
+        "nice": 15,
+        "allowed_cpus_before": [
+          0
+        ],
+        "allowed_cpus_after": [
+          0
+        ],
+        "audit": {
+          "pid": 23245,
+          "comm": "sysbench",
+          "lsm_stack": [
+            "lockdown",
+            "capability",
+            "yama",
+            "selinux",
+            "bpf"
+          ],
+          "lsm_label": "unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023\u0000",
+          "no_new_privs": false,
+          "seccomp_mode": 0,
+          "cap_eff_hex": "000001ffffffffff",
+          "has_cap_sys_admin": true,
+          "has_cap_net_admin": true,
+          "cgroups": "13:pids:/system.slice/sshd.service\n12:rdma:/\n11:net_cls,net_prio:/\n10:hugetlb:/\n9:perf_event:/\n8:devices:/system.slice/sshd.service\n7:blkio:/\n6:cpuset:/\n5:freezer:/\n4:memory:/system.slice/sshd.service\n3:misc:/\n2:cpu,cpuacct:/\n1:name=systemd:/system.slice/sshd.service"
+        }
+      }
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:11.903339+00:00",
+      "monotonic": 4959.241583466,
+      "event": "plugin_cgroup_isolated",
+      "reason": "mixed_contention_detected",
+      "latency_group": "auto_latency",
+      "batch_group": "auto_batch",
+      "latency_shares": 4096,
+      "batch_shares": 1024,
+      "latency_pids": [
+        23231
+      ],
+      "batch_pids": [
+        23245
+      ],
+      "dry_run": false
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:13.997624+00:00",
+      "monotonic": 4961.335872488,
+      "event": "policy_applied",
+      "before": {
+        "policy_id": "kernel.default",
+        "slice_us": null
+      },
+      "after": {
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": true,
+        "kick_interval_us": 50,
+        "variant": "wakeup_preempt",
+        "sched_ext": "enabled",
+        "pid": 23254,
+        "map_id": 625,
+        "generation": 0,
+        "max_slice_us": 20000
+      },
+      "revision": 1,
+      "dry_run": false,
+      "action_started_monotonic": 4961.267919108,
+      "action_finished_monotonic": 4961.335850506
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:15.016680+00:00",
+      "monotonic": 4962.35492474,
+      "event": "plugin_ebpf_isolated",
+      "reason": "target_port_rate_exceeded",
+      "target_port": 18095,
+      "observed_pps": 310.76,
+      "threshold_pps": 20.0,
+      "drop_target": true,
+      "stats": {
+        "total_packets": 527252,
+        "total_bytes": 612687863,
+        "target_packets": 348,
+        "target_bytes": 30276,
+        "dropped_packets": 0
+      },
+      "dry_run": false
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:17.047864+00:00",
+      "monotonic": 4964.386114158,
+      "event": "plugin_ebpf_recovered",
+      "reason": "cooldown_elapsed_rate_normal",
+      "target_port": 18095,
+      "observed_pps": 0.0,
+      "threshold_pps": 20.0,
+      "drop_target": false,
+      "stats": {
+        "total_packets": 735265,
+        "total_bytes": 854545205,
+        "target_packets": 349,
+        "target_bytes": 30350,
+        "dropped_packets": 1
+      },
+      "dry_run": false
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:19.134528+00:00",
+      "monotonic": 4966.472762474,
+      "event": "policy_applied",
+      "before": {
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": true,
+        "kick_interval_us": 50,
+        "variant": "wakeup_preempt",
+        "sched_ext": "enabled",
+        "pid": 23254,
+        "map_id": 625,
+        "generation": 0,
+        "max_slice_us": 20000
+      },
+      "after": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "sched_ext": "disabled"
+      },
+      "revision": 2,
+      "dry_run": false,
+      "action_started_monotonic": 4966.40636554,
+      "action_finished_monotonic": 4966.472758777
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:19.140834+00:00",
+      "monotonic": 4966.479083588,
+      "event": "plugin_cgroup_released",
+      "reason": "mixed_contention_cleared",
+      "latency_group": "auto_latency",
+      "batch_group": "auto_batch",
+      "released_latency_pids": [
+        23231
+      ],
+      "released_batch_pids": [
+        23245
+      ],
+      "dry_run": false
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:20.167726+00:00",
+      "monotonic": 4967.505971641,
+      "event": "plugin_cleanup_completed",
+      "dry_run": false
+    },
+    {
+      "schema_version": 1,
+      "utc": "2026-10-26T22:06:20.167820+00:00",
+      "monotonic": 4967.506055309,
+      "event": "agent_stopped",
+      "dry_run": false,
+      "sched_ext": "disabled",
+      "revision": 2,
+      "elapsed_seconds": 11.311465638999834,
+      "thread_cpu_seconds": 0.093570685,
+      "cpu_scope": "Python control thread only; native helpers excluded"
+    }
+  ]
+}

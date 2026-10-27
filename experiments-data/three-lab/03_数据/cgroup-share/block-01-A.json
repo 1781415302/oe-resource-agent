@@ -1,0 +1,168 @@
+{
+  "arm": "A",
+  "order": 1,
+  "requested_low_shares": 1024,
+  "requested_high_shares": 1024,
+  "cpu": 3,
+  "warmup_seconds": 5.0,
+  "measure_seconds": 15.0,
+  "sampling_interval_seconds": 0.25,
+  "started_utc": "2026-10-26T21:58:28.323630+00:00",
+  "events": [
+    {
+      "event": "plugin_cgroup_isolated",
+      "reason": "mixed_contention_detected",
+      "latency_group": "lab-a1-lat",
+      "batch_group": "lab-a1-bat",
+      "latency_shares": 1024,
+      "batch_shares": 1024,
+      "latency_pids": [
+        20736
+      ],
+      "batch_pids": [
+        20737
+      ],
+      "dry_run": false
+    },
+    {
+      "event": "plugin_cgroup_released",
+      "reason": "mixed_contention_cleared",
+      "latency_group": "lab-a1-lat",
+      "batch_group": "lab-a1-bat",
+      "released_latency_pids": [
+        20736
+      ],
+      "released_batch_pids": [
+        20737
+      ],
+      "dry_run": false
+    },
+    {
+      "event": "plugin_cleanup_completed",
+      "dry_run": false
+    }
+  ],
+  "workers": [],
+  "agent_actions": [
+    {
+      "event": "plugin_cgroup_isolated",
+      "reason": "mixed_contention_detected",
+      "latency_group": "lab-a1-lat",
+      "batch_group": "lab-a1-bat",
+      "latency_shares": 1024,
+      "batch_shares": 1024,
+      "latency_pids": [
+        20736
+      ],
+      "batch_pids": [
+        20737
+      ],
+      "dry_run": false
+    }
+  ],
+  "readback_before": {
+    "latency": {
+      "label": "high",
+      "pid": 20736,
+      "group": "lab-a1-lat",
+      "group_path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/lab-a1-lat",
+      "shares_readback": 1024,
+      "group_procs": [
+        20736
+      ],
+      "start_ticks": 449566,
+      "comm": "python3",
+      "in_group": true
+    },
+    "batch": {
+      "label": "normal",
+      "pid": 20737,
+      "group": "lab-a1-bat",
+      "group_path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/lab-a1-bat",
+      "shares_readback": 1024,
+      "group_procs": [
+        20737
+      ],
+      "start_ticks": 449566,
+      "comm": "python3",
+      "in_group": true
+    }
+  },
+  "window": {
+    "start_monotonic": 4501.074288116,
+    "end_monotonic": 4516.075045852,
+    "seconds": 15.000757735999287
+  },
+  "result": {
+    "high": {
+      "cpu_seconds": 7.2,
+      "cpu_share_pct": 50.0,
+      "cpuacct_seconds": 7.198,
+      "cpuacct_share_pct": 50.0,
+      "sched_runtime_seconds": 7.198,
+      "sched_runtime_share_pct": 50.0,
+      "work_units": 209045007
+    },
+    "normal": {
+      "cpu_seconds": 7.2,
+      "cpu_share_pct": 50.0,
+      "cpuacct_seconds": 7.197,
+      "cpuacct_share_pct": 50.0,
+      "sched_runtime_seconds": 7.197,
+      "sched_runtime_share_pct": 50.0,
+      "work_units": 204602366
+    },
+    "expected_share_pct": {
+      "high": 50.0,
+      "normal": 50.0
+    },
+    "measured_high_to_normal_ratio": 1.0,
+    "configured_ratio": 1.0
+  },
+  "readback_after": {
+    "latency": {
+      "label": "high",
+      "pid": 20736,
+      "group": "lab-a1-lat",
+      "group_path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/lab-a1-lat",
+      "shares_readback": 1024,
+      "group_procs": [
+        20736
+      ],
+      "start_ticks": 449566,
+      "comm": "python3",
+      "in_group": true
+    },
+    "batch": {
+      "label": "normal",
+      "pid": 20737,
+      "group": "lab-a1-bat",
+      "group_path": "/sys/fs/cgroup/cpu,cpuacct/oeagent/lab-a1-bat",
+      "shares_readback": 1024,
+      "group_procs": [
+        20737
+      ],
+      "start_ticks": 449566,
+      "comm": "python3",
+      "in_group": true
+    }
+  },
+  "cleanup": {
+    "groups": {
+      "lab-a1-lat": {
+        "present": true,
+        "removed": true,
+        "remaining_procs": []
+      },
+      "lab-a1-bat": {
+        "present": true,
+        "removed": true,
+        "remaining_procs": []
+      }
+    }
+  },
+  "finished_utc": "2026-10-26T21:58:48.751845+00:00",
+  "sched_ext_after": "disabled",
+  "block": 1,
+  "position": 1
+}

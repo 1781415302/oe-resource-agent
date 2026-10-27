@@ -1,0 +1,91 @@
+== captured_utc ==
+2026-10-26T22:07:25Z
+== boot_id ==
+e594eba8-0ace-4ae8-bb57-e4fd39df283e
+== uname ==
+Linux localhost.localdomain 6.6.0-scx #1 SMP Fri Oct  9 09:52:48 CST 2026 x86_64 x86_64 x86_64 GNU/Linux
+== cmdline ==
+BOOT_IMAGE=/vmlinuz-6.6.0-scx root=/dev/mapper/openeuler-root ro resume=/dev/mapper/openeuler-swap rd.lvm.lv=openeuler/root rd.lvm.lv=openeuler/swap cgroup_disable=files apparmor=0 crashkernel=512M
+== os ==
+openEuler release 24.03 (LTS-SP4)
+== cpu ==
+架构：                                x86_64
+CPU 运行模式：                        32-bit, 64-bit
+Address sizes:                        45 bits physical, 48 bits virtual
+字节序：                              Little Endian
+CPU:                                  8
+在线 CPU 列表：                       0-7
+厂商 ID：                             AuthenticAMD
+BIOS 厂商 ID：                        AuthenticAMD
+型号名称：                            AMD Ryzen 9 9955HX 16-Core Processor
+BIOS 型号名称：                       AMD Ryzen 9 9955HX 16-Core Processor             CPU @ 2.5GHz
+BIOS CPU family:                      2
+CPU 系列：                            26
+型号：                                68
+每个核的线程数：                      1
+每个座的核数：                        8
+座：                                  1
+步进：                                0
+BogoMIPS：                            4990.54
+== memory ==
+MemTotal:        3452924 kB
+MemAvailable:    2861200 kB
+SwapTotal:       4108284 kB
+== cgroup_fs ==
+tmpfs
+  tmpfs on /sys/fs/cgroup type tmpfs (ro,nosuid,nodev,noexec,seclabel,size=4096k,nr_inodes=1024,mode=755)
+  cgroup on /sys/fs/cgroup/systemd type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,xattr,release_agent=/usr/lib/systemd/systemd-cgroups-agent,name=systemd)
+  cgroup on /sys/fs/cgroup/cpu,cpuacct type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,cpu,cpuacct)
+  cgroup on /sys/fs/cgroup/misc type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,misc)
+  cgroup on /sys/fs/cgroup/memory type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,memory)
+  cgroup on /sys/fs/cgroup/freezer type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,freezer)
+  cgroup on /sys/fs/cgroup/cpuset type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,cpuset)
+  cgroup on /sys/fs/cgroup/blkio type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,blkio)
+  cgroup on /sys/fs/cgroup/devices type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,devices)
+  cgroup on /sys/fs/cgroup/perf_event type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,perf_event)
+  cgroup on /sys/fs/cgroup/hugetlb type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,hugetlb)
+  cgroup on /sys/fs/cgroup/net_cls,net_prio type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,net_cls,net_prio)
+  cgroup on /sys/fs/cgroup/rdma type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,rdma)
+  cgroup on /sys/fs/cgroup/pids type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,pids)
+== cpu_shares_file ==
+-rw-r--r--. 1 root root 0 10月27日 04:43 /sys/fs/cgroup/cpu,cpuacct/cpu.shares
+== sched_ext_state ==
+disabled
+== python ==
+Python 3.11.6
+== matplotlib ==
+3.7.1
+== nginx ==
+nginx version: nginx/1.24.0
+== bpftool ==
+bpftool v7.3.0
+using libbpf v1.3
+== tc ==
+tc utility, iproute2-6.6.0, libbpf 1.2.2
+== sysbench ==
+sysbench 1.0.20
+== wrk2_window_build ==
+{
+  "schema_version": 1,
+  "upstream_commit": "44a94c17d8e6a0bac8559b53da76848e430cb7a7",
+  "source_origin": "/root/wrk2-44a94c17",
+  "source_validation": "existing VM source; exact instrumentation anchors checked; original archive unavailable",
+  "original_sources": {
+    "src/wrk.h": "dc339303799cdd8d9d19adf946925c318ae1b395920613c08edb1108b7aebfe8",
+    "src/wrk.c": "97ef992c321108e3643e616cefbc8992bc35ad7256e26a018bf6a552c6c8eb99"
+  },
+  "binary": "/root/oe-resource-agent/cache/wrk2-window-deployment-1792907032505108532/wrk2-44a94c17/wrk",
+  "binary_sha256": "382efd0572f1e286f27536c7f7d6f1a48d48f7a45893ebd78e1e667ece54cc91",
+  "patched_sources": {
+    "src/wrk.h": "63845c7b0f361cbf94c1f77a99ee507e0ce4df5c52cf4a55dcdeb30510c88fb1",
+    "src/wrk.c": "bf4f4bc5643c18483843062ba2b075b633439fbefeaccc7ee93037456b92d571"
+  },
+  "measurement_protocol": "oe_wrk2_windows_v1",
+  "window_ms": 5000,
+  "compiler": "gcc (GCC) 12.3.1 (openEuler 12.3.1-110.oe2403sp4)\nCopyright \u00a9 2022 Free Software Foundation, Inc.\n\u672c\u7a0b\u5e8f\u662f\u81ea\u7531\u8f6f\u4ef6\uff1b\u8bf7\u53c2\u770b\u6e90\u4ee3\u7801\u7684\u7248\u6743\u58f0\u660e\u3002\u672c\u8f6f\u4ef6\u6ca1\u6709\u4efb\u4f55\u62c5\u4fdd\uff1b\n\u5305\u62ec\u6ca1\u6709\u9002\u9500\u6027\u548c\u67d0\u4e00\u4e13\u7528\u76ee\u7684\u4e0b\u7684\u9002\u7528\u6027\u62c5\u4fdd\u3002\n",
+  "scope": "one client thread; rebuilt locally with continuous HDR window instrumentation"
+}
+== scx_binary ==
+path /root/rpmbuild/BUILD/kernel-6.6.0/linux-6.6.0-159.4.3.154.x86_64/tools/sched_ext/build/bin/scx_oe_adaptive exists True
+sha256 9bc5e18dabdff1916e3b195c36f76e314d08909902f7567b9ba622ebcf2f3875
+recorded_sha256 9bc5e18dabdff1916e3b195c36f76e314d08909902f7567b9ba622ebcf2f3875

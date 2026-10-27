@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "study": "ebpf-port-isolation-ab",
+  "status": "complete",
+  "started_utc": "2026-10-26T22:01:49.410210+00:00",
+  "rounds": 2,
+  "runs": [
+    {
+      "arm": "A",
+      "block": 1,
+      "position": 1,
+      "quality": "complete",
+      "flood_totals": {
+        "attempts": 17167,
+        "ok": 17167,
+        "failed": 0,
+        "started_monotonic": 4719.080050496,
+        "stopped_monotonic": 4739.044200781
+      },
+      "coordinator_status": null,
+      "detached_after_round": true,
+      "error": null
+    },
+    {
+      "arm": "B",
+      "block": 1,
+      "position": 2,
+      "quality": "complete",
+      "flood_totals": {
+        "attempts": 850,
+        "ok": 194,
+        "failed": 656,
+        "started_monotonic": 4776.450233781,
+        "stopped_monotonic": 4796.49563828
+      },
+      "coordinator_status": {
+        "enabled": true,
+        "lsm_audited_count": 0,
+        "lsm_enforced_count": 0,
+        "cgroup": {
+          "enabled": false,
+          "active": false,
+          "latency_group": "auto_latency",
+          "batch_group": "auto_batch",
+          "latency_shares": 4096,
+          "batch_shares": 1024,
+          "latency_pids": [],
+          "batch_pids": []
+        },
+        "ebpf": {
+          "enabled": true,
+          "attached": true,
+          "target_port": 18095,
+          "drop_target": false,
+          "threshold_pps": 20.0,
+          "last_observed_pps": 0.0,
+          "hold_remaining": 0
+        }
+      },
+      "detached_after_round": true,
+      "error": null
+    },
+    {
+      "arm": "B",
+      "block": 2,
+      "position": 1,
+      "quality": "complete",
+      "flood_totals": {
+        "attempts": 845,
+        "ok": 189,
+        "failed": 656,
+        "started_monotonic": 4833.819438055,
+        "stopped_monotonic": 4853.865964277
+      },
+      "coordinator_status": {
+        "enabled": true,
+        "lsm_audited_count": 0,
+        "lsm_enforced_count": 0,
+        "cgroup": {
+          "enabled": false,
+          "active": false,
+          "latency_group": "auto_latency",
+          "batch_group": "auto_batch",
+          "latency_shares": 4096,
+          "batch_shares": 1024,
+          "latency_pids": [],
+          "batch_pids": []
+        },
+        "ebpf": {
+          "enabled": true,
+          "attached": true,
+          "target_port": 18095,
+          "drop_target": false,
+          "threshold_pps": 20.0,
+          "last_observed_pps": 0.0,
+          "hold_remaining": 0
+        }
+      },
+      "detached_after_round": true,
+      "error": null
+    },
+    {
+      "arm": "A",
+      "block": 2,
+      "position": 2,
+      "quality": "complete",
+      "flood_totals": {
+        "attempts": 16894,
+        "ok": 16894,
+        "failed": 0,
+        "started_monotonic": 4891.144113399,
+        "stopped_monotonic": 4911.156744501
+      },
+      "coordinator_status": null,
+      "detached_after_round": true,
+      "error": null
+    }
+  ],
+  "dashboard_stopped": true,
+  "sched_ext_initial": "disabled",
+  "plugin": {
+    "name": "network.ebpf_tc",
+    "available": true,
+    "program_type": "sched_cls",
+    "attach_point": "tc egress/ingress (lo)",
+    "source": "native/oe_net_hook.bpf.c",
+    "object_built": true,
+    "active": false,
+    "protected_ports": [
+      80,
+      443,
+      18080,
+      18086,
+      18091
+    ],
+    "capabilities": [
+      "packet_byte_accounting",
+      "target_port_monitoring",
+      "target_port_drop_isolation",
+      "protected_port_guard",
+      "egress_ingress_direction"
+    ]
+  },
+  "protection_scope": "target port only; when triggered, every connection to that port is dropped",
+  "method": {
+    "design": "two arms x two rounds with swapped order (A,B / B,A)",
+    "arm_a": "TC hook in observe mode; the target port is always allowed",
+    "arm_b": "AutoPluginCoordinator decides from the measured target-port packet rate (threshold 20.0 pps, hold 3s) and releases after cooldown",
+    "business": "Nginx :18086 on CPU0, one windowed wrk2 client on CPU1, offered 25600 RPS",
+    "monitor": "helper HTTP server :18095 on CPU0, flooded from CPU2",
+    "phases": "12.0s normal + 20.0s flood + 15.0s recovery",
+    "windows": "continuous 5s HDR windows from one wrk2 stream",
+    "packet_rate_note": "BPF target packet counters are packets, not HTTP requests",
+    "scope": "single VMware guest, descriptive course-design comparison"
+  },
+  "ended_utc": "2026-10-26T22:05:38.854395+00:00",
+  "sched_ext_final": "disabled"
+}

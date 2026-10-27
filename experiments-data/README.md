@@ -36,3 +36,15 @@ python3 experiments/analyze_live_agent_study.py experiments-data/raw/formal-two-
 加权版延迟优先混部p99为17.561±14.354ms，同轮默认为9.667±0.198ms；请求内计算为826.677±1162.430ms，默认也有明显波动。完整CSV保留坏结果及每轮顺序。报表对照分按同轮默认重算，和Agent现场早期基线是两个不同参照。
 
 新版独立动态压力与业务反馈丢失复测尚未运行；旧阈值版的功能证据不能替代新版验证。相关检查入口为 `experiments/check_agent_study_dynamics.py`，若另行运行两轮应指定 `--repeats 2`。
+
+## 三组课程对照
+
+`three-lab/` 是队友 2026-10-26 汇报包中的本次三组对照，采集环境为 VMware 上的 openEuler 24.03、内核 6.6.0-scx、8 vCPU。它和上面的两轮矩阵不是同一次运行。对应源码已在仓库的 `experiments/` 与 `oeagent/` 中，这里不再复制一份代码。
+
+- `three-lab/01_报告/`：实验报告和自动汇总表。
+- `three-lab/02_图表/`：CPU p99、CPU 分段、Cgroup 份额、网络时间线的 PNG 和 SVG。
+- `three-lab/03_数据/cpu-three-way/`：吞吐与延迟两个场景的默认、1 ms、20 ms、300 μs 和 Agent 原始记录。同目录的 `历史运行-cpu-three-way-v1/` 是更早的一轮，只有默认、1 ms 和 Agent。
+- `three-lab/03_数据/cgroup-share/`：默认调度下等份与 4:1 的两轮原始记录，以及两组进程的工作量日志。
+- `three-lab/03_数据/net-isolation/`：只观测与自动隔离各两轮的 `round.json`。
+- `three-lab/03_数据/linkage-demo.json`：一次多资源联动记录。
+- `three-lab/03_数据/summary_*.csv`：四张汇总表。

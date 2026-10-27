@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "study": "cgroup-share-ab",
+  "status": "complete",
+  "started_utc": "2026-10-26T21:58:28.322940+00:00",
+  "rounds": 2,
+  "runs": [
+    {
+      "block": 1,
+      "position": 1,
+      "arm": "A",
+      "low_shares": 1024,
+      "high_shares": 1024,
+      "result": {
+        "high": {
+          "cpu_seconds": 7.2,
+          "cpu_share_pct": 50.0,
+          "cpuacct_seconds": 7.198,
+          "cpuacct_share_pct": 50.0,
+          "sched_runtime_seconds": 7.198,
+          "sched_runtime_share_pct": 50.0,
+          "work_units": 209045007
+        },
+        "normal": {
+          "cpu_seconds": 7.2,
+          "cpu_share_pct": 50.0,
+          "cpuacct_seconds": 7.197,
+          "cpuacct_share_pct": 50.0,
+          "sched_runtime_seconds": 7.197,
+          "sched_runtime_share_pct": 50.0,
+          "work_units": 204602366
+        },
+        "expected_share_pct": {
+          "high": 50.0,
+          "normal": 50.0
+        },
+        "measured_high_to_normal_ratio": 1.0,
+        "configured_ratio": 1.0
+      },
+      "cleanup": {
+        "groups": {
+          "lab-a1-lat": {
+            "present": true,
+            "removed": true,
+            "remaining_procs": []
+          },
+          "lab-a1-bat": {
+            "present": true,
+            "removed": true,
+            "remaining_procs": []
+          }
+        }
+      },
+      "file": "block-01-A.json"
+    },
+    {
+      "block": 1,
+      "position": 2,
+      "arm": "B",
+      "low_shares": 1024,
+      "high_shares": 4096,
+      "result": {
+        "high": {
+          "cpu_seconds": 11.52,
+          "cpu_share_pct": 80.06,
+          "cpuacct_seconds": 11.519,
+          "cpuacct_share_pct": 80.01,
+          "sched_runtime_seconds": 11.519,
+          "sched_runtime_share_pct": 80.01,
+          "work_units": 327220955
+        },
+        "normal": {
+          "cpu_seconds": 2.87,
+          "cpu_share_pct": 19.94,
+          "cpuacct_seconds": 2.878,
+          "cpuacct_share_pct": 19.99,
+          "sched_runtime_seconds": 2.878,
+          "sched_runtime_share_pct": 19.99,
+          "work_units": 78481524
+        },
+        "expected_share_pct": {
+          "high": 80.0,
+          "normal": 20.0
+        },
+        "measured_high_to_normal_ratio": 4.014,
+        "configured_ratio": 4.0
+      },
+      "cleanup": {
+        "groups": {
+          "lab-b1-lat": {
+            "present": true,
+            "removed": true,
+            "remaining_procs": []
+          },
+          "lab-b1-bat": {
+            "present": true,
+            "removed": true,
+            "remaining_procs": []
+          }
+        }
+      },
+      "file": "block-01-B.json"
+    },
+    {
+      "block": 2,
+      "position": 1,
+      "arm": "B",
+      "low_shares": 1024,
+      "high_shares": 4096,
+      "result": {
+        "high": {
+          "cpu_seconds": 11.52,
+          "cpu_share_pct": 80.0,
+          "cpuacct_seconds": 11.525,
+          "cpuacct_share_pct": 80.01,
+          "sched_runtime_seconds": 11.525,
+          "sched_runtime_share_pct": 80.01,
+          "work_units": 342621193
+        },
+        "normal": {
+          "cpu_seconds": 2.88,
+          "cpu_share_pct": 20.0,
+          "cpuacct_seconds": 2.88,
+          "cpuacct_share_pct": 19.99,
+          "sched_runtime_seconds": 2.88,
+          "sched_runtime_share_pct": 19.99,
+          "work_units": 82782174
+        },
+        "expected_share_pct": {
+          "high": 80.0,
+          "normal": 20.0
+        },
+        "measured_high_to_normal_ratio": 4.0,
+        "configured_ratio": 4.0
+      },
+      "cleanup": {
+        "groups": {
+          "lab-b2-lat": {
+            "present": true,
+            "removed": true,
+            "remaining_procs": []
+          },
+          "lab-b2-bat": {
+            "present": true,
+            "removed": true,
+            "remaining_procs": []
+          }
+        }
+      },
+      "file": "block-02-B.json"
+    },
+    {
+      "block": 2,
+      "position": 2,
+      "arm": "A",
+      "low_shares": 1024,
+      "high_shares": 1024,
+      "result": {
+        "high": {
+          "cpu_seconds": 7.21,
+          "cpu_share_pct": 50.0,
+          "cpuacct_seconds": 7.203,
+          "cpuacct_share_pct": 49.99,
+          "sched_runtime_seconds": 7.203,
+          "sched_runtime_share_pct": 49.99,
+          "work_units": 215339213
+        },
+        "normal": {
+          "cpu_seconds": 7.21,
+          "cpu_share_pct": 50.0,
+          "cpuacct_seconds": 7.206,
+          "cpuacct_share_pct": 50.01,
+          "sched_runtime_seconds": 7.206,
+          "sched_runtime_share_pct": 50.01,
+          "work_units": 209783900
+        },
+        "expected_share_pct": {
+          "high": 50.0,
+          "normal": 50.0
+        },
+        "measured_high_to_normal_ratio": 1.0,
+        "configured_ratio": 1.0
+      },
+      "cleanup": {
+        "groups": {
+          "lab-a2-lat": {
+            "present": true,
+            "removed": true,
+            "remaining_procs": []
+          },
+          "lab-a2-bat": {
+            "present": true,
+            "removed": true,
+            "remaining_procs": []
+          }
+        }
+      },
+      "file": "block-02-A.json"
+    }
+  ],
+  "dashboard_stopped": true,
+  "sched_ext_initial": "disabled",
+  "machine": {
+    "kernel": "6.6.0-scx",
+    "cpus": 8
+  },
+  "plugin": {
+    "name": "resource.cgroup",
+    "available": true,
+    "cgroup_version": 1,
+    "controlled_file": "cpu.shares",
+    "value_range": [
+      2,
+      262144
+    ],
+    "scope": "owned oeagent child groups only",
+    "cpu_weight_under_scx": "unsupported by this backend; writes require sched_ext disabled",
+    "attach_processes": "supported (PID and start_ticks verified; safe detach to root cgroup)"
+  },
+  "method": {
+    "design": "two arms x two rounds with swapped order (A,B / B,A)",
+    "arms": {
+      "A": "cpu.shares 1024:1024 (equal)",
+      "B": "cpu.shares 4096:1024 (4:1)"
+    },
+    "scheduler": "default kernel scheduler; sched_ext must be disabled because this backend has no cgroup weight semantics under SCX",
+    "disabled_for_control": [
+      "network eBPF handling",
+      "LSM nice demotion"
+    ],
+    "timing": "5.0s warmup + 15.0s measured window",
+    "accounting": "per-task /proc utime+stime ticks, per-group cpuacct.usage, per-task schedstat runtime, and each worker's own iteration counter",
+    "scope": "single VMware guest, descriptive course-design comparison"
+  },
+  "ended_utc": "2026-10-26T21:59:50.029941+00:00",
+  "sched_ext_final": "disabled"
+}

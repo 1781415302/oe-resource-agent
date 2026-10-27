@@ -1,0 +1,748 @@
+{
+  "schema_version": 1,
+  "study": "cpu-three-way",
+  "status": "complete",
+  "started_utc": "2026-10-26T23:40:44.490273+00:00",
+  "machine": {
+    "hostname": "localhost.localdomain",
+    "os": "openEuler 24.03 (LTS-SP4)",
+    "kernel": "6.6.0-scx",
+    "architecture": "x86_64",
+    "vcpus": 8,
+    "boot_id": "e594eba8-0ace-4ae8-bb57-e4fd39df283e",
+    "agent_pid": 58234,
+    "session_id": "oe-live-sandbox-v8gujvjl",
+    "started_utc": "2026-10-26T23:40:39.509960+00:00",
+    "collector_sha256": "496f8cba18667f7e8088f7d42faa49a3e83deb72b3874e0abc7eea4952b1e817"
+  },
+  "rounds": 1,
+  "required_windows": 7,
+  "scenarios": [
+    "throughput",
+    "latency"
+  ],
+  "arms": {
+    "A": {
+      "policy": "default",
+      "label": "默认 EEVDF"
+    },
+    "B": {
+      "policy": "scx-1ms",
+      "label": "SCX 1ms + 唤醒抢占"
+    },
+    "D": {
+      "policy": "scx-u20000p1",
+      "label": "SCX 20ms + 唤醒抢占（片长选得过长）"
+    },
+    "E": {
+      "policy": "scx-u300p1",
+      "label": "SCX 300μs + 唤醒抢占（片长选得过短）"
+    },
+    "C": {
+      "policy": "agent",
+      "label": "网页加权 Agent (延迟60/吞吐40，自己算片长)"
+    }
+  },
+  "round_orders": {
+    "1": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "C"
+    ]
+  },
+  "trials": [
+    {
+      "scenario_id": "throughput",
+      "arm": "A",
+      "arm_label": "默认 EEVDF",
+      "policy": "default",
+      "block": 1,
+      "position": 1,
+      "quality": "complete",
+      "summary": {
+        "p99_ms": 5.563,
+        "p95_ms": 4.843,
+        "rps": 4000.124522520751,
+        "completion_fraction": 1.0000311306301877,
+        "eps": 5743.8272250153805,
+        "errors": 0
+      },
+      "final_agent_phase": "disabled",
+      "observed_policy_counts": [
+        {
+          "policy_id": "kernel.default",
+          "slice_us": null,
+          "samples": 102
+        }
+      ],
+      "final_kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": null
+      },
+      "chosen_slice_us": null,
+      "file": "block-01-throughput-A.json"
+    },
+    {
+      "scenario_id": "throughput",
+      "arm": "B",
+      "arm_label": "SCX 1ms + 唤醒抢占",
+      "policy": "scx-1ms",
+      "block": 1,
+      "position": 2,
+      "quality": "complete",
+      "summary": {
+        "p99_ms": 2.705,
+        "p95_ms": 2.283,
+        "rps": 4000.17172497205,
+        "completion_fraction": 1.0000429312430126,
+        "eps": 5269.515759418649,
+        "errors": 0
+      },
+      "final_agent_phase": "disabled",
+      "observed_policy_counts": [
+        {
+          "policy_id": "scx.slice",
+          "slice_us": 1000,
+          "samples": 99
+        }
+      ],
+      "final_kernel": {
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": true
+      },
+      "chosen_slice_us": 1000,
+      "file": "block-01-throughput-B.json"
+    },
+    {
+      "scenario_id": "throughput",
+      "arm": "D",
+      "arm_label": "SCX 20ms + 唤醒抢占（片长选得过长）",
+      "policy": "scx-u20000p1",
+      "block": 1,
+      "position": 3,
+      "quality": "complete",
+      "summary": {
+        "p99_ms": 2.837,
+        "p95_ms": 2.281,
+        "rps": 4000.167221986757,
+        "completion_fraction": 1.0000418054966893,
+        "eps": 5267.332375913686,
+        "errors": 0
+      },
+      "final_agent_phase": "disabled",
+      "observed_policy_counts": [
+        {
+          "policy_id": "scx.slice",
+          "slice_us": 20000,
+          "samples": 98
+        }
+      ],
+      "final_kernel": {
+        "policy_id": "scx.slice",
+        "slice_us": 20000,
+        "wakeup_preempt": true
+      },
+      "chosen_slice_us": 20000,
+      "file": "block-01-throughput-D.json"
+    },
+    {
+      "scenario_id": "throughput",
+      "arm": "E",
+      "arm_label": "SCX 300μs + 唤醒抢占（片长选得过短）",
+      "policy": "scx-u300p1",
+      "block": 1,
+      "position": 4,
+      "quality": "complete",
+      "summary": {
+        "p99_ms": 2.601,
+        "p95_ms": 2.273,
+        "rps": 3999.732726330844,
+        "completion_fraction": 0.9999331815827109,
+        "eps": 5246.4390202003815,
+        "errors": 0
+      },
+      "final_agent_phase": "disabled",
+      "observed_policy_counts": [
+        {
+          "policy_id": "scx.slice",
+          "slice_us": 300,
+          "samples": 97
+        }
+      ],
+      "final_kernel": {
+        "policy_id": "scx.slice",
+        "slice_us": 300,
+        "wakeup_preempt": true
+      },
+      "chosen_slice_us": 300,
+      "file": "block-01-throughput-E.json"
+    },
+    {
+      "scenario_id": "throughput",
+      "arm": "C",
+      "arm_label": "网页加权 Agent (延迟60/吞吐40，自己算片长)",
+      "policy": "agent",
+      "block": 1,
+      "position": 5,
+      "quality": "complete",
+      "summary": {
+        "p99_ms": 2.625,
+        "p95_ms": 2.277,
+        "rps": 4000.0776199061834,
+        "completion_fraction": 1.0000194049765458,
+        "eps": 5256.155492773304,
+        "errors": 0
+      },
+      "final_agent_phase": "holding",
+      "observed_policy_counts": [
+        {
+          "policy_id": "kernel.default",
+          "slice_us": null,
+          "samples": 23
+        },
+        {
+          "policy_id": "scx.slice",
+          "slice_us": 650,
+          "samples": 24
+        },
+        {
+          "policy_id": "scx.slice",
+          "slice_us": 300,
+          "samples": 49
+        }
+      ],
+      "final_kernel": {
+        "policy_id": "scx.slice",
+        "slice_us": 300,
+        "wakeup_preempt": true
+      },
+      "chosen_slice_us": 300,
+      "file": "block-01-throughput-C.json"
+    },
+    {
+      "scenario_id": "latency",
+      "arm": "A",
+      "arm_label": "默认 EEVDF",
+      "policy": "default",
+      "block": 1,
+      "position": 1,
+      "quality": "complete",
+      "summary": {
+        "p99_ms": 14.687,
+        "p95_ms": 9.903,
+        "rps": 25605.867921618803,
+        "completion_fraction": 1.0002292156882344,
+        "eps": 4397.058150656104,
+        "errors": 0
+      },
+      "final_agent_phase": "disabled",
+      "observed_policy_counts": [
+        {
+          "policy_id": "kernel.default",
+          "slice_us": null,
+          "samples": 101
+        }
+      ],
+      "final_kernel": {
+        "policy_id": "kernel.default",
+        "slice_us": null,
+        "wakeup_preempt": null
+      },
+      "chosen_slice_us": null,
+      "file": "block-01-latency-A.json"
+    },
+    {
+      "scenario_id": "latency",
+      "arm": "B",
+      "arm_label": "SCX 1ms + 唤醒抢占",
+      "policy": "scx-1ms",
+      "block": 1,
+      "position": 2,
+      "quality": "complete",
+      "summary": {
+        "p99_ms": 3.779,
+        "p95_ms": 3.083,
+        "rps": 25599.971446684136,
+        "completion_fraction": 0.9999988846360991,
+        "eps": 3925.1340445320197,
+        "errors": 0
+      },
+      "final_agent_phase": "disabled",
+      "observed_policy_counts": [
+        {
+          "policy_id": "scx.slice",
+          "slice_us": 1000,
+          "samples": 98
+        }
+      ],
+      "final_kernel": {
+        "policy_id": "scx.slice",
+        "slice_us": 1000,
+        "wakeup_preempt": true
+      },
+      "chosen_slice_us": 1000,
+      "file": "block-01-latency-B.json"
+    },
+    {
+      "scenario_id": "latency",
+      "arm": "D",
+      "arm_label": "SCX 20ms + 唤醒抢占（片长选得过长）",
+      "policy": "scx-u20000p1",
+      "block": 1,
+      "position": 3,
+      "quality": "complete",
+      "summary": {
+        "p99_ms": 3.821,
+        "p95_ms": 3.055,
+        "rps": 25598.98443120654,
+        "completion_fraction": 0.9999603293440055,
+        "eps": 3899.5300074788847,
+        "errors": 0
+      },
+      "final_agent_phase": "disabled",
+      "observed_policy_counts": [
+        {
+          "policy_id": "scx.slice",
+          "slice_us": 20000,
+          "samples": 97
+        }
+      ],
+      "final_kernel": {
+        "policy_id": "scx.slice",
+        "slice_us": 20000,
+        "wakeup_preempt": true
+      },
+      "chosen_slice_us": 20000,
+      "file": "block-01-latency-D.json"
+    },
+    {
+      "scenario_id": "latency",
+      "arm": "E",
+      "arm_label": "SCX 300μs + 唤醒抢占（片长选得过短）",
+      "policy": "scx-u300p1",
+      "block": 1,
+      "position": 4,
+      "quality": "complete",
+      "summary": {
+        "p99_ms": 3.687,
+        "p95_ms": 3.047,
+        "rps": 25598.86897738736,
+        "completion_fraction": 0.9999558194291938,
+        "eps": 3877.428053561487,
+        "errors": 0
+      },
+      "final_agent_phase": "disabled",
+      "observed_policy_counts": [
+        {
+          "policy_id": "scx.slice",
+          "slice_us": 300,
+          "samples": 96
+        }
+      ],
+      "final_kernel": {
+        "policy_id": "scx.slice",
+        "slice_us": 300,
+        "wakeup_preempt": true
+      },
+      "chosen_slice_us": 300,
+      "file": "block-01-latency-E.json"
+    },
+    {
+      "scenario_id": "latency",
+      "arm": "C",
+      "arm_label": "网页加权 Agent (延迟60/吞吐40，自己算片长)",
+      "policy": "agent",
+      "block": 1,
+      "position": 5,
+      "quality": "complete",
+      "summary": {
+        "p99_ms": 3.655,
+        "p95_ms": 3.031,
+        "rps": 25598.20275948626,
+        "completion_fraction": 0.999929795292432,
+        "eps": 3926.0670598867687,
+        "errors": 0
+      },
+      "final_agent_phase": "holding",
+      "observed_policy_counts": [
+        {
+          "policy_id": "kernel.default",
+          "slice_us": null,
+          "samples": 25
+        },
+        {
+          "policy_id": "scx.slice",
+          "slice_us": 700,
+          "samples": 47
+        },
+        {
+          "policy_id": "scx.slice",
+          "slice_us": 350,
+          "samples": 25
+        }
+      ],
+      "final_kernel": {
+        "policy_id": "scx.slice",
+        "slice_us": 700,
+        "wakeup_preempt": true
+      },
+      "chosen_slice_us": 700,
+      "file": "block-01-latency-C.json"
+    }
+  ],
+  "source_hashes": {
+    "experiments/run_cpu_three_way_study.py": "a82a1b36aa34bb1ab9e82d5a2fbeaeb688311850394de3eacd8bb1f3a1a5907a",
+    "experiments/run_weighted_agent_study.py": "8d0b019deb952f24a7f47e31450a0b0f5f2b3841b4647781599340ef612d556e",
+    "experiments/web_dashboard.py": "496f8cba18667f7e8088f7d42faa49a3e83deb72b3874e0abc7eea4952b1e817",
+    "experiments/demo_load_worker.py": "9f5af12a72e55c7059f84caa8fe1edf49a04f6741654379d38cd883d88d1ea44",
+    "oeagent/weighted_agent.py": "84792984a01c337343c88f481291a59c5b46b28d4dfb6746aed2f1a891f90e4b",
+    "oeagent/live_agent.py": "74ff059be91e791d1fbddc5be1a6dfa1ce5a619ba1cb8cf56891fee7a7892722",
+    "oeagent/live_observe.py": "a452a547b9b6b50e2aaf9f8a3791bb9a958813cd39de4ca8d19a844150c2cd20",
+    "oeagent/demo_control.py": "b0ebe3968e3415f05f7f931f3a1c218bb372559260f7d5a92d856d2c0d9c4127",
+    "oeagent/demo_tuning.py": "363eb196d92d39340ddedfe9842609364f472a4c8779b9955ba640dbcb2b6495"
+  },
+  "method": {
+    "design": "two rounds; round 1 A->B->D->C, round 2 C->D->B->A for every scenario",
+    "why_not_cyclic": "four arms need four blocks for a cyclic rotation to balance; two blocks would partly cancel",
+    "warmup_seconds": 5,
+    "window_seconds": 5,
+    "windows_per_trial": 7,
+    "aggregation": "per-trial median of complete windows; the two rounds are reported separately and as a mean, no significance claim",
+    "agent": "actual weighted_agent.py, relative weights only, no performance target; exploration and policy transitions stay inside the measured windows",
+    "measurement": "same maximum 5 HTTP probes per sampling cycle under every arm",
+    "processes": "same workload PIDs across the arms of a block; freshly restarted between blocks",
+    "scope": "single VMware guest, descriptive course-design comparison"
+  },
+  "environment": {
+    "/proc/cpuinfo": "processor\t: 0\nvendor_id\t: AuthenticAMD\ncpu family\t: 26\nmodel\t\t: 68\nmodel name\t: AMD Ryzen 9 9955HX 16-Core Processor\nstepping\t: 0\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 2495.271\ncache size\t: 1024 KB\nphysical id\t: 0\nsiblings\t: 8\ncore id\t\t: 0\ncpu cores\t: 8\napicid\t\t: 0\ninitial apicid\t: 0\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext ibpb vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx_vnni avx512_bf16 clzero arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid overflow_recov succor fsrm avx512_vp2intersect verw_clear\nbugs\t\t: fxsave_leak sysret_ss_attrs null_seg spectre_v1 spectre_v2 spec_store_bypass ibpb_no_ret\nbogomips\t: 4990.54\nTLB size\t: 192 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 45 bits physical, 48 bits virtual\npower management:\n\nprocessor\t: 1\nvendor_id\t: AuthenticAMD\ncpu family\t: 26\nmodel\t\t: 68\nmodel name\t: AMD Ryzen 9 9955HX 16-Core Processor\nstepping\t: 0\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 2495.271\ncache size\t: 1024 KB\nphysical id\t: 0\nsiblings\t: 8\ncore id\t\t: 1\ncpu cores\t: 8\napicid\t\t: 1\ninitial apicid\t: 1\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext ibpb vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx_vnni avx512_bf16 clzero arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid overflow_recov succor fsrm avx512_vp2intersect verw_clear\nbugs\t\t: fxsave_leak sysret_ss_attrs null_seg spectre_v1 spectre_v2 spec_store_bypass ibpb_no_ret\nbogomips\t: 4990.54\nTLB size\t: 192 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 45 bits physical, 48 bits virtual\npower management:\n\nprocessor\t: 2\nvendor_id\t: AuthenticAMD\ncpu family\t: 26\nmodel\t\t: 68\nmodel name\t: AMD Ryzen 9 9955HX 16-Core Processor\nstepping\t: 0\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 2495.271\ncache size\t: 1024 KB\nphysical id\t: 0\nsiblings\t: 8\ncore id\t\t: 2\ncpu cores\t: 8\napicid\t\t: 2\ninitial apicid\t: 2\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext ibpb vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx_vnni avx512_bf16 clzero arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid overflow_recov succor fsrm avx512_vp2intersect verw_clear\nbugs\t\t: fxsave_leak sysret_ss_attrs null_seg spectre_v1 spectre_v2 spec_store_bypass ibpb_no_ret\nbogomips\t: 4990.54\nTLB size\t: 192 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 45 bits physical, 48 bits virtual\npower management:\n\nprocessor\t: 3\nvendor_id\t: AuthenticAMD\ncpu family\t: 26\nmodel\t\t: 68\nmodel name\t: AMD Ryzen 9 9955HX 16-Core Processor\nstepping\t: 0\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 2495.271\ncache size\t: 1024 KB\nphysical id\t: 0\nsiblings\t: 8\ncore id\t\t: 3\ncpu cores\t: 8\napicid\t\t: 3\ninitial apicid\t: 3\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext ibpb vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx_vnni avx512_bf16 clzero arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid overflow_recov succor fsrm avx512_vp2intersect verw_clear\nbugs\t\t: fxsave_leak sysret_ss_attrs null_seg spectre_v1 spectre_v2 spec_store_bypass ibpb_no_ret\nbogomips\t: 4990.54\nTLB size\t: 192 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 45 bits physical, 48 bits virtual\npower management:\n\nprocessor\t: 4\nvendor_id\t: AuthenticAMD\ncpu family\t: 26\nmodel\t\t: 68\nmodel name\t: AMD Ryzen 9 9955HX 16-Core Processor\nstepping\t: 0\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 2495.271\ncache size\t: 1024 KB\nphysical id\t: 0\nsiblings\t: 8\ncore id\t\t: 4\ncpu cores\t: 8\napicid\t\t: 4\ninitial apicid\t: 4\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext ibpb vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx_vnni avx512_bf16 clzero arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid overflow_recov succor fsrm avx512_vp2intersect verw_clear\nbugs\t\t: fxsave_leak sysret_ss_attrs null_seg spectre_v1 spectre_v2 spec_store_bypass ibpb_no_ret\nbogomips\t: 4990.54\nTLB size\t: 192 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 45 bits physical, 48 bits virtual\npower management:\n\nprocessor\t: 5\nvendor_id\t: AuthenticAMD\ncpu family\t: 26\nmodel\t\t: 68\nmodel name\t: AMD Ryzen 9 9955HX 16-Core Processor\nstepping\t: 0\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 2495.271\ncache size\t: 1024 KB\nphysical id\t: 0\nsiblings\t: 8\ncore id\t\t: 5\ncpu cores\t: 8\napicid\t\t: 5\ninitial apicid\t: 5\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext ibpb vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx_vnni avx512_bf16 clzero arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid overflow_recov succor fsrm avx512_vp2intersect verw_clear\nbugs\t\t: fxsave_leak sysret_ss_attrs null_seg spectre_v1 spectre_v2 spec_store_bypass ibpb_no_ret\nbogomips\t: 4990.54\nTLB size\t: 192 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 45 bits physical, 48 bits virtual\npower management:\n\nprocessor\t: 6\nvendor_id\t: AuthenticAMD\ncpu family\t: 26\nmodel\t\t: 68\nmodel name\t: AMD Ryzen 9 9955HX 16-Core Processor\nstepping\t: 0\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 2495.271\ncache size\t: 1024 KB\nphysical id\t: 0\nsiblings\t: 8\ncore id\t\t: 6\ncpu cores\t: 8\napicid\t\t: 6\ninitial apicid\t: 6\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext ibpb vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx_vnni avx512_bf16 clzero arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid overflow_recov succor fsrm avx512_vp2intersect verw_clear\nbugs\t\t: fxsave_leak sysret_ss_attrs null_seg spectre_v1 spectre_v2 spec_store_bypass ibpb_no_ret\nbogomips\t: 4990.54\nTLB size\t: 192 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 45 bits physical, 48 bits virtual\npower management:\n\nprocessor\t: 7\nvendor_id\t: AuthenticAMD\ncpu family\t: 26\nmodel\t\t: 68\nmodel name\t: AMD Ryzen 9 9955HX 16-Core Processor\nstepping\t: 0\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 2495.271\ncache size\t: 1024 KB\nphysical id\t: 0\nsiblings\t: 8\ncore id\t\t: 7\ncpu cores\t: 8\napicid\t\t: 7\ninitial apicid\t: 7\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext ibpb vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx_vnni avx512_bf16 clzero arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid overflow_recov succor fsrm avx512_vp2intersect verw_clear\nbugs\t\t: fxsave_leak sysret_ss_attrs null_seg spectre_v1 spectre_v2 spec_store_bypass ibpb_no_ret\nbogomips\t: 4990.54\nTLB size\t: 192 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 45 bits physical, 48 bits virtual\npower management:\n\n",
+    "/proc/meminfo": "MemTotal:        3452924 kB\nMemFree:         2315532 kB\nMemAvailable:    2759768 kB\nBuffers:          162312 kB\nCached:           482296 kB\nSwapCached:            0 kB\nActive:           347360 kB\nInactive:         434008 kB\nActive(anon):       9212 kB\nInactive(anon):   179360 kB\nActive(file):     338148 kB\nInactive(file):   254648 kB\nUnevictable:           0 kB\nMlocked:               0 kB\nSwapTotal:       4108284 kB\nSwapFree:        4108284 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:                 4 kB\nWriteback:             0 kB\nAnonPages:        135844 kB\nMapped:            56796 kB\nShmem:             51812 kB\nKReclaimable:     108316 kB\nSlab:             200296 kB\nSReclaimable:     108316 kB\nSUnreclaim:        91980 kB\nKernelStack:        5504 kB\nPageTables:         2108 kB\nSecPageTables:         0 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:     5834744 kB\nCommitted_AS:     418748 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:       21288 kB\nVmallocChunk:          0 kB\nPercpu:            66048 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:     24576 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:     28672 kB\nFilePmdMapped:     10240 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      261952 kB\nDirectMap2M:     2883584 kB\nDirectMap1G:     3145728 kB\n",
+    "/proc/cmdline": "BOOT_IMAGE=/vmlinuz-6.6.0-scx root=/dev/mapper/openeuler-root ro resume=/dev/mapper/openeuler-swap rd.lvm.lv=openeuler/root rd.lvm.lv=openeuler/swap cgroup_disable=files apparmor=0 crashkernel=512M\n"
+  },
+  "ended_utc": "2026-10-26T23:48:17.682933+00:00",
+  "restored": {
+    "phase": "observing",
+    "reason": "Agent 已启用，等待当前实时数据；不立即指定配置",
+    "confirmations": 0,
+    "required_confirmations": 3,
+    "pending_candidate": null,
+    "observation": {
+      "sequence": 49,
+      "now": 11084.028329996,
+      "identity": "8ba1df4dbd10edbdfb6c76d09d7521ba71ee52f957f5aa96792785917f058819",
+      "strategy": "scx-u700p1",
+      "frontend_present": true,
+      "background_present": true,
+      "cpu_busy_pct": 100.0,
+      "frontend_cpu_pct": 18.613917787292664,
+      "background_cpu_pct": 68.98098944702575,
+      "wait_pct": 36.5,
+      "avg_wait_us": 141.3,
+      "background_runnable": 1,
+      "voluntary_per_sec": 1.0949363404289802,
+      "involuntary_per_sec": 845.2908548111727,
+      "probe_p95_ms": 0.227,
+      "probe_samples": 5,
+      "probe_errors": 0,
+      "eps": 3824.4,
+      "hdr_id": "60163:43:b2c69165ecf21817e1ccf84728a656046d8ce2cd01849aa55ec0b6dc51c46d77",
+      "hdr_start": 11078.506887859,
+      "hdr_end": 11083.507583988,
+      "hdr_p99_ms": 3.671,
+      "frontend_rps": 25607.23481224748,
+      "completion_fraction": 1.0002826098534172,
+      "request_errors": 0,
+      "valid": true
+    },
+    "trial": null,
+    "last_action": {
+      "action": "apply",
+      "strategy_id": "scx-u700p1",
+      "reason": "候选加权分 221.41，未超过当前 222.65 的防抖幅度，恢复上一配置",
+      "kind": "rollback",
+      "observations": {
+        "cpu_busy_pct": 100.0,
+        "frontend_cpu_pct": 17.50167246257388,
+        "background_cpu_pct": 68.91283532138465,
+        "wait_pct": 38.2,
+        "avg_wait_us": 154.4,
+        "background_runnable": 1,
+        "voluntary_per_sec": 1.092627271529462,
+        "involuntary_per_sec": 833.6746081769795,
+        "probe_p95_ms": 0.364,
+        "eps": 3964.5,
+        "sample_count": 3
+      },
+      "weighted_score": 221.40708421747428
+    },
+    "events": [
+      {
+        "monotonic": 10824.218936362,
+        "from": "default",
+        "action": "apply",
+        "strategy_id": "scx-u650p1",
+        "reason": "连续确认后试用 SCX 650μs + 唤醒抢占，依据实测加权分决定保留",
+        "kind": "trial",
+        "observations": {
+          "cpu_busy_pct": 100.0,
+          "frontend_cpu_pct": 2.215335293702689,
+          "background_cpu_pct": 91.82813758648035,
+          "wait_pct": 96.0,
+          "avg_wait_us": 2617.3,
+          "background_runnable": 4,
+          "voluntary_per_sec": 1.1072786511480248,
+          "involuntary_per_sec": 273.4978268335621,
+          "probe_p95_ms": 2.345,
+          "eps": 5577.3,
+          "sample_count": 3
+        },
+        "trial_kind": "weighted"
+      },
+      {
+        "monotonic": 10832.451189658,
+        "action": "accept",
+        "strategy_id": "scx-u650p1",
+        "reason": "加权实测收益通过，保留当前配置",
+        "weighted_score": 152.73640299132472,
+        "previous_score": 100.14803833855895,
+        "reference": {
+          "cpu_busy_pct": 100.0,
+          "frontend_cpu_pct": 2.2145573022960496,
+          "background_cpu_pct": 90.82677094132838,
+          "wait_pct": 96.1,
+          "avg_wait_us": 2617.5,
+          "background_runnable": 4,
+          "voluntary_per_sec": 1.1072786511480248,
+          "involuntary_per_sec": 275.67863657688895,
+          "probe_p95_ms": 2.483,
+          "eps": 5536.2,
+          "sample_count": 3,
+          "frontend_present": true,
+          "background_present": true,
+          "frontend_rps": 4001.1707628399913,
+          "hdr_p99_ms": 5.515,
+          "latency_metric": "hdr_p99_ms"
+        },
+        "candidate": {
+          "cpu_busy_pct": 100.0,
+          "frontend_cpu_pct": 4.376866140767202,
+          "background_cpu_pct": 89.07878502126908,
+          "wait_pct": 64.35,
+          "avg_wait_us": 147.05,
+          "background_runnable": 4.0,
+          "voluntary_per_sec": 1.092406296917785,
+          "involuntary_per_sec": 1196.26571912433,
+          "probe_p95_ms": 0.4425,
+          "eps": 5252.8,
+          "sample_count": 8,
+          "frontend_present": true,
+          "background_present": true,
+          "frontend_rps": 3999.9594980101065,
+          "hdr_p99_ms": 2.675,
+          "latency_metric": "hdr_p99_ms"
+        }
+      },
+      {
+        "monotonic": 10835.201949627,
+        "from": "scx-u650p1",
+        "action": "apply",
+        "strategy_id": "scx-u300p1",
+        "reason": "连续确认后试用 SCX 300μs + 唤醒抢占，依据实测加权分决定保留",
+        "kind": "trial",
+        "observations": {
+          "cpu_busy_pct": 100.0,
+          "frontend_cpu_pct": 4.389927996797339,
+          "background_cpu_pct": 89.7842619299444,
+          "wait_pct": 63.5,
+          "avg_wait_us": 140.9,
+          "background_runnable": 4,
+          "voluntary_per_sec": 1.0974819991993348,
+          "involuntary_per_sec": 1198.7708659816449,
+          "probe_p95_ms": 0.348,
+          "eps": 5283.9,
+          "sample_count": 3
+        },
+        "trial_kind": "weighted"
+      },
+      {
+        "monotonic": 10843.453733076,
+        "action": "accept",
+        "strategy_id": "scx-u300p1",
+        "reason": "加权实测收益通过，保留当前配置",
+        "weighted_score": 156.4193895981897,
+        "previous_score": 152.91683599659137,
+        "reference": {
+          "cpu_busy_pct": 100.0,
+          "frontend_cpu_pct": 2.2145573022960496,
+          "background_cpu_pct": 90.82677094132838,
+          "wait_pct": 96.1,
+          "avg_wait_us": 2617.5,
+          "background_runnable": 4,
+          "voluntary_per_sec": 1.1072786511480248,
+          "involuntary_per_sec": 275.67863657688895,
+          "probe_p95_ms": 2.483,
+          "eps": 5536.2,
+          "sample_count": 3,
+          "frontend_present": true,
+          "background_present": true,
+          "frontend_rps": 4001.1707628399913,
+          "hdr_p99_ms": 5.515,
+          "latency_metric": "hdr_p99_ms"
+        },
+        "candidate": {
+          "cpu_busy_pct": 100.0,
+          "frontend_cpu_pct": 4.906944052472056,
+          "background_cpu_pct": 88.51209009477796,
+          "wait_pct": 63.45,
+          "avg_wait_us": 139.2,
+          "background_runnable": 4.0,
+          "voluntary_per_sec": 1.0903618299501883,
+          "involuntary_per_sec": 1202.7576884554474,
+          "probe_p95_ms": 0.4185,
+          "eps": 5241.0,
+          "sample_count": 8,
+          "frontend_present": true,
+          "background_present": true,
+          "frontend_rps": 4000.3076655164195,
+          "hdr_p99_ms": 2.569,
+          "latency_metric": "hdr_p99_ms"
+        }
+      },
+      {
+        "monotonic": 11051.066022181,
+        "from": "default",
+        "action": "apply",
+        "strategy_id": "scx-u700p1",
+        "reason": "连续确认后试用 SCX 700μs + 唤醒抢占，依据实测加权分决定保留",
+        "kind": "trial",
+        "observations": {
+          "cpu_busy_pct": 100.0,
+          "frontend_cpu_pct": 14.4033333142494,
+          "background_cpu_pct": 74.23256400420846,
+          "wait_pct": 81.5,
+          "avg_wait_us": 2887.0,
+          "background_runnable": 1,
+          "voluntary_per_sec": 1.1079487164807231,
+          "involuntary_per_sec": 221.65551728487168,
+          "probe_p95_ms": 3.152,
+          "eps": 4467.8,
+          "sample_count": 3
+        },
+        "trial_kind": "weighted"
+      },
+      {
+        "monotonic": 11059.287600768,
+        "action": "accept",
+        "strategy_id": "scx-u700p1",
+        "reason": "加权实测收益通过，保留当前配置",
+        "weighted_score": 222.3425062605584,
+        "previous_score": 100.06054223330484,
+        "reference": {
+          "cpu_busy_pct": 100.0,
+          "frontend_cpu_pct": 14.40722041302807,
+          "background_cpu_pct": 74.25259751329851,
+          "wait_pct": 81.2,
+          "avg_wait_us": 2839.9,
+          "background_runnable": 1,
+          "voluntary_per_sec": 1.1081428114579321,
+          "involuntary_per_sec": 221.65551728487168,
+          "probe_p95_ms": 3.152,
+          "eps": 4454.3,
+          "sample_count": 3,
+          "frontend_present": true,
+          "background_present": true,
+          "frontend_rps": 25623.95764154271,
+          "hdr_p99_ms": 14.383,
+          "latency_metric": "hdr_p99_ms"
+        },
+        "candidate": {
+          "cpu_busy_pct": 100.0,
+          "frontend_cpu_pct": 18.06874593222483,
+          "background_cpu_pct": 68.56322119611869,
+          "wait_pct": 36.95,
+          "avg_wait_us": 149.5,
+          "background_runnable": 1.0,
+          "voluntary_per_sec": 1.093991854879676,
+          "involuntary_per_sec": 834.167873928235,
+          "probe_p95_ms": 0.34450000000000003,
+          "eps": 3930.45,
+          "sample_count": 8,
+          "frontend_present": true,
+          "background_present": true,
+          "frontend_rps": 25598.20275948626,
+          "hdr_p99_ms": 3.641,
+          "latency_metric": "hdr_p99_ms"
+        }
+      },
+      {
+        "monotonic": 11062.044880868,
+        "from": "scx-u700p1",
+        "action": "apply",
+        "strategy_id": "scx-u350p1",
+        "reason": "连续确认后试用 SCX 350μs + 唤醒抢占，依据实测加权分决定保留",
+        "kind": "trial",
+        "observations": {
+          "cpu_busy_pct": 100.0,
+          "frontend_cpu_pct": 17.492867422682693,
+          "background_cpu_pct": 68.8781654768131,
+          "wait_pct": 36.4,
+          "avg_wait_us": 142.0,
+          "background_runnable": 1,
+          "voluntary_per_sec": 1.0933042139176683,
+          "involuntary_per_sec": 846.2174615722752,
+          "probe_p95_ms": 0.349,
+          "eps": 3957.3,
+          "sample_count": 3
+        },
+        "trial_kind": "weighted"
+      },
+      {
+        "monotonic": 11073.970333454,
+        "from": "scx-u350p1",
+        "action": "apply",
+        "strategy_id": "scx-u700p1",
+        "reason": "候选加权分 221.41，未超过当前 222.65 的防抖幅度，恢复上一配置",
+        "kind": "rollback",
+        "observations": {
+          "cpu_busy_pct": 100.0,
+          "frontend_cpu_pct": 17.50167246257388,
+          "background_cpu_pct": 68.91283532138465,
+          "wait_pct": 38.2,
+          "avg_wait_us": 154.4,
+          "background_runnable": 1,
+          "voluntary_per_sec": 1.092627271529462,
+          "involuntary_per_sec": 833.6746081769795,
+          "probe_p95_ms": 0.364,
+          "eps": 3964.5,
+          "sample_count": 3
+        },
+        "weighted_score": 221.40708421747428
+      }
+    ],
+    "decision_source": "live_observations_only",
+    "weights": {
+      "latency": 0.6,
+      "throughput": 0.4
+    },
+    "measured_configurations": {},
+    "reference": null,
+    "selection": "relative_weighted_score",
+    "performance_targets": null,
+    "latency_score_source": "complete_HDR_window_p99",
+    "timing": {
+      "confirmations": 3,
+      "min_residence": 6.0,
+      "settle_seconds": 1.5,
+      "trial_seconds": 8.0,
+      "max_trial_seconds": 24.0,
+      "retry_seconds": 30.0,
+      "max_trial_points": 2
+    },
+    "chosen": null,
+    "enabled": true,
+    "current_strategy": "default"
+  }
+}
